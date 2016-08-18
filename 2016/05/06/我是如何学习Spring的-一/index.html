@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>我是如何学习Spring的(一) | OneStack</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta name="description" content="简介Spring是一个开源框架，Spring是于2003 年兴起的一个轻量级的Java 开发框架，由Rod Johnson 在其著作Expert One-On-One J2EE Development and Design中阐述的部分理念和原型衍生而来。它是为了解决企业应用开发的复杂性而创建的。框架的主要优势之一就是其分层架构，分层架构允许使用者选择使用哪一个组件，同时为 JavaEE 应用程序开">
+<meta property="og:type" content="article">
+<meta property="og:title" content="我是如何学习Spring的(一)">
+<meta property="og:url" content="http://jessyon.com/2016/05/06/我是如何学习Spring的-一/index.html">
+<meta property="og:site_name" content="OneStack">
+<meta property="og:description" content="简介Spring是一个开源框架，Spring是于2003 年兴起的一个轻量级的Java 开发框架，由Rod Johnson 在其著作Expert One-On-One J2EE Development and Design中阐述的部分理念和原型衍生而来。它是为了解决企业应用开发的复杂性而创建的。框架的主要优势之一就是其分层架构，分层架构允许使用者选择使用哪一个组件，同时为 JavaEE 应用程序开">
+<meta property="og:updated_time" content="2016-05-12T13:32:38.859Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我是如何学习Spring的(一)">
+<meta name="twitter:description" content="简介Spring是一个开源框架，Spring是于2003 年兴起的一个轻量级的Java 开发框架，由Rod Johnson 在其著作Expert One-On-One J2EE Development and Design中阐述的部分理念和原型衍生而来。它是为了解决企业应用开发的复杂性而创建的。框架的主要优势之一就是其分层架构，分层架构允许使用者选择使用哪一个组件，同时为 JavaEE 应用程序开">
+  
+    <link rel="alternative" href="/atom.xml" title="OneStack" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/img/c8177f3e6709c93dff94151f9e3df8dcd00054f7.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Jessyon</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">The Blog Powered By jessyon</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+							<li><a href="/tags/随笔">随笔</a></li>
+				        
+							<li><a href="http://www.500d.me/resume/jessyon.jhtml">简历</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/minokoko" title="github">github</a>
+					        
+								<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/li-si-wen-75" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="/349283474@qq.com" title="mail">mail</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/GitHub/" style="font-size: 10px;">GitHub</a> <a href="/tags/Hibernate/" style="font-size: 17.5px;">Hibernate</a> <a href="/tags/JavaEE/" style="font-size: 20px;">JavaEE</a> <a href="/tags/SSM/" style="font-size: 10px;">SSM</a> <a href="/tags/SVN/" style="font-size: 12.5px;">SVN</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/centos/" style="font-size: 10px;">centos</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/hibernate3/" style="font-size: 15px;">hibernate3</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/node-js/" style="font-size: 10px;">node.js</a> <a href="/tags/spring/" style="font-size: 15px;">spring</a> <a href="/tags/struts2/" style="font-size: 15px;">struts2</a> <a href="/tags/数据库/" style="font-size: 17.5px;">数据库</a> <a href="/tags/淘淘商城/" style="font-size: 10px;">淘淘商城</a> <a href="/tags/随笔/" style="font-size: 10px;">随笔</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+				
+				<section class="switch-part switch-part3">
+				
+					<div id="js-aboutme">西华大学2013级计科</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Jessyon</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/img/c8177f3e6709c93dff94151f9e3df8dcd00054f7.jpg" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Jessyon</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">The Blog Powered By jessyon</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+					<li><a href="/tags/随笔">随笔</a></li>
+		        
+					<li><a href="http://www.500d.me/resume/jessyon.jhtml">简历</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/minokoko" title="github">github</a>
+			        
+						<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/li-si-wen-75" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="/349283474@qq.com" title="mail">mail</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-我是如何学习Spring的-一" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/05/06/我是如何学习Spring的-一/" class="article-date">
+  	<time datetime="2016-05-06T14:01:45.000Z" itemprop="datePublished">2016-05-06</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      我是如何学习Spring的(一)
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaEE/">JavaEE</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring/">Spring</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a><strong>简介</strong></h1><p>Spring是一个开源框架，Spring是于2003 年兴起的一个轻量级的Java 开发框架，由Rod Johnson 在其著作Expert One-On-One J2EE Development and Design中阐述的部分理念和原型衍生而来。它是为了解决企业应用开发的复杂性而创建的。框架的主要优势之一就是其分层架构，分层架构允许使用者选择使用哪一个组件，同时为 JavaEE 应用程序开发提供集成的框架。Spring使用基本的JavaBean来完成以前只可能由EJB完成的事情。然而，Spring的用途不仅限于服务器端的开发。从简单性、可测试性和松耦合的角度而言，任何Java应用都可以从Spring中受益。Spring的核心是控制反转（IoC）和面向切面（AOP）。简单来说，Spring是一个分层的JavaSE/EEfull-stack(一站式) 轻量级开源框架。</p>
+<h2 id="Spring优点"><a href="#Spring优点" class="headerlink" title="Spring优点"></a>Spring优点</h2><h3 id="方便解耦，简化开发"><a href="#方便解耦，简化开发" class="headerlink" title="方便解耦，简化开发"></a>方便解耦，简化开发</h3><p>Spring就是一个大工厂，可以将所有对象创建和依赖关系维护，交给Spring管理</p>
+<h3 id="AOP编程的支持"><a href="#AOP编程的支持" class="headerlink" title="AOP编程的支持"></a>AOP编程的支持</h3><p>Spring提供面向切面编程，可以方便的实现对程序进行权限拦截、运行监控等功能</p>
+<h3 id="声明式事务的支持"><a href="#声明式事务的支持" class="headerlink" title="声明式事务的支持"></a>声明式事务的支持</h3><p>只需要通过配置就可以完成对事务的管理，而无需手动编程</p>
+<h3 id="方便程序的测试"><a href="#方便程序的测试" class="headerlink" title="方便程序的测试"></a>方便程序的测试</h3><p>Spring对Junit4支持，可以通过注解方便的测试Spring程序</p>
+<h3 id="方便集成各种优秀框架"><a href="#方便集成各种优秀框架" class="headerlink" title="方便集成各种优秀框架"></a>方便集成各种优秀框架</h3><p>Spring不排斥各种优秀的开源框架，其内部提供了对各种优秀框架（如：Struts、Hibernate、MyBatis、Quartz等）的直接支持</p>
+<h3 id="降低JavaEE-API的使用难度"><a href="#降低JavaEE-API的使用难度" class="headerlink" title="降低JavaEE API的使用难度"></a>降低JavaEE API的使用难度</h3><p>Spring 对JavaEE开发中非常难用的一些API（JDBC、JavaMail、远程调用等），都提供了封装，使这些API应用难度大大降低</p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>Dependency 依赖：一个类的实现需要用到另一个类。<br>Injection 注入：将一个类添加到另一个类中。<br>DI (Dependency Injection) 依赖注入：A类依赖B类，A类提供set接口，当需要B类时，通过接口，将B类传递给A类。<br>IOC (Inversion of Control) 控制反转：由以前的A类创建B类，转变为由第三方IOC容器(Spring)创建B类。A类不能直接创建B类，A类通过第三方IOC容器获取B类。</p>
+<h2 id="传统方式"><a href="#传统方式" class="headerlink" title="传统方式"></a>传统方式</h2><p>传统方式创建 Model、Dao、DaoImpl、Service</p>
+<ul>
+<li><p>User Model</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public class User &#123;</span><br><span class="line">	private String username;</span><br><span class="line">	private String password;</span><br><span class="line">	//省略get、<span class="built_in">set</span>方法</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>User Dao</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public interface UserDAO &#123;</span><br><span class="line">	public void save(User user);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>User DaoImpl</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class UserDAOImpl implements UserDAO &#123;</span><br><span class="line">	public void save(User user) &#123;</span><br><span class="line"></span><br><span class="line">		System.out.println(<span class="string">"user saved!"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>User Service</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class UserService &#123;</span><br><span class="line">	private UserDAO userDAO;  </span><br><span class="line">	public void add(User user) &#123;</span><br><span class="line">		userDAO.save(user);</span><br><span class="line">	&#125;</span><br><span class="line">	public UserDAO <span class="function"><span class="title">getUserDAO</span></span>() &#123;</span><br><span class="line">		<span class="built_in">return</span> userDAO;</span><br><span class="line">	&#125;</span><br><span class="line">	public void <span class="built_in">set</span>UserDAO(UserDAO userDAO) &#123;</span><br><span class="line">		this.userDAO = userDAO;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">//创建Service层，Service层调用DaoImpl的add()方法，add()调用Dao层的save()方法。</span><br><span class="line">Service service= new Service();</span><br><span class="line">service.add(u);</span><br></pre></td></tr></table></figure>
+<h2 id="IOC方式"><a href="#IOC方式" class="headerlink" title="IOC方式"></a>IOC方式</h2><p>beans.xml配置一个bean</p>
+<pre><code class="bash">&lt;beans&gt;
+    &lt;bean id=<span class="string">"u"</span> class=<span class="string">"com.dao.impl.UserDAOImpl"</span> /&gt;          //配置一个简单类
+    &lt;bean id=<span class="string">"userService"</span> class=<span class="string">"com.service.UserService"</span> &gt;  //配置一个userService
+        &lt;property name=<span class="string">"userDAO"</span> bean=<span class="string">"u"</span>/&gt;     //为userService通过property配置一个<span class="built_in">set</span>UserDao()方法，当调用<span class="built_in">set</span>UserDao()方法时，将u这个bean传进去(注入)。
+    &lt;/bean&gt;
+&lt;/beans&gt;
+``` bash
+//IOC方式与传统方式得到的结果都一样，在控制台输出user saved!因为都执行了save(User)方法。
+public class UserServiceTest {
+    @Test
+    public void <span class="built_in">test</span>Add() throws Exception {
+        //1 加载配置文件，默认为beans.xml
+        BeanFactory applicationContext = new ClassPathXmlApplicationContext(); 
+        UserService service = (UserService)applicationContext.getBean(<span class="string">"userService"</span>);    
+
+        User u = new User();
+        u.setUsername(<span class="string">"zhangsan"</span>);
+        u.setPassword(<span class="string">"zhangsan"</span>);
+        service.add(u);
+    }
+}
+</code></pre>
+<p>## </p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/05/07/我是如何学习Spring的-二/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          我是如何学习Spring的(二)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/05/05/我是如何学习Hibernate的-六/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">我是如何学习Hibernate的(六)</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+
+
+
+ 
+  <section id="comments">
+    <!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key="post-我是如何学习Spring的-一" data-title="我是如何学习Spring的(一)" data-url="http://jessyon.com/2016/05/06/我是如何学习Spring的-一/"></div>
+    <!-- 多说评论框 end -->
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'jessyon'};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+    <!-- 多说公共JS代码 end -->
+  </section>
+  
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 Jessyon
+    	</div>
+      	<div class="footer-right">
+      		西华大学 计科2013级 杨杰
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+<!-- Google Analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-77125482-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

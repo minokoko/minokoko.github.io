@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>我是如何整合SSH的(一) | OneStack</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta name="description" content="概述在之前一段时间内，我断断续续在课余时间学习了struts2、hibernate3、spring和其他javaEE的关键技术。由于之间一直呆在实验室帮老师做一个其他的项目，并没有很认真地学习javaEE，掌握的知识可能并不是很牢靠，所以通过整合SSH这个过程来提高我对JavaEE的认知。
+Spring整合Hibernate3之注册案例1234567891011121314151617181920">
+<meta property="og:type" content="article">
+<meta property="og:title" content="我是如何整合SSH的(一)">
+<meta property="og:url" content="http://jessyon.com/2016/05/20/我是如何整合SSH的-一/index.html">
+<meta property="og:site_name" content="OneStack">
+<meta property="og:description" content="概述在之前一段时间内，我断断续续在课余时间学习了struts2、hibernate3、spring和其他javaEE的关键技术。由于之间一直呆在实验室帮老师做一个其他的项目，并没有很认真地学习javaEE，掌握的知识可能并不是很牢靠，所以通过整合SSH这个过程来提高我对JavaEE的认知。
+Spring整合Hibernate3之注册案例1234567891011121314151617181920">
+<meta property="og:updated_time" content="2016-05-20T15:22:03.403Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我是如何整合SSH的(一)">
+<meta name="twitter:description" content="概述在之前一段时间内，我断断续续在课余时间学习了struts2、hibernate3、spring和其他javaEE的关键技术。由于之间一直呆在实验室帮老师做一个其他的项目，并没有很认真地学习javaEE，掌握的知识可能并不是很牢靠，所以通过整合SSH这个过程来提高我对JavaEE的认知。
+Spring整合Hibernate3之注册案例1234567891011121314151617181920">
+  
+    <link rel="alternative" href="/atom.xml" title="OneStack" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/img/c8177f3e6709c93dff94151f9e3df8dcd00054f7.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Jessyon</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">The Blog Powered By jessyon</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+							<li><a href="/tags/随笔">随笔</a></li>
+				        
+							<li><a href="http://www.500d.me/resume/jessyon.jhtml">简历</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/minokoko" title="github">github</a>
+					        
+								<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/li-si-wen-75" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="/349283474@qq.com" title="mail">mail</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/GitHub/" style="font-size: 10px;">GitHub</a> <a href="/tags/Hibernate/" style="font-size: 17.5px;">Hibernate</a> <a href="/tags/JavaEE/" style="font-size: 20px;">JavaEE</a> <a href="/tags/SSM/" style="font-size: 10px;">SSM</a> <a href="/tags/SVN/" style="font-size: 12.5px;">SVN</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/centos/" style="font-size: 10px;">centos</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/hibernate3/" style="font-size: 15px;">hibernate3</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/node-js/" style="font-size: 10px;">node.js</a> <a href="/tags/spring/" style="font-size: 15px;">spring</a> <a href="/tags/struts2/" style="font-size: 15px;">struts2</a> <a href="/tags/数据库/" style="font-size: 17.5px;">数据库</a> <a href="/tags/淘淘商城/" style="font-size: 10px;">淘淘商城</a> <a href="/tags/随笔/" style="font-size: 10px;">随笔</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+				
+				<section class="switch-part switch-part3">
+				
+					<div id="js-aboutme">西华大学2013级计科</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Jessyon</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/img/c8177f3e6709c93dff94151f9e3df8dcd00054f7.jpg" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Jessyon</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">The Blog Powered By jessyon</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+					<li><a href="/tags/随笔">随笔</a></li>
+		        
+					<li><a href="http://www.500d.me/resume/jessyon.jhtml">简历</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/minokoko" title="github">github</a>
+			        
+						<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/li-si-wen-75" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="/349283474@qq.com" title="mail">mail</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-我是如何整合SSH的-一" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/05/20/我是如何整合SSH的-一/" class="article-date">
+  	<time datetime="2016-05-20T15:00:31.000Z" itemprop="datePublished">2016-05-20</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      我是如何整合SSH的(一)
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hibernate3/">hibernate3</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/spring/">spring</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/struts2/">struts2</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>在之前一段时间内，我断断续续在课余时间学习了struts2、hibernate3、spring和其他javaEE的关键技术。由于之间一直呆在实验室帮老师做一个其他的项目，并没有很认真地学习javaEE，掌握的知识可能并不是很牢靠，所以通过整合SSH这个过程来提高我对JavaEE的认知。</p>
+<h2 id="Spring整合Hibernate3之注册案例"><a href="#Spring整合Hibernate3之注册案例" class="headerlink" title="Spring整合Hibernate3之注册案例"></a>Spring整合Hibernate3之注册案例</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br></pre></td><td class="code"><pre><span class="line">//定义User</span><br><span class="line">	private Integer id;</span><br><span class="line">	private String username;</span><br><span class="line">	private String <span class="built_in">pwd</span>;</span><br><span class="line">	private Integer age;</span><br><span class="line">	private Date birthday;</span><br><span class="line">	</span><br><span class="line">//User.hbx.xml配置文件</span><br><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</span><br><span class="line">&lt;!DOCTYPE hibernate-mapping PUBLIC </span><br><span class="line">    <span class="string">"-//Hibernate/Hibernate Mapping DTD 3.0//EN"</span></span><br><span class="line">    <span class="string">"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"</span>&gt;</span><br><span class="line">&lt;hibernate-mapping&gt;</span><br><span class="line">	&lt;class name=<span class="string">"com.ssh.bean.User"</span> table=<span class="string">"user"</span>&gt;</span><br><span class="line">	  &lt;id name=<span class="string">"id"</span>&gt;</span><br><span class="line">	  	&lt;generator class=<span class="string">"native"</span>&gt;&lt;/generator&gt;</span><br><span class="line">	  &lt;/id&gt;</span><br><span class="line">	  &lt;property name=<span class="string">"username"</span>&gt;&lt;/property&gt;</span><br><span class="line">	  &lt;property name=<span class="string">"pwd"</span>&gt;&lt;/property&gt;</span><br><span class="line">	  &lt;property name=<span class="string">"age"</span>&gt;&lt;/property&gt;</span><br><span class="line">	  &lt;property name=<span class="string">"birthday"</span> <span class="built_in">type</span>=<span class="string">"date"</span>&gt;&lt;/property&gt;</span><br><span class="line">	&lt;/class&gt;</span><br><span class="line">&lt;/hibernate-mapping&gt;</span><br><span class="line"></span><br><span class="line">//UserDaoImpl ,继承自HibernateDaoSupport，可以使用hibernate的模版</span><br><span class="line">public class UserDaoImpl extends HibernateDaoSupport implements UserDao &#123;</span><br><span class="line">	public void addUser(User u) &#123;</span><br><span class="line">        this.getHibernateTemplate().save(u);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//UserService层,这一层和以前没有任何改变</span><br><span class="line">public class UserServiceImpl implements UserService &#123;</span><br><span class="line"></span><br><span class="line">	private UserDao userDao;</span><br><span class="line">	public void <span class="built_in">set</span>UserDao(UserDao userDao) &#123;</span><br><span class="line">		this.userDao = userDao;</span><br><span class="line">	&#125;</span><br><span class="line">	public void register(User u) &#123;</span><br><span class="line">        this.userDao.addUser(u);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//用注册一个用户来测试Spring是否已经整合了hibernate</span><br><span class="line">public class SSHTest &#123;</span><br><span class="line">	@Test</span><br><span class="line">	public void <span class="function"><span class="title">testAdd</span></span>()&#123;</span><br><span class="line">		User u = new User();</span><br><span class="line">		u.setUsername(<span class="string">"jessyon"</span>);</span><br><span class="line">		u.setPwd(<span class="string">"1234"</span>);</span><br><span class="line">		u.setAge(18);</span><br><span class="line">		u.setBirthday(new Date());</span><br><span class="line">		</span><br><span class="line">		String xmlPath=<span class="string">"applicationContext.xml"</span>;</span><br><span class="line">		ApplicationContext applicationContext = new ClassPathXmlApplicationContext(xmlPath);</span><br><span class="line">		UserService userService = (UserService) applicationContext.getBean(<span class="string">"userService"</span>);	</span><br><span class="line">		userService.register(u);  </span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">//和单独使用hibernate一样，需要在src下创建一个hibernate.cfg.xml配置文件</span><br><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</span><br><span class="line">&lt;!DOCTYPE hibernate-configuration PUBLIC</span><br><span class="line">	<span class="string">"-//Hibernate/Hibernate Configuration DTD 3.0//EN"</span></span><br><span class="line">	<span class="string">"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd"</span>&gt;</span><br><span class="line"></span><br><span class="line">&lt;hibernate-configuration&gt;</span><br><span class="line">	&lt;session-factory&gt;</span><br><span class="line">		&lt;!-- 1.基本4项 --&gt;</span><br><span class="line">		&lt;property name=<span class="string">"hibernate.connection.driver_class"</span>&gt;com.mysql.jdbc.Driver&lt;/property&gt;</span><br><span class="line">		&lt;property name=<span class="string">"hibernate.connection.url"</span>&gt;jdbc:mysql:///ssh&lt;/property&gt;</span><br><span class="line">		&lt;property name=<span class="string">"hibernate.connection.username"</span>&gt;root&lt;/property&gt;</span><br><span class="line">		&lt;property name=<span class="string">"hibernate.connection.password"</span>&gt;jessyon6233834&lt;/property&gt;</span><br><span class="line">		</span><br><span class="line">		&lt;!-- 方言 --&gt;</span><br><span class="line">		&lt;property name=<span class="string">"hibernate.dialect"</span>&gt;org.hibernate.dialect.MySQL5Dialect&lt;/property&gt;</span><br><span class="line">		</span><br><span class="line">		&lt;!-- sql语句 --&gt;</span><br><span class="line">		&lt;property name=<span class="string">"hibernate.show_sql"</span>&gt;<span class="literal">true</span>&lt;/property&gt;</span><br><span class="line">		&lt;property name=<span class="string">"hibernate.format_sql"</span>&gt;<span class="literal">true</span>&lt;/property&gt;</span><br><span class="line">		</span><br><span class="line">			&lt;!-- 6 取消bean校验 --&gt;</span><br><span class="line">		&lt;property name=<span class="string">"javax.persistence.validation.mode"</span>&gt;none&lt;/property&gt;</span><br><span class="line">	</span><br><span class="line">		&lt;!-- 添加映射文件 --&gt;</span><br><span class="line">		&lt;mapping resource=<span class="string">"com/ssh/bean/User.hbm.xml"</span>/&gt;</span><br><span class="line">	&lt;/session-factory&gt;</span><br><span class="line">&lt;/hibernate-configuration&gt;	</span><br><span class="line"></span><br><span class="line">//Spring的配置都保存在applicationContext.xml里面</span><br><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</span><br><span class="line">&lt;beans xmlns=<span class="string">"http://www.springframework.org/schema/beans"</span></span><br><span class="line">       xmlns:xsi=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span><br><span class="line">       xmlns:aop=<span class="string">"http://www.springframework.org/schema/aop"</span></span><br><span class="line">       xmlns:tx=<span class="string">"http://www.springframework.org/schema/tx"</span></span><br><span class="line">       xmlns:context=<span class="string">"http://www.springframework.org/schema/context"</span></span><br><span class="line">       xsi:schemaLocation=<span class="string">"http://www.springframework.org/schema/beans </span><br><span class="line">       					   http://www.springframework.org/schema/beans/spring-beans.xsd</span><br><span class="line">       					   http://www.springframework.org/schema/tx </span><br><span class="line">       					   http://www.springframework.org/schema/tx/spring-tx.xsd</span><br><span class="line">       					   http://www.springframework.org/schema/aop </span><br><span class="line">       					   http://www.springframework.org/schema/aop/spring-aop.xsd</span><br><span class="line">       					   http://www.springframework.org/schema/context </span><br><span class="line">       					   http://www.springframework.org/schema/context/spring-context.xsd"</span>&gt;</span><br><span class="line">	&lt;!-- 1 获得session工厂</span><br><span class="line">			* 加载hibernate.cfg.xml 获得工厂</span><br><span class="line">				configLocation : 确定配置文件位置</span><br><span class="line">	--&gt;</span><br><span class="line"></span><br><span class="line">	&lt;bean id=<span class="string">"sessionFactory"</span> class=<span class="string">"org.springframework.orm.hibernate3.LocalSessionFactoryBean"</span>&gt;</span><br><span class="line">		&lt;property name=<span class="string">"configLocation"</span> value=<span class="string">"classpath:hibernate.cfg.xml"</span>&gt;&lt;/property&gt;</span><br><span class="line">	&lt;/bean&gt;</span><br><span class="line">	</span><br><span class="line">	&lt;!-- 2  模板 --&gt;</span><br><span class="line">	&lt;bean id=<span class="string">"hibernateTemplate"</span> class=<span class="string">"org.springframework.orm.hibernate3.HibernateTemplate"</span>&gt;</span><br><span class="line">		&lt;property name=<span class="string">"sessionFactory"</span> ref=<span class="string">"sessionFactory"</span>&gt;&lt;/property&gt;</span><br><span class="line">	&lt;/bean&gt;</span><br><span class="line">	</span><br><span class="line">	&lt;!-- dao UserDao类里用到了hibernateTemplate，所以需要将之注入到dao里面--&gt;</span><br><span class="line">	&lt;bean id=<span class="string">"userDao"</span> class=<span class="string">"com.ssh.daoimpl.UserDaoImpl"</span>&gt;</span><br><span class="line">		&lt;property name=<span class="string">"hibernateTemplate"</span> ref=<span class="string">"hibernateTemplate"</span>&gt;&lt;/property&gt;</span><br><span class="line">	&lt;/bean&gt;</span><br><span class="line">	</span><br><span class="line">	&lt;bean id=<span class="string">"userService"</span> class=<span class="string">"com.ssh.serviceimpl.UserServiceImpl"</span>&gt;</span><br><span class="line">		&lt;property name=<span class="string">"userDao"</span> ref=<span class="string">"userDao"</span>&gt;&lt;/property&gt;</span><br><span class="line">	&lt;/bean&gt;</span><br><span class="line">	</span><br><span class="line">	&lt;!-- 事务管理 ,需要将管理事务的session注入--&gt;</span><br><span class="line">	&lt;bean id=<span class="string">"txManager"</span> class=<span class="string">"org.springframework.orm.hibernate3.HibernateTransactionManager"</span>&gt;</span><br><span class="line">		&lt;property name=<span class="string">"sessionFactory"</span> ref=<span class="string">"sessionFactory"</span>&gt;&lt;/property&gt;</span><br><span class="line">	&lt;/bean&gt;</span><br><span class="line">	</span><br><span class="line">	&lt;tx:advice id=<span class="string">"txAdvice"</span> transaction-manager=<span class="string">"txManager"</span>&gt;</span><br><span class="line">		&lt;tx:attributes&gt;</span><br><span class="line">			&lt;tx:method name=<span class="string">"register"</span>/&gt;</span><br><span class="line">		&lt;/tx:attributes&gt;</span><br><span class="line">	&lt;/tx:advice&gt;</span><br><span class="line">	</span><br><span class="line">	&lt;!-- aop 执行service中的方法前，添加事务管理。如果不加这句话，就相当于执行了rollback,没有commit--&gt;</span><br><span class="line">	&lt;aop:config&gt;</span><br><span class="line">		&lt;aop:advisor advice-ref=<span class="string">"txAdvice"</span> pointcut=<span class="string">"execution(* com.ssh.service..*.*(..))"</span>/&gt;</span><br><span class="line">	&lt;/aop:config&gt;</span><br><span class="line">&lt;/beans&gt;</span><br><span class="line"></span><br><span class="line">//也可以不使用hibernate.cfg.xml，那么applicationContext需要微调</span><br><span class="line"></span><br><span class="line">//使用c3p0作为数据源(连接池)</span><br><span class="line">&lt;bean id=<span class="string">"dataSource"</span> class=<span class="string">"com.mchange.v2.c3p0.ComboPooledDataSource"</span>&gt;</span><br><span class="line">		&lt;property name=<span class="string">"driverClass"</span> value=<span class="string">"com.mysql.jdbc.Driver"</span>&gt;&lt;/property&gt;</span><br><span class="line">		&lt;property name=<span class="string">"jdbcUrl"</span> value=<span class="string">"jdbc:mysql:///ssh"</span>&gt;&lt;/property&gt;</span><br><span class="line">		&lt;property name=<span class="string">"user"</span> value=<span class="string">"root"</span>&gt;&lt;/property&gt;</span><br><span class="line">		&lt;property name=<span class="string">"password"</span> value=<span class="string">"jessyon6233834"</span>&gt;&lt;/property&gt;</span><br><span class="line">	&lt;/bean&gt;</span><br><span class="line">	</span><br><span class="line">	//session工厂的内容变多，不仅需要注入数据源，还要将hibernate.cfg.xml里的内容注入</span><br><span class="line">	&lt;bean id=<span class="string">"sessionFactory"</span> class=<span class="string">"org.springframework.orm.hibernate3.LocalSessionFactoryBean"</span>&gt;</span><br><span class="line">		&lt;property name=<span class="string">"dataSource"</span> ref=<span class="string">"dataSource"</span>&gt;&lt;/property&gt;</span><br><span class="line">		&lt;property name=<span class="string">"hibernateProperties"</span>&gt;</span><br><span class="line">			&lt;props&gt;</span><br><span class="line">				&lt;prop key=<span class="string">"hibernate.dialect"</span>&gt;org.hibernate.dialect.MySQL5Dialect&lt;/prop&gt;</span><br><span class="line">				&lt;prop key=<span class="string">"hibernate.show_sql"</span>&gt;<span class="literal">true</span>&lt;/prop&gt;</span><br><span class="line">				&lt;prop key=<span class="string">"hibernate.format_sql"</span>&gt;<span class="literal">true</span>&lt;/prop&gt;</span><br><span class="line">				&lt;prop key=<span class="string">"hibernate.current_session_context_class"</span>&gt;thread&lt;/prop&gt;</span><br><span class="line">				&lt;prop key=<span class="string">"javax.persistence.validation.mode"</span>&gt;none&lt;/prop&gt;</span><br><span class="line">			&lt;/props&gt;</span><br><span class="line">		&lt;/property&gt;</span><br><span class="line">		&lt;property name=<span class="string">"mappingLocations"</span> value=<span class="string">"classpath:com/ssh/bean/*.hbm.xml"</span>&gt;&lt;/property&gt;</span><br><span class="line">	&lt;/bean&gt;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/05/25/我是如何整合SSH的-二/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          我是如何整合SSH的(二)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/05/18/我是如何学习Spring的-三/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">我是如何学习Spring的(三)--AspectJ</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+
+
+
+ 
+  <section id="comments">
+    <!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key="post-我是如何整合SSH的-一" data-title="我是如何整合SSH的(一)" data-url="http://jessyon.com/2016/05/20/我是如何整合SSH的-一/"></div>
+    <!-- 多说评论框 end -->
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'jessyon'};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+    <!-- 多说公共JS代码 end -->
+  </section>
+  
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 Jessyon
+    	</div>
+      	<div class="footer-right">
+      		西华大学 计科2013级 杨杰
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+<!-- Google Analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-77125482-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

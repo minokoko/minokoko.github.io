@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>淘淘商城开发记录(一) | OneStack</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta name="description" content="前述  学习javaEE已经有半年多了吧，但是还没有正式用所学的内容开发一个比较完整的项目。所以就照着网上的视频边学边做这个淘淘商城这个网站，这次的目标是熟悉JavaWeb开发的全流程，包括代码，项目架构，代码托管等。  第一天熟悉了项目的技术架构，功能架构，完成了基础功能模块的搭建，并且掌握了将代码托管到github，总之这是一件很令人兴奋的事情。因为之前很久我都不太熟悉github，不知道怎么">
+<meta property="og:type" content="article">
+<meta property="og:title" content="淘淘商城开发记录(一)">
+<meta property="og:url" content="http://jessyon.com/2016/08/18/淘淘商城开发记录-一/index.html">
+<meta property="og:site_name" content="OneStack">
+<meta property="og:description" content="前述  学习javaEE已经有半年多了吧，但是还没有正式用所学的内容开发一个比较完整的项目。所以就照着网上的视频边学边做这个淘淘商城这个网站，这次的目标是熟悉JavaWeb开发的全流程，包括代码，项目架构，代码托管等。  第一天熟悉了项目的技术架构，功能架构，完成了基础功能模块的搭建，并且掌握了将代码托管到github，总之这是一件很令人兴奋的事情。因为之前很久我都不太熟悉github，不知道怎么">
+<meta property="og:updated_time" content="2016-08-18T11:39:31.752Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="淘淘商城开发记录(一)">
+<meta name="twitter:description" content="前述  学习javaEE已经有半年多了吧，但是还没有正式用所学的内容开发一个比较完整的项目。所以就照着网上的视频边学边做这个淘淘商城这个网站，这次的目标是熟悉JavaWeb开发的全流程，包括代码，项目架构，代码托管等。  第一天熟悉了项目的技术架构，功能架构，完成了基础功能模块的搭建，并且掌握了将代码托管到github，总之这是一件很令人兴奋的事情。因为之前很久我都不太熟悉github，不知道怎么">
+  
+    <link rel="alternative" href="/atom.xml" title="OneStack" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/img/c8177f3e6709c93dff94151f9e3df8dcd00054f7.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Jessyon</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">The Blog Powered By jessyon</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+							<li><a href="/tags/随笔">随笔</a></li>
+				        
+							<li><a href="http://www.500d.me/resume/jessyon.jhtml">简历</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/minokoko" title="github">github</a>
+					        
+								<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/li-si-wen-75" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="/349283474@qq.com" title="mail">mail</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/GitHub/" style="font-size: 10px;">GitHub</a> <a href="/tags/Hibernate/" style="font-size: 17.5px;">Hibernate</a> <a href="/tags/JavaEE/" style="font-size: 20px;">JavaEE</a> <a href="/tags/SSM/" style="font-size: 10px;">SSM</a> <a href="/tags/SVN/" style="font-size: 12.5px;">SVN</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/centos/" style="font-size: 10px;">centos</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/hibernate3/" style="font-size: 15px;">hibernate3</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/node-js/" style="font-size: 10px;">node.js</a> <a href="/tags/spring/" style="font-size: 15px;">spring</a> <a href="/tags/struts2/" style="font-size: 15px;">struts2</a> <a href="/tags/数据库/" style="font-size: 17.5px;">数据库</a> <a href="/tags/淘淘商城/" style="font-size: 10px;">淘淘商城</a> <a href="/tags/随笔/" style="font-size: 10px;">随笔</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+				
+				<section class="switch-part switch-part3">
+				
+					<div id="js-aboutme">西华大学2013级计科</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Jessyon</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/img/c8177f3e6709c93dff94151f9e3df8dcd00054f7.jpg" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Jessyon</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">The Blog Powered By jessyon</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+					<li><a href="/tags/随笔">随笔</a></li>
+		        
+					<li><a href="http://www.500d.me/resume/jessyon.jhtml">简历</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/minokoko" title="github">github</a>
+			        
+						<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/li-si-wen-75" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="/349283474@qq.com" title="mail">mail</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-淘淘商城开发记录-一" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/08/18/淘淘商城开发记录-一/" class="article-date">
+  	<time datetime="2016-08-18T11:25:03.000Z" itemprop="datePublished">2016-08-18</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      淘淘商城开发记录(一)
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SSM/">SSM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/maven/">maven</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/淘淘商城/">淘淘商城</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="前述"><a href="#前述" class="headerlink" title="前述"></a><strong>前述</strong></h1><p>  学习javaEE已经有半年多了吧，但是还没有正式用所学的内容开发一个比较完整的项目。所以就照着网上的视频边学边做这个淘淘商城这个网站，这次的目标是熟悉JavaWeb开发的全流程，包括代码，项目架构，代码托管等。<br>  第一天熟悉了项目的技术架构，功能架构，完成了基础功能模块的搭建，并且掌握了将代码托管到github，总之这是一件很令人兴奋的事情。因为之前很久我都不太熟悉github，不知道怎么用，更不知道为何要用。在使用过SVN后，才知道版本控制，之后才知道github的强大并喜欢上了他。</p>
+<h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a><strong>环境搭建</strong></h1><p>我是在eclipse下开发的淘淘商城，我之前使用的eclipse版本没有自带maven，所以刚开始找插件就令我非常头痛，因为插件的site很早就没有更新了。后来索性下载了最新版的eclipse，果然有惊喜，原来eclipse mars就已经自带了maven，非常棒。<br>我建立了一个聚合工程，在这个聚合工程中，我又分别创建了dao层，service层，web层。这样的分层结构让我的开发很有节奏感，知道到了哪一步该做什么，有条不紊。所以上手搭建SSM框架也是很快速的事情，而且很快就跑通了第一个测试，nice。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/08/16/AccountManage开发记录/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">AccountManage开发记录</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+
+
+
+ 
+  <section id="comments">
+    <!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key="post-淘淘商城开发记录-一" data-title="淘淘商城开发记录(一)" data-url="http://jessyon.com/2016/08/18/淘淘商城开发记录-一/"></div>
+    <!-- 多说评论框 end -->
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'jessyon'};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+    <!-- 多说公共JS代码 end -->
+  </section>
+  
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 Jessyon
+    	</div>
+      	<div class="footer-right">
+      		西华大学 计科2013级 杨杰
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+<!-- Google Analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-77125482-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
