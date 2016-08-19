@@ -4,19 +4,22 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>我是如何使用lantern科学上网的 | OneStack</title>
+  <title>淘淘商城开发记录(二) | OneStack</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta name="description" content="简介lanternlantern(蓝灯)是一个科学上网的工具,安装了lantern之后，Chrome可以直接科学上网这是我分享的地址 链接：http://pan.baidu.com/s/1qXTuI4k 密码：vk3a下载后，直接安装之后就可以使用了。lantern有自己的官方网站，但是并不能直接访问。如果这个版本使用不了，那么可以到百度贴吧找到最新版下载。">
+  <meta name="description" content="前述昨天完成了环境和框架的搭建，万里长征迈出了第一步，是一个完美的开始。今天完成了后台主页的展示，理解了从前端发送ajax的Restful风格的请求。将请求发送给springMVC，通过RequestMapping找到请求的页面，再返回到前端，渲染到页面。
+分页查询然后是数据的部分，无论是什么系统，都离不开CRUD，所以从最简单的查询开始。但是有一点不同的是，我使用了mybatis分页的插件pag">
 <meta property="og:type" content="article">
-<meta property="og:title" content="我是如何使用lantern科学上网的">
-<meta property="og:url" content="http://jessyon.com/2016/04/29/我是如何使用lantern科学上网的/index.html">
+<meta property="og:title" content="淘淘商城开发记录(二)">
+<meta property="og:url" content="http://jessyon.com/2016/08/19/淘淘商城开发记录-二/index.html">
 <meta property="og:site_name" content="OneStack">
-<meta property="og:description" content="简介lanternlantern(蓝灯)是一个科学上网的工具,安装了lantern之后，Chrome可以直接科学上网这是我分享的地址 链接：http://pan.baidu.com/s/1qXTuI4k 密码：vk3a下载后，直接安装之后就可以使用了。lantern有自己的官方网站，但是并不能直接访问。如果这个版本使用不了，那么可以到百度贴吧找到最新版下载。">
-<meta property="og:updated_time" content="2016-04-30T09:14:11.171Z">
+<meta property="og:description" content="前述昨天完成了环境和框架的搭建，万里长征迈出了第一步，是一个完美的开始。今天完成了后台主页的展示，理解了从前端发送ajax的Restful风格的请求。将请求发送给springMVC，通过RequestMapping找到请求的页面，再返回到前端，渲染到页面。
+分页查询然后是数据的部分，无论是什么系统，都离不开CRUD，所以从最简单的查询开始。但是有一点不同的是，我使用了mybatis分页的插件pag">
+<meta property="og:updated_time" content="2016-08-19T14:11:32.858Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="我是如何使用lantern科学上网的">
-<meta name="twitter:description" content="简介lanternlantern(蓝灯)是一个科学上网的工具,安装了lantern之后，Chrome可以直接科学上网这是我分享的地址 链接：http://pan.baidu.com/s/1qXTuI4k 密码：vk3a下载后，直接安装之后就可以使用了。lantern有自己的官方网站，但是并不能直接访问。如果这个版本使用不了，那么可以到百度贴吧找到最新版下载。">
+<meta name="twitter:title" content="淘淘商城开发记录(二)">
+<meta name="twitter:description" content="前述昨天完成了环境和框架的搭建，万里长征迈出了第一步，是一个完美的开始。今天完成了后台主页的展示，理解了从前端发送ajax的Restful风格的请求。将请求发送给springMVC，通过RequestMapping找到请求的页面，再返回到前端，渲染到页面。
+分页查询然后是数据的部分，无论是什么系统，都离不开CRUD，所以从最简单的查询开始。但是有一点不同的是，我使用了mybatis分页的插件pag">
   
     <link rel="alternative" href="/atom.xml" title="OneStack" type="application/atom+xml">
   
@@ -182,11 +185,11 @@
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-我是如何使用lantern科学上网的" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-淘淘商城开发记录-二" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/04/29/我是如何使用lantern科学上网的/" class="article-date">
-  	<time datetime="2016-04-29T14:09:44.000Z" itemprop="datePublished">2016-04-29</time>
+      <a href="/2016/08/19/淘淘商城开发记录-二/" class="article-date">
+  	<time datetime="2016-08-19T13:49:14.000Z" itemprop="datePublished">2016-08-19</time>
 </a>
     </div>
   
@@ -199,7 +202,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      我是如何使用lantern科学上网的
+      淘淘商城开发记录(二)
     </h1>
   
 
@@ -208,7 +211,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/随笔/">随笔</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SSM/">SSM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/maven/">maven</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/淘淘商城/">淘淘商城</a></li></ul>
 	</div>
 
         
@@ -219,7 +222,9 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><h1 id="lantern"><a href="#lantern" class="headerlink" title="lantern"></a>lantern</h1><p>lantern(蓝灯)是一个科学上网的工具,安装了lantern之后，Chrome可以直接科学上网<br>这是我分享的地址 链接：<a href="http://pan.baidu.com/s/1qXTuI4k" target="_blank" rel="external">http://pan.baidu.com/s/1qXTuI4k</a> 密码：vk3a<br>下载后，直接安装之后就可以使用了。<br>lantern有自己的官方网站，但是并不能直接访问。如果这个版本使用不了，那么可以到百度贴吧找到最新版下载。</p>
+        <h1 id="前述"><a href="#前述" class="headerlink" title="前述"></a><strong>前述</strong></h1><p>昨天完成了环境和框架的搭建，万里长征迈出了第一步，是一个完美的开始。今天完成了后台主页的展示，理解了从前端发送ajax的Restful风格的请求。将请求发送给springMVC，通过RequestMapping找到请求的页面，再返回到前端，渲染到页面。</p>
+<h1 id="分页查询"><a href="#分页查询" class="headerlink" title="分页查询"></a><strong>分页查询</strong></h1><p>然后是数据的部分，无论是什么系统，都离不开CRUD，所以从最简单的查询开始。但是有一点不同的是，我使用了mybatis分页的插件pageHelper。插件的使用帮助我们大大减少了开发的难度。但是这次后台使用的是EasyUI来展示页面，相比于boostrap的插件Data Tables强大的分页和查询功能来说，自己利用插件分页和查询还是有些复杂。</p>
+<h1 id="EasyUI异步树控件"><a href="#EasyUI异步树控件" class="headerlink" title="EasyUI异步树控件"></a><strong>EasyUI异步树控件</strong></h1><p>无论EasyUI在表格数据上表现如何，它在树形数据展示上还是比较可靠的。树控件内建异步加载模式的支持，用户先创建一个空的树，然后指定一个服务器端，执行检索后动态返回JSON数据来填充树并完成异步请求。EasyUITreeNode只需要三个关键属性，id，text，state。state有两个值，closed表示有子节点，ajax将会再发送请求直到返回的节点的state为open ,open的时候代表这个节点是叶子节点，将不再发送ajax请求。</p>
 
       
     </div>
@@ -229,18 +234,9 @@
     
 <nav id="article-nav">
   
-    <a href="/2016/04/30/我是如何学习Hibernate的/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          我是如何学习Hibernate的(一)
-        
-      </div>
-    </a>
   
-  
-    <a href="/2016/04/29/我是如何使用hexo搭建这个blog的/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">我是如何使用hexo搭建这个blog的</div>
+    <a href="/2016/08/18/淘淘商城开发记录-一/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">淘淘商城开发记录(一)</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -258,7 +254,7 @@
  
   <section id="comments">
     <!-- 多说评论框 start -->
-    <div class="ds-thread" data-thread-key="post-我是如何使用lantern科学上网的" data-title="我是如何使用lantern科学上网的" data-url="http://jessyon.com/2016/04/29/我是如何使用lantern科学上网的/"></div>
+    <div class="ds-thread" data-thread-key="post-淘淘商城开发记录-二" data-title="淘淘商城开发记录(二)" data-url="http://jessyon.com/2016/08/19/淘淘商城开发记录-二/"></div>
     <!-- 多说评论框 end -->
     <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
     <script type="text/javascript">

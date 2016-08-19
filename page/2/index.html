@@ -113,7 +113,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/GitHub/" style="font-size: 10px;">GitHub</a> <a href="/tags/Hibernate/" style="font-size: 17.5px;">Hibernate</a> <a href="/tags/JavaEE/" style="font-size: 20px;">JavaEE</a> <a href="/tags/SSM/" style="font-size: 10px;">SSM</a> <a href="/tags/SVN/" style="font-size: 12.5px;">SVN</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/centos/" style="font-size: 10px;">centos</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/hibernate3/" style="font-size: 15px;">hibernate3</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/node-js/" style="font-size: 10px;">node.js</a> <a href="/tags/spring/" style="font-size: 15px;">spring</a> <a href="/tags/struts2/" style="font-size: 15px;">struts2</a> <a href="/tags/数据库/" style="font-size: 17.5px;">数据库</a> <a href="/tags/淘淘商城/" style="font-size: 10px;">淘淘商城</a> <a href="/tags/随笔/" style="font-size: 10px;">随笔</a>
+						<a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/GitHub/" style="font-size: 10px;">GitHub</a> <a href="/tags/Hibernate/" style="font-size: 17.5px;">Hibernate</a> <a href="/tags/JavaEE/" style="font-size: 20px;">JavaEE</a> <a href="/tags/SSM/" style="font-size: 12.5px;">SSM</a> <a href="/tags/SVN/" style="font-size: 12.5px;">SVN</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/centos/" style="font-size: 10px;">centos</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/hibernate3/" style="font-size: 15px;">hibernate3</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/maven/" style="font-size: 12.5px;">maven</a> <a href="/tags/node-js/" style="font-size: 10px;">node.js</a> <a href="/tags/spring/" style="font-size: 15px;">spring</a> <a href="/tags/struts2/" style="font-size: 15px;">struts2</a> <a href="/tags/数据库/" style="font-size: 17.5px;">数据库</a> <a href="/tags/淘淘商城/" style="font-size: 12.5px;">淘淘商城</a> <a href="/tags/随笔/" style="font-size: 10px;">随笔</a>
 					</div>
 				</section>
 				
@@ -182,6 +182,83 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-我是如何学习Hibernate的-五" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/05/04/我是如何学习Hibernate的-五/" class="article-date">
+  	<time datetime="2016-05-04T13:23:39.000Z" itemprop="datePublished">2016-05-04</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/05/04/我是如何学习Hibernate的-五/">我是如何学习Hibernate的(五)</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="前述"><a href="#前述" class="headerlink" title="前述"></a>前述</h1><p>Hibernate中的级联关系和抓取策略是放在一起使用的，应当先搞清楚级联关系的一对一、多对一、一对多、多对多。再搞清楚抓取策略中的fetch、lazy的使用，然后再将二者结合一起使用。</p>
+<h2 id="多对一-重点-、-一对一"><a href="#多对一-重点-、-一对一" class="headerlink" title="多对一(重点) 、 一对一"></a>多对一(重点) 、 一对一</h2><p><many-to-one fetch="select" lazy="proxy"><br>多端维护关联关系，多端持有一个一端的引用，在多端加入一个外键，指向一端。<br>使用多个User对一个Group举例(Annotation版本+XML配置版本)<br>注意:使用Annotation配置，可以不用像以前一样配置XML文件，在hiberna.cfg.xml中需要使用:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;mapping class=<span class="string">"com.hibernate.User"</span> /&gt;</span><br><span class="line">&lt;mapping class=<span class="string">"com.hibernate.Group"</span> /&gt;</span><br></pre></td></tr></table></figure></many-to-one></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">package com.hibernate;</span><br><span class="line">// 多端：User类，省略不重要的包和get、<span class="built_in">set</span>方法</span><br><span class="line">@Entity</span><br><span class="line">@Table(name=<span class="string">"t_user"</span>)</span><br><span class="line">public class User &#123;</span><br><span class="line">	private int id;</span><br><span class="line">	private String name;</span><br><span class="line">	private Group group;</span><br><span class="line">	</span><br><span class="line">	@ManyToOne</span><br><span class="line">	public Group <span class="function"><span class="title">getGroup</span></span>() &#123;</span><br><span class="line">		<span class="built_in">return</span> group;</span><br><span class="line">	&#125;</span><br><span class="line">	@Id</span><br><span class="line">	@GeneratedValue</span><br><span class="line">	public int <span class="function"><span class="title">getId</span></span>() &#123;</span><br><span class="line">		<span class="built_in">return</span> id;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">XML主要配置:</span><br><span class="line">&lt;hibernate-mapping&gt;</span><br><span class="line">	&lt;class name=<span class="string">"com.hibernate.User"</span> table=<span class="string">"t_user"</span>&gt;</span><br><span class="line">		&lt;id name=<span class="string">"id"</span>&gt;</span><br><span class="line">			&lt;generator class=<span class="string">"native"</span>&gt;&lt;/generator&gt;</span><br><span class="line">		&lt;/id&gt;</span><br><span class="line">		</span><br><span class="line">		&lt;property name=<span class="string">"name"</span>&gt;&lt;/property&gt;</span><br><span class="line">		&lt;many-to-one name=<span class="string">"group"</span> column=<span class="string">"groupId"</span> /&gt;</span><br><span class="line">    &lt;/class&gt;</span><br><span class="line">	</span><br><span class="line">&lt;/hibernate-mapping&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">package com.hibernate;</span><br><span class="line">// 一端：Group类，省略不重要的包和get、<span class="built_in">set</span>方法</span><br><span class="line">@Entity</span><br><span class="line">@Table(name=<span class="string">"t_group"</span>)</span><br><span class="line">public class Group &#123;</span><br><span class="line">	private int id;</span><br><span class="line">	private String name;</span><br><span class="line">	@Id</span><br><span class="line">	@GeneratedValue</span><br><span class="line">	public int <span class="function"><span class="title">getId</span></span>() &#123;</span><br><span class="line">		<span class="built_in">return</span> id;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">XML主要配置：</span><br><span class="line">	&lt;class name=<span class="string">"com.hibernate.Group"</span> table=<span class="string">"t_group"</span>&gt;</span><br><span class="line">		&lt;id name=<span class="string">"id"</span>&gt;</span><br><span class="line">			&lt;generator class=<span class="string">"native"</span>&gt;&lt;/generator&gt;</span><br><span class="line">		&lt;/id&gt;</span><br><span class="line">		&lt;property name=<span class="string">"name"</span>&gt;&lt;/property&gt;</span><br><span class="line">	&lt;class&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="多对一总结"><a href="#多对一总结" class="headerlink" title="多对一总结"></a>多对一总结</h2><ul>
+<li><p>只需要在多端User的getGroup方法上端进行注解配置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@ManyToOne //多对一关联 User是多的一方 Group是一的一方</span><br><span class="line">@JoinColumn(name=<span class="string">"groupid"</span>) //指定User表中生成与Group对应的字段名</span><br><span class="line">public Group <span class="function"><span class="title">getGroup</span></span>() &#123;</span><br><span class="line">       <span class="built_in">return</span> group;</span><br><span class="line">     &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>xml：<many-to-one name="group" column="groupId"><br>标签会在多端添加外键,相当于在数据库中添加外键,生成的表为：<br>user(id,name,groupid),t_group(id,groupname)</many-to-one></p>
+</li>
+<li>属性cascade<br><many-to-one name="group" column="groupid" cascade="all"><br>取值all,none,save-update,delete,对象间的级联操作,只对增删改起作用.<br>在存储时User时,设置了cascade=”all”会自动存储相应的t_group.而不用管user关联的对象(通常情况下会优先存储关联的对象,然后再存储user)。</many-to-one></li>
+</ul>
+<h2 id="多对一抓取策略"><a href="#多对一抓取策略" class="headerlink" title="多对一抓取策略"></a>多对一抓取策略</h2><p><many-to-one name="group" column="groupId" fetch="select" lazy="proxy"></many-to-one></p>
+<ul>
+<li>fetch取值:join select<br>join:底层使用迫切左外连接，lazy无效。<br>select:使用多条查询语句查询。</li>
+<li><p>lazy取值：false、proxy、no-proxy<br>false:不实用懒加载，在查询的时候把所有字段全部加载到缓存中。<br>proxy:采用关联对象，类级别检索策略。</p>
+</li>
+<li><p>fetch=”select” lazy=”proxy”是否延迟，取决于关联对象所设定的类级别检索策略。比如:<br>多端(User端)：<many-to-one name="group" column="groupId" fetch="select" lazy="proxy"><br>一端(Group端)：<class name="com.hibernate.Group" table="t_group" lazy="false"><br>同时查询User和Group会同时生成两条select语句。</class></many-to-one></p>
+</li>
+</ul>
+<p>多端(User端)：<many-to-one name="group" column="groupId" fetch="select" lazy="proxy"><br>一端(Group端)：<class name="com.hibernate.Group" table="t_group" lazy="true"><br>同时查询User和Group，先生成select User的语句，当使用到Group属性时，再生成select Group的语句。</class></many-to-one></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hibernate/">Hibernate</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaEE/">JavaEE</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据库/">数据库</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+ 
+
   
     <article id="post-我是如何学习Hibernate的-四" class="article article-type-post" itemscope itemprop="blogPost">
   
