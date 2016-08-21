@@ -4,18 +4,28 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Tag: SSM | OneStack</title>
+  <title>淘淘商城开发记录(三) | OneStack</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="OneStack">
-<meta property="og:url" content="http://jessyon.com/tags/SSM/index.html">
+  <meta name="description" content="综述昨天没有什么写太多的代码，github也都没有更新，因为一直在linux搞nginx和图片服务器的东西。
+今天也没有写太多的代码，但是还是更新了下github，两天不更新，感觉是不是有点懒惰。
+因为要把图片上传到服务器，而tomcat用来做静态资源服务器难免大材小用了，所以学习了nginx服务器，以及fastdfs插件。
+在linux下操作还是有些不熟悉，还得自己搭建一个服务器，的确头有点头大">
+<meta property="og:type" content="article">
+<meta property="og:title" content="淘淘商城开发记录(三)">
+<meta property="og:url" content="http://jessyon.com/2016/08/21/淘淘商城开发记录-三/index.html">
 <meta property="og:site_name" content="OneStack">
-<meta property="og:description">
+<meta property="og:description" content="综述昨天没有什么写太多的代码，github也都没有更新，因为一直在linux搞nginx和图片服务器的东西。
+今天也没有写太多的代码，但是还是更新了下github，两天不更新，感觉是不是有点懒惰。
+因为要把图片上传到服务器，而tomcat用来做静态资源服务器难免大材小用了，所以学习了nginx服务器，以及fastdfs插件。
+在linux下操作还是有些不熟悉，还得自己搭建一个服务器，的确头有点头大">
+<meta property="og:updated_time" content="2016-08-21T13:42:51.972Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="OneStack">
-<meta name="twitter:description">
+<meta name="twitter:title" content="淘淘商城开发记录(三)">
+<meta name="twitter:description" content="综述昨天没有什么写太多的代码，github也都没有更新，因为一直在linux搞nginx和图片服务器的东西。
+今天也没有写太多的代码，但是还是更新了下github，两天不更新，感觉是不是有点懒惰。
+因为要把图片上传到服务器，而tomcat用来做静态资源服务器难免大材小用了，所以学习了nginx服务器，以及fastdfs插件。
+在linux下操作还是有些不熟悉，还得自己搭建一个服务器，的确头有点头大">
   
     <link rel="alternative" href="/atom.xml" title="OneStack" type="application/atom+xml">
   
@@ -181,116 +191,106 @@
 	</div>
 </nav>
 
-      <div class="body-wrap">
+      <div class="body-wrap"><article id="post-淘淘商城开发记录-三" class="article article-type-post" itemscope itemprop="blogPost">
   
+    <div class="article-meta">
+      <a href="/2016/08/21/淘淘商城开发记录-三/" class="article-date">
+  	<time datetime="2016-08-21T12:39:49.000Z" itemprop="datePublished">2016-08-21</time>
+</a>
+    </div>
   
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
     
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      淘淘商城开发记录(三)
+    </h1>
+  
+
+      </header>
       
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SSM/">SSM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/maven/">maven</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/淘淘商城/">淘淘商城</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
     
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/08/21/淘淘商城开发记录-三/" class="archive-article-date">
-  	<time datetime="2016-08-21T12:39:49.000Z" itemprop="datePublished">Aug 21</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/08/21/淘淘商城开发记录-三/">淘淘商城开发记录(三)</a>
-    </h1>
-  
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="综述"><a href="#综述" class="headerlink" title="综述"></a><strong>综述</strong></h1><p>昨天没有什么写太多的代码，github也都没有更新，因为一直在linux搞nginx和图片服务器的东西。</p>
+<p>今天也没有写太多的代码，但是还是更新了下github，两天不更新，感觉是不是有点懒惰。</p>
+<p>因为要把图片上传到服务器，而tomcat用来做静态资源服务器难免大材小用了，所以学习了nginx服务器，以及fastdfs插件。</p>
+<p>在linux下操作还是有些不熟悉，还得自己搭建一个服务器，的确头有点头大。稍微总结了下用到的命令:</p>
+<ul>
+<li>mkdir 创建新文件夹</li>
+<li>cd 返回上层目录 cd /usr/localhost/ 进入usr下的localhost目录</li>
+<li>rm -rf  a/  强制删除目录a</li>
+<li>ll 显示当前目录所有文件</li>
+<li>cp /a/b/c  d/e/f  将a/b 目录下的c文件复制到d/e/f目录下</li>
+<li>pwd 显示当前目录全路经</li>
+<li>ifconfig 相当于ipconfig在windows下的效果,查看网关，ip等信息</li>
+<li>tar -zxf nginx-1.8.0.tar.gz 解压nginx-1.8.0.tar.gz到当前目录</li>
+</ul>
+<p>在windows下经常使用SecureCRT连接到linux下，同样可以操作服务器,同时配合notpad++连接到linux操作文档，双管齐下，效率高涨。</p>
+<p>nginx可以反向代理，用户访问域名，nginx服务器决定用户访问不同的应用服务器，这样可以减轻一个服务器的压力。</p>
+<p>负载均衡决定了几个不同服务器负载权重，nginx服务器决定用户访问的是哪个应用服务器。根据不同的权重，nginx服务器决定权重大的应用服务器承受更多的用户访问。</p>
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SSM/">SSM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/maven/">maven</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/淘淘商城/">淘淘商城</a></li></ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
+      
+    </div>
+    
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/08/19/淘淘商城开发记录-二/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">淘淘商城开发记录(二)</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/08/19/淘淘商城开发记录-二/" class="archive-article-date">
-  	<time datetime="2016-08-19T13:49:14.000Z" itemprop="datePublished">Aug 19</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/08/19/淘淘商城开发记录-二/">淘淘商城开发记录(二)</a>
-    </h1>
-  
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SSM/">SSM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/maven/">maven</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/淘淘商城/">淘淘商城</a></li></ul>
-	</div>
 
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+
+
+
+
+ 
+  <section id="comments">
+    <!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key="post-淘淘商城开发记录-三" data-title="淘淘商城开发记录(三)" data-url="http://jessyon.com/2016/08/21/淘淘商城开发记录-三/"></div>
+    <!-- 多说评论框 end -->
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'jessyon'};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+    <!-- 多说公共JS代码 end -->
+  </section>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/08/18/淘淘商城开发记录-一/" class="archive-article-date">
-  	<time datetime="2016-08-18T11:25:03.000Z" itemprop="datePublished">Aug 18</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/08/18/淘淘商城开发记录-一/">淘淘商城开发记录(一)</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SSM/">SSM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/maven/">maven</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/淘淘商城/">淘淘商城</a></li></ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-
 </div>
       <footer id="footer">
   <div class="outer">
@@ -315,9 +315,9 @@
 		mathjax: true,
 		animate: true,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false
 	}

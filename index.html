@@ -113,7 +113,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/GitHub/" style="font-size: 10px;">GitHub</a> <a href="/tags/Hibernate/" style="font-size: 17.5px;">Hibernate</a> <a href="/tags/JavaEE/" style="font-size: 20px;">JavaEE</a> <a href="/tags/SSM/" style="font-size: 12.5px;">SSM</a> <a href="/tags/SVN/" style="font-size: 12.5px;">SVN</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/centos/" style="font-size: 10px;">centos</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/hibernate3/" style="font-size: 15px;">hibernate3</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/maven/" style="font-size: 12.5px;">maven</a> <a href="/tags/node-js/" style="font-size: 10px;">node.js</a> <a href="/tags/spring/" style="font-size: 15px;">spring</a> <a href="/tags/struts2/" style="font-size: 15px;">struts2</a> <a href="/tags/数据库/" style="font-size: 17.5px;">数据库</a> <a href="/tags/淘淘商城/" style="font-size: 12.5px;">淘淘商城</a> <a href="/tags/随笔/" style="font-size: 10px;">随笔</a>
+						<a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/GitHub/" style="font-size: 10px;">GitHub</a> <a href="/tags/Hibernate/" style="font-size: 17.5px;">Hibernate</a> <a href="/tags/JavaEE/" style="font-size: 20px;">JavaEE</a> <a href="/tags/SSM/" style="font-size: 15px;">SSM</a> <a href="/tags/SVN/" style="font-size: 12.5px;">SVN</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/centos/" style="font-size: 10px;">centos</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/hibernate3/" style="font-size: 15px;">hibernate3</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/maven/" style="font-size: 15px;">maven</a> <a href="/tags/node-js/" style="font-size: 10px;">node.js</a> <a href="/tags/spring/" style="font-size: 15px;">spring</a> <a href="/tags/struts2/" style="font-size: 15px;">struts2</a> <a href="/tags/数据库/" style="font-size: 17.5px;">数据库</a> <a href="/tags/淘淘商城/" style="font-size: 15px;">淘淘商城</a> <a href="/tags/随笔/" style="font-size: 10px;">随笔</a>
 					</div>
 				</section>
 				
@@ -182,6 +182,79 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-淘淘商城开发记录-三" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/08/21/淘淘商城开发记录-三/" class="article-date">
+  	<time datetime="2016-08-21T12:39:49.000Z" itemprop="datePublished">2016-08-21</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/21/淘淘商城开发记录-三/">淘淘商城开发记录(三)</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="综述"><a href="#综述" class="headerlink" title="综述"></a><strong>综述</strong></h1><p>昨天没有什么写太多的代码，github也都没有更新，因为一直在linux搞nginx和图片服务器的东西。</p>
+<p>今天也没有写太多的代码，但是还是更新了下github，两天不更新，感觉是不是有点懒惰。</p>
+<p>因为要把图片上传到服务器，而tomcat用来做静态资源服务器难免大材小用了，所以学习了nginx服务器，以及fastdfs插件。</p>
+<p>在linux下操作还是有些不熟悉，还得自己搭建一个服务器，的确头有点头大。稍微总结了下用到的命令:</p>
+<ul>
+<li>mkdir 创建新文件夹</li>
+<li>cd 返回上层目录 cd /usr/localhost/ 进入usr下的localhost目录</li>
+<li>rm -rf  a/  强制删除目录a</li>
+<li>ll 显示当前目录所有文件</li>
+<li>cp /a/b/c  d/e/f  将a/b 目录下的c文件复制到d/e/f目录下</li>
+<li>pwd 显示当前目录全路经</li>
+<li>ifconfig 相当于ipconfig在windows下的效果,查看网关，ip等信息</li>
+<li>tar -zxf nginx-1.8.0.tar.gz 解压nginx-1.8.0.tar.gz到当前目录</li>
+</ul>
+<p>在windows下经常使用SecureCRT连接到linux下，同样可以操作服务器,同时配合notpad++连接到linux操作文档，双管齐下，效率高涨。</p>
+<p>nginx可以反向代理，用户访问域名，nginx服务器决定用户访问不同的应用服务器，这样可以减轻一个服务器的压力。</p>
+<p>负载均衡决定了几个不同服务器负载权重，nginx服务器决定用户访问的是哪个应用服务器。根据不同的权重，nginx服务器决定权重大的应用服务器承受更多的用户访问。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SSM/">SSM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/maven/">maven</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/淘淘商城/">淘淘商城</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+ 
+
   
     <article id="post-淘淘商城开发记录-二" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -1114,101 +1187,6 @@ public class UserServiceTest {
       
 	<div class="article-tag tagcloud">
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaEE/">JavaEE</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring/">Spring</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
- 
-
-  
-    <article id="post-我是如何学习Hibernate的-六" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/05/05/我是如何学习Hibernate的-六/" class="article-date">
-  	<time datetime="2016-05-05T14:24:58.000Z" itemprop="datePublished">2016-05-05</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/05/05/我是如何学习Hibernate的-六/">我是如何学习Hibernate的(六)</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="前述"><a href="#前述" class="headerlink" title="前述"></a>前述</h1><p>缓存在操作系统中经常被使用，在CPU和内存之间有高速cache。在内存读取硬盘的时候也有缓存，也有相应的缓存页面置换算法：  FIFO（First In First Out）先进先出、LRU（Least Recently Used）最近很少使用、 LFU（Least Frequently Used）最近不常被使用（命中率低）。在Hibernate中也有使用一级缓存和二级缓存来加快读取数据库的操作，节省开销。</p>
-<h1 id="一级缓存"><a href="#一级缓存" class="headerlink" title="一级缓存"></a>一级缓存</h1><p>一级缓存，又称为session级别的缓存。当获得一次会话,hibernate在session中创建多个集合(Map),用于存放操作数据(PO对象)，为程序优化服务，如果之后需要相应的数据，hibernate优先从session缓存中获取，如果有就使用，没有再查询。</p>
-<ul>
-<li>缓存工作原理<br><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/img/cache.jpg" alt=""></li>
-<li>一级缓存是默认的，查询都将数据存放在一级缓存中。</li>
-<li>一级缓存缓存的是对象本身。</li>
-<li>一级缓存常用的API<br>evict():用于对某个对象从session的一级缓存中清除<br>clear()：将一级缓存中所有对象全部清除<br>flush()：刷新一级缓存区的内容,使之与数据库数据保持同步。<br>注意： 常用的Query方法中，query.list()是不使用一级缓存的，每次都是重新查询数据库的。 </li>
-</ul>
-<h2 id="一级缓存的操作"><a href="#一级缓存的操作" class="headerlink" title="一级缓存的操作"></a>一级缓存的操作</h2><pre><code>//1 查询 id = 1
-User user = (User) session.get(User.class, 1);
-System.out.println(user);
-//2 再查询 -- 不执行select语句，将从一级缓存获得
-User user2 = (User) session.get(User.class, 1);   //此时 user 与user2是同一个对象
-</code></pre><h2 id="清除缓存"><a href="#清除缓存" class="headerlink" title="清除缓存"></a>清除缓存</h2><pre><code>User user = (User) session.get(User.class, 1); 
-System.out.println(user);
-//清除
-//session.clear();
-session.evict(user);
-// 一级缓存没有缓存对象，从数据库直接查询
-User user2 = (User) session.get(User.class, 1); 
-System.out.println(user2);    //此时user 与 user2 为两个不同对象
-</code></pre><h2 id="一级缓存的快照-备份"><a href="#一级缓存的快照-备份" class="headerlink" title="一级缓存的快照(备份)"></a>一级缓存的快照(备份)</h2><p>快照：与一级缓存一样的存放位置，对一级缓存数据备份。保证数据库的数据与一级数据缓存必须一致。如果一级缓存修改，在执行commit提交时，将自动刷新一级缓存，执行update语句，将一级缓存保存到数据库中。</p>
-<ul>
-<li>问题：一级缓存什么时候刷新？能否修改刷新时机？<br>默认情况下，执行commit()时。当修改了一级缓存后，三种情况：session查询，手动刷新flush，commit底层自动flush</li>
-</ul>
-<h1 id="二级缓存"><a href="#二级缓存" class="headerlink" title="二级缓存"></a>二级缓存</h1><h2 id="使用annotation配置缓存"><a href="#使用annotation配置缓存" class="headerlink" title="使用annotation配置缓存:"></a>使用annotation配置缓存:</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">@Entity</span><br><span class="line">//@BatchSize(size=5)</span><br><span class="line">@Cache(usage = CacheConcurrencyStrategy.READ_WRITE) </span><br><span class="line">@region=<span class="string">"gionName"</span></span><br><span class="line">public class Category &#123;</span><br><span class="line">	private int id;</span><br><span class="line">	private String name;</span><br><span class="line">	@Id</span><br><span class="line">	@GeneratedValue</span><br><span class="line">	public int <span class="function"><span class="title">getId</span></span>() &#123;</span><br><span class="line">		<span class="built_in">return</span> id;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="缓存策略-CacheConcurrencyStrategy-的取值"><a href="#缓存策略-CacheConcurrencyStrategy-的取值" class="headerlink" title="缓存策略(CacheConcurrencyStrategy)的取值"></a>缓存策略(CacheConcurrencyStrategy)的取值</h2><ul>
-<li>只读缓存（Strategy：read only）(常用)<br>如果你的应用程序只需读取一个持久化类的实例，而无需对其修改， 那么就可以对其进行只读 缓存。这是最简单，也是实用性最好的方法。甚至在集群中，它也能完美地运作。</li>
-<li>读写/缓存（Strategy：read/write）(常用)<br>如果应用程序需要更新数据，那么使用读/写缓存 比较合适。 如果应用程序要求“序列化事务”的隔离级别（serializable transaction isolation level），那么就决不能使用这种缓存策略。 如果在 JTA 环境中使用缓存，你必须指定 hibernate.transaction.manager_lookup_class 属性的值， 通过它，Hibernate 才能知道该应用程序中 JTA 的TransactionManager的具体策略。 在其它环境中，你必须保证在 Session.close()、或 Session.disconnect() 调用前， 整个事务已经结束。 如果你想在集群环境中使用此策略，你必须保证底层的缓存实现支持锁定（locking）。Hibernate 内置的缓存策略并不支持锁定功能。</li>
-<li>非严格读/写缓存（Strategy：nonstrict read/write）<br>如果应用程序只偶尔需要更新数据（也就是说，两个事务同时更新同一记录的情况很不常见），也不需要十分严格的事务隔离，那么比较适合使用非严格读/写缓存策略。如果在 JTA 环境中使用该策略，你必须为其指定 hibernate.transaction.manager_lookup_class 属性的值，在其它环境中，你必须保证在Session.close()、或 Session.disconnect() 调用前，整个事务已经结束。</li>
-<li>事务缓存（transactional）<br>Hibernate 的事务缓存策略提供了全事务的缓存支持，例如对 JBoss TreeCache 的支持。这样的缓存只能用于 JTA 环境中，你必须指定为其 hibernate.transaction.manager_lookup_class 属性。<h2 id="region的取值"><a href="#region的取值" class="headerlink" title="region的取值"></a>region的取值</h2>在ehcache.xml中，可以自定义缓存类型,比如:<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;cache name=<span class="string">"sampleCache1"</span></span><br><span class="line">maxElementsInMemory=<span class="string">"10000"</span> //最大缓存数量</span><br><span class="line">eternal=<span class="string">"false"</span>             //是否能被清除</span><br><span class="line">timeToIdleSeconds=<span class="string">"300"</span>     //300秒没被访问就被清除</span><br><span class="line">timeToLiveSeconds=<span class="string">"600"</span>     //已经存在600秒就可以被清除</span><br><span class="line">overflowToDisk=<span class="string">"true"</span>       //溢出时放在硬盘上</span><br><span class="line">/&gt;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>那么@region=”sampleCache1”<br>配置文件中:<br>  //不使用二级缓存<br>  <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property><br>  //hibernate中默认的二级缓存ehcache<br>  <property name="cache.use_second_level_cache">true</property><br>  <property name="cache.provider_class">org.hibernate.cache.EhCacheProvider</property><br>  //启用查询缓存<br>  <property name="cache.use_query_cache">true</property></p>
-<ul>
-<li>load默认使用二级缓存，iterate默认使用二级缓存</li>
-<li>list默认往二级缓存加数据，但是查询的时候不使用</li>
-<li>如果要query用二级缓存，需打开查询缓存<br><property name="cache.use_query_cache">true</property><br>调用Query的setCachable (true)方法指明使用二级缓存<br>例如：session.createQuery(“from Category”).setCacheable(true).list();</li>
-</ul>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hibernate/">Hibernate</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaEE/">JavaEE</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据库/">数据库</a></li></ul>
 	</div>
 
       
