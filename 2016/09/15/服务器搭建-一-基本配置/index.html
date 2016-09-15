@@ -87,14 +87,14 @@
 <meta name="description" content="使用SecureCRT连接服务器1.点击new session新建连接，选择SSH22.hostname填服务器的地址，Port填22,SecureFX选择SFTP
 安装JDK1.通过Connect SFTP Session将jdk上传至服务器2.使用命令tar -zxvf jdk-7u55-linux-i586.tar.gz解压压缩包3.将解压后的文件移到/usr/local下 mv jdk1.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="服务器搭建(一)基本配置">
+<meta property="og:title" content="服务器搭建(一)jdk和nginx配置">
 <meta property="og:url" content="http://jessyon.com/2016/09/15/服务器搭建-一-基本配置/index.html">
 <meta property="og:site_name" content="OneStack">
 <meta property="og:description" content="使用SecureCRT连接服务器1.点击new session新建连接，选择SSH22.hostname填服务器的地址，Port填22,SecureFX选择SFTP
 安装JDK1.通过Connect SFTP Session将jdk上传至服务器2.使用命令tar -zxvf jdk-7u55-linux-i586.tar.gz解压压缩包3.将解压后的文件移到/usr/local下 mv jdk1.">
-<meta property="og:updated_time" content="2016-09-15T13:58:41.423Z">
+<meta property="og:updated_time" content="2016-09-15T14:19:06.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="服务器搭建(一)基本配置">
+<meta name="twitter:title" content="服务器搭建(一)jdk和nginx配置">
 <meta name="twitter:description" content="使用SecureCRT连接服务器1.点击new session新建连接，选择SSH22.hostname填服务器的地址，Port填22,SecureFX选择SFTP
 安装JDK1.通过Connect SFTP Session将jdk上传至服务器2.使用命令tar -zxvf jdk-7u55-linux-i586.tar.gz解压压缩包3.将解压后的文件移到/usr/local下 mv jdk1.">
 
@@ -119,7 +119,7 @@
 
   <link rel="canonical" href="http://jessyon.com/2016/09/15/服务器搭建-一-基本配置/"/>
 
-  <title> 服务器搭建(一)基本配置 | OneStack </title>
+  <title> 服务器搭建(一)jdk和nginx配置 | OneStack </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -239,7 +239,7 @@
             
             
               
-                服务器搭建(一)基本配置
+                服务器搭建(一)jdk和nginx配置
               
             
           </h1>
@@ -305,8 +305,21 @@
 <li>在nginx目录,编译make，安装make install,安装在了/usr/local/nginx目录下</li>
 <li>启动：进入nginx的sbin目录，./nginx就可以启动。关闭:./nginx -s stop<br>ps aux|grep nginx 查看nginx进程</li>
 </ol>
-<h1 id="nginx配置"><a href="#nginx配置" class="headerlink" title="nginx配置"></a><strong>nginx配置</strong></h1><p>在/usr/local/nginx/conf目录下nginx.conf文件是nginx的配置文件。</p>
+<h1 id="nginx配置"><a href="#nginx配置" class="headerlink" title="nginx配置"></a><strong>nginx配置</strong></h1><p>在/usr/local/nginx/conf目录下nginx.conf文件是nginx的配置文件。<br>在nginx.conf文件中添加一个Service节点，修改端口号就可以</p>
+<pre><code>server {                        //一个server是一个虚拟主机
+        listen       80;        //当前虚拟主机监听的端口号
+        server_name  localhost; //当前虚拟主机的名称
 
+        #charset koi8-r;
+
+        #access_log  logs/host.access.log  main;
+
+        location / {
+            root   html;     //虚拟主机的根目录
+            index  index.html index.htm; //欢迎页,顺序查找
+        }
+   }
+</code></pre>
       
     </div>
 
@@ -374,7 +387,7 @@
   <div class="comments" id="comments">
     
       <div class="ds-thread" data-thread-key="2016/09/15/服务器搭建-一-基本配置/"
-           data-title="服务器搭建(一)基本配置" data-url="http://jessyon.com/2016/09/15/服务器搭建-一-基本配置/">
+           data-title="服务器搭建(一)jdk和nginx配置" data-url="http://jessyon.com/2016/09/15/服务器搭建-一-基本配置/">
       </div>
     
   </div>

@@ -239,7 +239,7 @@
               
                 
                 <a class="post-title-link" href="/2016/09/15/服务器搭建-一-基本配置/" itemprop="url">
-                  服务器搭建(一)基本配置
+                  服务器搭建(一)jdk和nginx配置
                 </a>
               
             
@@ -308,8 +308,21 @@
 <li>在nginx目录,编译make，安装make install,安装在了/usr/local/nginx目录下</li>
 <li>启动：进入nginx的sbin目录，./nginx就可以启动。关闭:./nginx -s stop<br>ps aux|grep nginx 查看nginx进程</li>
 </ol>
-<h1 id="nginx配置"><a href="#nginx配置" class="headerlink" title="nginx配置"></a><strong>nginx配置</strong></h1><p>在/usr/local/nginx/conf目录下nginx.conf文件是nginx的配置文件。</p>
+<h1 id="nginx配置"><a href="#nginx配置" class="headerlink" title="nginx配置"></a><strong>nginx配置</strong></h1><p>在/usr/local/nginx/conf目录下nginx.conf文件是nginx的配置文件。<br>在nginx.conf文件中添加一个Service节点，修改端口号就可以</p>
+<pre><code>server {                        //一个server是一个虚拟主机
+        listen       80;        //当前虚拟主机监听的端口号
+        server_name  localhost; //当前虚拟主机的名称
 
+        #charset koi8-r;
+
+        #access_log  logs/host.access.log  main;
+
+        location / {
+            root   html;     //虚拟主机的根目录
+            index  index.html index.htm; //欢迎页,顺序查找
+        }
+   }
+</code></pre>
           
         
       
