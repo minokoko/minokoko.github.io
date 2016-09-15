@@ -328,8 +328,8 @@
             }
        }
 </code></pre><h1 id="fastDFS"><a href="#fastDFS" class="headerlink" title="fastDFS"></a><strong>fastDFS</strong></h1><p>FastDFS是用c语言编写的一款开源的分布式文件系统。FastDFS为互联网量身定制，充分考虑了冗余备份、负载均衡、线性扩容等机制，并注重高可用、高性能等指标，使用FastDFS很容易搭建一套高性能的文件服务器集群提供文件上传、下载等服务。</p>
-<p><img src="https://github.com/minokoko/minokoko.github.io/blob/master/images/upload.jpg" alt=""></p>
-<p><img src="https://github.com/minokoko/minokoko.github.io/blob/master/images/download.jpg" alt=""></p>
+<h2 id="fastDFS上传流程"><a href="#fastDFS上传流程" class="headerlink" title="fastDFS上传流程"></a>fastDFS上传流程</h2><p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/upload.jpg" alt=""></p>
+<h2 id="fastDFS下载流程"><a href="#fastDFS下载流程" class="headerlink" title="fastDFS下载流程"></a>fastDFS下载流程</h2><p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/download.jpg" alt=""></p>
 <p>客户端上传文件后存储服务器将文件ID返回给客户端，此文件ID用于以后访问该文件的索引信息。文件索引信息包括：组名，虚拟磁盘路径，数据两级目录，文件名。</p>
 <pre><code>http://192.168.233.128/group1/M00/00/00/wKjpgFfGRCqAHIo6AADW-NO57MA805.jpg
 
