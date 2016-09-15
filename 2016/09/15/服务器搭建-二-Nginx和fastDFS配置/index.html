@@ -106,7 +106,9 @@ upstream tomcats{
   server {
        listen       80;
        server_name  tomcat.taotao.com;">
-<meta property="og:updated_time" content="2016-09-15T14:58:59.612Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/img/upload.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/img/download.jpg">
+<meta property="og:updated_time" content="2016-09-15T15:21:16.556Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="服务器搭建(二)Nginx和fastDFS配置">
 <meta name="twitter:description" content="Nginx反向代理Nginx的配置文件：
@@ -118,6 +120,7 @@ upstream tomcats{
   server {
        listen       80;
        server_name  tomcat.taotao.com;">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/img/upload.jpg">
 
 
 
@@ -345,6 +348,16 @@ upstream tomcats{
                 index  index.html index.htm;
             }
        }
+</code></pre><h1 id="fastDFS"><a href="#fastDFS" class="headerlink" title="fastDFS"></a><strong>fastDFS</strong></h1><p>FastDFS是用c语言编写的一款开源的分布式文件系统。FastDFS为互联网量身定制，充分考虑了冗余备份、负载均衡、线性扩容等机制，并注重高可用、高性能等指标，使用FastDFS很容易搭建一套高性能的文件服务器集群提供文件上传、下载等服务。</p>
+<p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/img/upload.jpg" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/img/download.jpg" alt=""></p>
+<p>客户端上传文件后存储服务器将文件ID返回给客户端，此文件ID用于以后访问该文件的索引信息。文件索引信息包括：组名，虚拟磁盘路径，数据两级目录，文件名。</p>
+<pre><code>http://192.168.233.128/group1/M00/00/00/wKjpgFfGRCqAHIo6AADW-NO57MA805.jpg
+
+组名：文件上传后所在的storage组名称，在文件上传成功后有storage服务器返回，需要客户端自行保存。 
+虚拟磁盘路径：storage配置的虚拟路径，与磁盘选项store_path*对应。如果配置了store_path0则是M00，如果配置了store_path1则是M01，以此类推。
+数据两级目录：storage服务器在每个虚拟磁盘路径下创建的两级目录，用于存储数据文件。
+文件名：与文件上传时不同。是由存储服务器根据特定信息生成，文件名包含：源存储服务器IP地址、文件创建时间戳、文件大小、随机数和文件拓展名等信息。
 </code></pre>
       
     </div>
@@ -497,7 +510,7 @@ upstream tomcats{
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Nginx反向代理"><span class="nav-number">1.</span> <span class="nav-text">Nginx反向代理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Nginx负载均衡"><span class="nav-number">2.</span> <span class="nav-text">Nginx负载均衡</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Nginx反向代理"><span class="nav-number">1.</span> <span class="nav-text">Nginx反向代理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Nginx负载均衡"><span class="nav-number">2.</span> <span class="nav-text">Nginx负载均衡</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#fastDFS"><span class="nav-number">3.</span> <span class="nav-text">fastDFS</span></a></li></ol></div>
             
           </div>
         </section>
