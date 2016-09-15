@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="struts2,hibernate3,spring,SVN," />
+  <meta name="keywords" content="linux,服务器,linux命令," />
 
 
 
@@ -84,24 +84,19 @@
 
 
 
-<meta name="description" content="前述这个周在初步了解SSH整合流程，同时以项目为驱动继续学习SSH。在网上找了一个CRM系统来临摹，同时辅助学习SVN版本控制器。因为之前并没有很多版本控制的概念，所以在接触SVN的时候，遇到了很多问题。CRM系统目前已经完成了登录功能，之后会通过CRM再熟悉SSH的CRUD。
-新知识点
-spring配置中，可以在applicationContext.xml中通过来引入applicationCon">
+<meta name="description" content="使用SecureCRT连接服务器1.点击new session新建连接，选择SSH22.hostname填服务器的地址，Port填22,SecureFX选择SFTP
+安装JDK1.通过Connect SFTP Session将jdk上传至服务器2.使用命令tar -zxvf jdk-7u55-linux-i586.tar.gz解压压缩包3.将解压后的文件移到/usr/local下 mv jdk1.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="我是如何整合SSH的(二)">
-<meta property="og:url" content="http://jessyon.com/2016/05/25/我是如何整合SSH的-二/index.html">
+<meta property="og:title" content="服务器搭建(一)jdk和nginx配置">
+<meta property="og:url" content="http://jessyon.com/2016/09/15/服务器搭建-一-jdk和nginx配置/index.html">
 <meta property="og:site_name" content="OneStack">
-<meta property="og:description" content="前述这个周在初步了解SSH整合流程，同时以项目为驱动继续学习SSH。在网上找了一个CRM系统来临摹，同时辅助学习SVN版本控制器。因为之前并没有很多版本控制的概念，所以在接触SVN的时候，遇到了很多问题。CRM系统目前已经完成了登录功能，之后会通过CRM再熟悉SSH的CRUD。
-新知识点
-spring配置中，可以在applicationContext.xml中通过来引入applicationCon">
-<meta property="og:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/img/checkout.jpg">
-<meta property="og:updated_time" content="2016-05-25T14:53:40.490Z">
+<meta property="og:description" content="使用SecureCRT连接服务器1.点击new session新建连接，选择SSH22.hostname填服务器的地址，Port填22,SecureFX选择SFTP
+安装JDK1.通过Connect SFTP Session将jdk上传至服务器2.使用命令tar -zxvf jdk-7u55-linux-i586.tar.gz解压压缩包3.将解压后的文件移到/usr/local下 mv jdk1.">
+<meta property="og:updated_time" content="2016-09-15T14:35:45.128Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="我是如何整合SSH的(二)">
-<meta name="twitter:description" content="前述这个周在初步了解SSH整合流程，同时以项目为驱动继续学习SSH。在网上找了一个CRM系统来临摹，同时辅助学习SVN版本控制器。因为之前并没有很多版本控制的概念，所以在接触SVN的时候，遇到了很多问题。CRM系统目前已经完成了登录功能，之后会通过CRM再熟悉SSH的CRUD。
-新知识点
-spring配置中，可以在applicationContext.xml中通过来引入applicationCon">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/img/checkout.jpg">
+<meta name="twitter:title" content="服务器搭建(一)jdk和nginx配置">
+<meta name="twitter:description" content="使用SecureCRT连接服务器1.点击new session新建连接，选择SSH22.hostname填服务器的地址，Port填22,SecureFX选择SFTP
+安装JDK1.通过Connect SFTP Session将jdk上传至服务器2.使用命令tar -zxvf jdk-7u55-linux-i586.tar.gz解压压缩包3.将解压后的文件移到/usr/local下 mv jdk1.">
 
 
 
@@ -122,9 +117,9 @@ spring配置中，可以在applicationContext.xml中通过来引入applicationCo
 
 
 
-  <link rel="canonical" href="http://jessyon.com/2016/05/25/我是如何整合SSH的-二/"/>
+  <link rel="canonical" href="http://jessyon.com/2016/09/15/服务器搭建-一-jdk和nginx配置/"/>
 
-  <title> 我是如何整合SSH的(二) | OneStack </title>
+  <title> 服务器搭建(一)jdk和nginx配置 | OneStack </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -244,7 +239,7 @@ spring配置中，可以在applicationContext.xml中通过来引入applicationCo
             
             
               
-                我是如何整合SSH的(二)
+                服务器搭建(一)jdk和nginx配置
               
             
           </h1>
@@ -256,8 +251,8 @@ spring配置中，可以在applicationContext.xml中通过来引入applicationCo
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-25T21:15:38+08:00" content="2016-05-25">
-              2016-05-25
+            <time itemprop="dateCreated" datetime="2016-09-15T20:39:25+08:00" content="2016-09-15">
+              2016-09-15
             </time>
           </span>
 
@@ -267,8 +262,8 @@ spring配置中，可以在applicationContext.xml中通过来引入applicationCo
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/05/25/我是如何整合SSH的-二/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/25/我是如何整合SSH的-二/" itemprop="commentsCount"></span>
+                <a href="/2016/09/15/服务器搭建-一-jdk和nginx配置/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/15/服务器搭建-一-jdk和nginx配置/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -291,20 +286,40 @@ spring配置中，可以在applicationContext.xml中通过来引入applicationCo
       
 
       
-        <h1 id="前述"><a href="#前述" class="headerlink" title="前述"></a>前述</h1><p>这个周在初步了解SSH整合流程，同时以项目为驱动继续学习SSH。在网上找了一个CRM系统来临摹，同时辅助学习SVN版本控制器。因为之前并没有很多版本控制的概念，所以在接触SVN的时候，遇到了很多问题。CRM系统目前已经完成了登录功能，之后会通过CRM再熟悉SSH的CRUD。</p>
-<h1 id="新知识点"><a href="#新知识点" class="headerlink" title="新知识点"></a>新知识点</h1><ul>
-<li>spring配置中，可以在applicationContext.xml中通过<import resource="applicationContext-user.xml">来引入applicationContext-user.xml配置文件。</import></li>
-<li>struts2配置中，指定package的name=”common”,其他struts2配置文件可以通过<package extends="common">继承包名为common下的所有内容。</package></li>
-<li>struts2配置中，可以通过<include file="struts/struts-staff.xml"></include>来引入struts包下的struts-staff.xml配置文件中的所有内容。</li>
-<li>MD5加密，可以通过MessageDigest messageDigest=MessageDigest.getInstance(“MD5”)初始化消息摘要算法<br>通过byte[] md5value = messageDigest.digest(value.getBytes());对String类型的字符串进行加密。<br>得到内容是10进制的，通过BigInteger bigInteger = new BigInteger(1,md5value); bigInteger.toString(16);转换成16进制。</li>
-<li>SVN开启服务，打开命令行，输入svnserve -d -r f:\svn开启服务(f:\svn为仓库目录)。</li>
-<li>在svnserve.conf文件的20、27、36行，将注释打开，开启svn权限配置。<br>auth-access = write<br>password-db = passwd<br>authz-db = authz 这三行前面不能有任何空格。</li>
-<li>在passwd文件下添加用户 user1 = 1234 user1为用户名，1234为密码。</li>
-<li>在authz文件下配置权限<br>[crm:/]       配置crm文件夹的访问权限<br>jessyon = rw  用户jessyon有读写权限<br>*=r         其他所有用户为只读权限</li>
-<li>check out到本地文件，在文件夹中右键SVN checkout弹出窗口，输入svn://localhost:3690/crm便可以将服务器上的内容checkout下来。<br><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/img/checkout.jpg" alt=""></li>
-</ul>
-<h2 id="特别注意"><a href="#特别注意" class="headerlink" title="特别注意"></a>特别注意</h2><p>在eclipse中，新建的web项目并没有jstl.jar和standard.jar这两个包，如果是myeclipse中的项目导入到eclipse中并且用到了jstl，那么需要额外导入这两个jar包。</p>
+        <h1 id="使用SecureCRT连接服务器"><a href="#使用SecureCRT连接服务器" class="headerlink" title="使用SecureCRT连接服务器"></a><strong>使用SecureCRT连接服务器</strong></h1><p>1.点击new session新建连接，选择SSH2<br>2.hostname填服务器的地址，Port填22,SecureFX选择SFTP</p>
+<h1 id="安装JDK"><a href="#安装JDK" class="headerlink" title="安装JDK"></a><strong>安装JDK</strong></h1><p>1.通过Connect SFTP Session将jdk上传至服务器<br>2.使用命令tar -zxvf jdk-7u55-linux-i586.tar.gz解压压缩包<br>3.将解压后的文件移到/usr/local下 mv jdk1.7.0_55 /usr/local<br>4.cd /usr/local 查看文件是否存在<br>5.通过notepad++连接服务器,找到/etc/profile编辑<br>6.加入内容如下：<br>export JAVA_HOME=/usr/local/jdk1.7.0_55<br>export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar<br>export PATH=$JAVA_HOME/bin:$PATH<br>7.加载刚设置的变量 source /etc/profile<br>8.java -version 查看是否成功安装jdk</p>
+<h1 id="nginx安装"><a href="#nginx安装" class="headerlink" title="nginx安装"></a><strong>nginx安装</strong></h1><p>nginx是一个使用c语言开发的高性能的http服务器及反向代理服务器。<br>Nginx是一款高性能的http 服务器/反向代理服务器及电子邮件（IMAP/POP3）代理服务器。由俄罗斯的程序设计师Igor Sysoev所开发，官方测试nginx能够支支撑5万并发链接，并且cpu、内存等资源消耗却非常低，运行非常稳定。</p>
+<ol>
+<li>gcc<br>安装nginx需要先将官网下载的源码进行编译，编译依赖gcc环境，如果没有gcc环境，需要安装gcc：yum install gcc-c++ </li>
+<li>PCRE<br>PCRE(Perl Compatible Regular Expressions)是一个Perl库，包括 perl 兼容的正则表达式库。nginx的http模块使用pcre来解析正则表达式，所以需要在linux上安装pcre库。<br>yum install -y pcre pcre-devel<br>注：pcre-devel是使用pcre开发的一个二次开发库。nginx也需要此库。</li>
+<li><p>zlib<br>zlib库提供了很多种压缩和解压缩的方式，nginx使用zlib对http包的内容进行gzip，所以需要在linux上安装zlib库。<br>yum install -y zlib zlib-devel</p>
+</li>
+<li><p>openssl<br>OpenSSL 是一个强大的安全套接字层密码库，囊括主要的密码算法、常用的密钥和证书封装管理功能及SSL协议，并提供丰富的应用程序供测试或其它目的使用。<br>nginx不仅支持http协议，还支持https（即在ssl协议上传输http），所以需要在linux安装openssl库。<br>yum install -y openssl openssl-devel</p>
+</li>
+<li>将nginx-1.8.0.tar.gz拷贝至linux服务器</li>
+<li>解压 tar -zxvf nginx-1.8.0.tar.gz</li>
+<li>移到/usr/local mv nginx-1.8.0 /usr/local</li>
+<li><p>进入nginx目录,参数设置如下：<br>./configure \<br>–prefix=/usr/local/nginx \<br>–pid-path=/var/run/nginx/nginx.pid \<br>–lock-path=/var/lock/nginx.lock \<br>–error-log-path=/var/log/nginx/error.log \<br>–http-log-path=/var/log/nginx/access.log \<br>–with-http_gzip_static_module \<br>–http-client-body-temp-path=/var/temp/nginx/client \<br>–http-proxy-temp-path=/var/temp/nginx/proxy \<br>–http-fastcgi-temp-path=/var/temp/nginx/fastcgi \<br>–http-uwsgi-temp-path=/var/temp/nginx/uwsgi \<br>–http-scgi-temp-path=/var/temp/nginx/scgi</p>
+<p>注意：上边将临时文件目录指定为/var/temp/nginx，需要在/var下创建temp及nginx目录cd /var -&gt; mkdir temp -&gt; cd temp -&gt; mkdir nginx</p>
+</li>
+<li>在nginx目录,编译make，安装make install,安装在了/usr/local/nginx目录下</li>
+<li>启动：进入nginx的sbin目录，./nginx就可以启动。关闭:./nginx -s stop<br>ps aux|grep nginx 查看nginx进程</li>
+</ol>
+<h1 id="nginx配置"><a href="#nginx配置" class="headerlink" title="nginx配置"></a><strong>nginx配置</strong></h1><p>在/usr/local/nginx/conf目录下nginx.conf文件是nginx的配置文件。<br>在nginx.conf文件中添加一个Service节点，修改端口号就可以</p>
+<pre><code>server {                        //一个server是一个虚拟主机
+        listen       80;        //当前虚拟主机监听的端口号
+        server_name  localhost; //当前虚拟主机的名称
 
+        #charset koi8-r;
+
+        #access_log  logs/host.access.log  main;
+
+        location / {
+            root   html;     //虚拟主机的根目录
+            index  index.html index.htm; //欢迎页,顺序查找
+        }
+   }
+</code></pre>
       
     </div>
 
@@ -326,13 +341,11 @@ spring配置中，可以在applicationContext.xml中通过来引入applicationCo
       
         <div class="post-tags">
           
-            <a href="/tags/struts2/" rel="tag">#struts2</a>
+            <a href="/tags/linux/" rel="tag">#linux</a>
           
-            <a href="/tags/hibernate3/" rel="tag">#hibernate3</a>
+            <a href="/tags/服务器/" rel="tag">#服务器</a>
           
-            <a href="/tags/spring/" rel="tag">#spring</a>
-          
-            <a href="/tags/SVN/" rel="tag">#SVN</a>
+            <a href="/tags/linux命令/" rel="tag">#linux命令</a>
           
         </div>
       
@@ -341,16 +354,16 @@ spring配置中，可以在applicationContext.xml中通过来引入applicationCo
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/05/20/我是如何整合SSH的-一/" rel="next" title="我是如何整合SSH的(一)">
-                <i class="fa fa-chevron-left"></i> 我是如何整合SSH的(一)
+              <a href="/2016/08/21/淘淘商城开发记录-三/" rel="next" title="淘淘商城开发记录(三)">
+                <i class="fa fa-chevron-left"></i> 淘淘商城开发记录(三)
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/06/01/我是如何整合SSH的-三-CRM总结/" rel="prev" title="我是如何整合SSH的(三)CRM总结">
-                我是如何整合SSH的(三)CRM总结 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/09/15/服务器搭建-一-基本配置/" rel="prev" title="服务器搭建(一)jdk和nginx配置">
+                服务器搭建(一)jdk和nginx配置 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -377,8 +390,8 @@ spring配置中，可以在applicationContext.xml中通过来引入applicationCo
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/05/25/我是如何整合SSH的-二/"
-           data-title="我是如何整合SSH的(二)" data-url="http://jessyon.com/2016/05/25/我是如何整合SSH的-二/">
+      <div class="ds-thread" data-thread-key="2016/09/15/服务器搭建-一-jdk和nginx配置/"
+           data-title="服务器搭建(一)jdk和nginx配置" data-url="http://jessyon.com/2016/09/15/服务器搭建-一-jdk和nginx配置/">
       </div>
     
   </div>
@@ -462,7 +475,7 @@ spring配置中，可以在applicationContext.xml中通过来引入applicationCo
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前述"><span class="nav-number">1.</span> <span class="nav-text">前述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#新知识点"><span class="nav-number">2.</span> <span class="nav-text">新知识点</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特别注意"><span class="nav-number">2.1.</span> <span class="nav-text">特别注意</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#使用SecureCRT连接服务器"><span class="nav-number">1.</span> <span class="nav-text">使用SecureCRT连接服务器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装JDK"><span class="nav-number">2.</span> <span class="nav-text">安装JDK</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#nginx安装"><span class="nav-number">3.</span> <span class="nav-text">nginx安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#nginx配置"><span class="nav-number">4.</span> <span class="nav-text">nginx配置</span></a></li></ol></div>
             
           </div>
         </section>
