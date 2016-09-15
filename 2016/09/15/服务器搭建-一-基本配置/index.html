@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="linux,服务器,linux命令," />
 
 
 
@@ -84,40 +84,19 @@
 
 
 
-<meta name="description" content="title: 服务器搭建(一)基本配置date: 2016-09-15 20:39:25tags:
-
-linux
-服务器
-linux命令
-
-
-使用SecureCRT连接服务器1.点击new session新建连接，选择SSH22.hostname填服务器的地址，Port填22,SecureFX选择SFTP
-安装JDK1.通过Connect SFTP Session将jdk上传至服务器2.使用命令">
+<meta name="description" content="使用SecureCRT连接服务器1.点击new session新建连接，选择SSH22.hostname填服务器的地址，Port填22,SecureFX选择SFTP
+安装JDK1.通过Connect SFTP Session将jdk上传至服务器2.使用命令tar -zxvf jdk-7u55-linux-i586.tar.gz解压压缩包3.将解压后的文件移到/usr/local下 mv jdk1.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="OneStack">
+<meta property="og:title" content="服务器搭建(一)基本配置">
 <meta property="og:url" content="http://jessyon.com/2016/09/15/服务器搭建-一-基本配置/index.html">
 <meta property="og:site_name" content="OneStack">
-<meta property="og:description" content="title: 服务器搭建(一)基本配置date: 2016-09-15 20:39:25tags:
-
-linux
-服务器
-linux命令
-
-
-使用SecureCRT连接服务器1.点击new session新建连接，选择SSH22.hostname填服务器的地址，Port填22,SecureFX选择SFTP
-安装JDK1.通过Connect SFTP Session将jdk上传至服务器2.使用命令">
-<meta property="og:updated_time" content="2016-09-15T13:10:21.748Z">
+<meta property="og:description" content="使用SecureCRT连接服务器1.点击new session新建连接，选择SSH22.hostname填服务器的地址，Port填22,SecureFX选择SFTP
+安装JDK1.通过Connect SFTP Session将jdk上传至服务器2.使用命令tar -zxvf jdk-7u55-linux-i586.tar.gz解压压缩包3.将解压后的文件移到/usr/local下 mv jdk1.">
+<meta property="og:updated_time" content="2016-09-15T13:58:41.423Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="OneStack">
-<meta name="twitter:description" content="title: 服务器搭建(一)基本配置date: 2016-09-15 20:39:25tags:
-
-linux
-服务器
-linux命令
-
-
-使用SecureCRT连接服务器1.点击new session新建连接，选择SSH22.hostname填服务器的地址，Port填22,SecureFX选择SFTP
-安装JDK1.通过Connect SFTP Session将jdk上传至服务器2.使用命令">
+<meta name="twitter:title" content="服务器搭建(一)基本配置">
+<meta name="twitter:description" content="使用SecureCRT连接服务器1.点击new session新建连接，选择SSH22.hostname填服务器的地址，Port填22,SecureFX选择SFTP
+安装JDK1.通过Connect SFTP Session将jdk上传至服务器2.使用命令tar -zxvf jdk-7u55-linux-i586.tar.gz解压压缩包3.将解压后的文件移到/usr/local下 mv jdk1.">
 
 
 
@@ -140,7 +119,7 @@ linux命令
 
   <link rel="canonical" href="http://jessyon.com/2016/09/15/服务器搭建-一-基本配置/"/>
 
-  <title>  | OneStack </title>
+  <title> 服务器搭建(一)基本配置 | OneStack </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -260,7 +239,7 @@ linux命令
             
             
               
-                
+                服务器搭建(一)基本配置
               
             
           </h1>
@@ -307,24 +286,26 @@ linux命令
       
 
       
-        <hr>
-<p>title: 服务器搭建(一)基本配置<br>date: 2016-09-15 20:39:25<br>tags:</p>
-<ul>
-<li>linux</li>
-<li>服务器</li>
-<li>linux命令</li>
-</ul>
-<hr>
-<h1 id="使用SecureCRT连接服务器"><a href="#使用SecureCRT连接服务器" class="headerlink" title="使用SecureCRT连接服务器"></a><strong>使用SecureCRT连接服务器</strong></h1><p>1.点击new session新建连接，选择SSH2<br>2.hostname填服务器的地址，Port填22,SecureFX选择SFTP</p>
+        <h1 id="使用SecureCRT连接服务器"><a href="#使用SecureCRT连接服务器" class="headerlink" title="使用SecureCRT连接服务器"></a><strong>使用SecureCRT连接服务器</strong></h1><p>1.点击new session新建连接，选择SSH2<br>2.hostname填服务器的地址，Port填22,SecureFX选择SFTP</p>
 <h1 id="安装JDK"><a href="#安装JDK" class="headerlink" title="安装JDK"></a><strong>安装JDK</strong></h1><p>1.通过Connect SFTP Session将jdk上传至服务器<br>2.使用命令tar -zxvf jdk-7u55-linux-i586.tar.gz解压压缩包<br>3.将解压后的文件移到/usr/local下 mv jdk1.7.0_55 /usr/local<br>4.cd /usr/local 查看文件是否存在<br>5.通过notepad++连接服务器,找到/etc/profile编辑<br>6.加入内容如下：<br>export JAVA_HOME=/usr/local/jdk1.7.0_55<br>export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar<br>export PATH=$JAVA_HOME/bin:$PATH<br>7.加载刚设置的变量 source /etc/profile<br>8.java -version 查看是否成功安装jdk</p>
-<h1 id="nginx安装"><a href="#nginx安装" class="headerlink" title="nginx安装"></a><strong>nginx安装</strong></h1><ol>
+<h1 id="nginx安装"><a href="#nginx安装" class="headerlink" title="nginx安装"></a><strong>nginx安装</strong></h1><p>nginx是一个使用c语言开发的高性能的http服务器及反向代理服务器。<br>Nginx是一款高性能的http 服务器/反向代理服务器及电子邮件（IMAP/POP3）代理服务器。由俄罗斯的程序设计师Igor Sysoev所开发，官方测试nginx能够支支撑5万并发链接，并且cpu、内存等资源消耗却非常低，运行非常稳定。</p>
+<ol>
 <li>gcc<br>安装nginx需要先将官网下载的源码进行编译，编译依赖gcc环境，如果没有gcc环境，需要安装gcc：yum install gcc-c++ </li>
 <li>PCRE<br>PCRE(Perl Compatible Regular Expressions)是一个Perl库，包括 perl 兼容的正则表达式库。nginx的http模块使用pcre来解析正则表达式，所以需要在linux上安装pcre库。<br>yum install -y pcre pcre-devel<br>注：pcre-devel是使用pcre开发的一个二次开发库。nginx也需要此库。</li>
 <li><p>zlib<br>zlib库提供了很多种压缩和解压缩的方式，nginx使用zlib对http包的内容进行gzip，所以需要在linux上安装zlib库。<br>yum install -y zlib zlib-devel</p>
 </li>
 <li><p>openssl<br>OpenSSL 是一个强大的安全套接字层密码库，囊括主要的密码算法、常用的密钥和证书封装管理功能及SSL协议，并提供丰富的应用程序供测试或其它目的使用。<br>nginx不仅支持http协议，还支持https（即在ssl协议上传输http），所以需要在linux安装openssl库。<br>yum install -y openssl openssl-devel</p>
 </li>
+<li>将nginx-1.8.0.tar.gz拷贝至linux服务器</li>
+<li>解压 tar -zxvf nginx-1.8.0.tar.gz</li>
+<li>移到/usr/local mv nginx-1.8.0 /usr/local</li>
+<li><p>进入nginx目录,参数设置如下：<br>./configure \<br>–prefix=/usr/local/nginx \<br>–pid-path=/var/run/nginx/nginx.pid \<br>–lock-path=/var/lock/nginx.lock \<br>–error-log-path=/var/log/nginx/error.log \<br>–http-log-path=/var/log/nginx/access.log \<br>–with-http_gzip_static_module \<br>–http-client-body-temp-path=/var/temp/nginx/client \<br>–http-proxy-temp-path=/var/temp/nginx/proxy \<br>–http-fastcgi-temp-path=/var/temp/nginx/fastcgi \<br>–http-uwsgi-temp-path=/var/temp/nginx/uwsgi \<br>–http-scgi-temp-path=/var/temp/nginx/scgi</p>
+<p>注意：上边将临时文件目录指定为/var/temp/nginx，需要在/var下创建temp及nginx目录cd /var -&gt; mkdir temp -&gt; cd temp -&gt; mkdir nginx</p>
+</li>
+<li>在nginx目录,编译make，安装make install,安装在了/usr/local/nginx目录下</li>
+<li>启动：进入nginx的sbin目录，./nginx就可以启动。关闭:./nginx -s stop<br>ps aux|grep nginx 查看nginx进程</li>
 </ol>
+<h1 id="nginx配置"><a href="#nginx配置" class="headerlink" title="nginx配置"></a><strong>nginx配置</strong></h1><p>在/usr/local/nginx/conf目录下nginx.conf文件是nginx的配置文件。</p>
 
       
     </div>
@@ -344,6 +325,16 @@ linux命令
     </div>
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag">#linux</a>
+          
+            <a href="/tags/服务器/" rel="tag">#服务器</a>
+          
+            <a href="/tags/linux命令/" rel="tag">#linux命令</a>
+          
+        </div>
       
 
       
@@ -383,7 +374,7 @@ linux命令
   <div class="comments" id="comments">
     
       <div class="ds-thread" data-thread-key="2016/09/15/服务器搭建-一-基本配置/"
-           data-title="" data-url="http://jessyon.com/2016/09/15/服务器搭建-一-基本配置/">
+           data-title="服务器搭建(一)基本配置" data-url="http://jessyon.com/2016/09/15/服务器搭建-一-基本配置/">
       </div>
     
   </div>
@@ -438,7 +429,7 @@ linux命令
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-count">20</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -467,7 +458,7 @@ linux命令
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#使用SecureCRT连接服务器"><span class="nav-number">1.</span> <span class="nav-text">使用SecureCRT连接服务器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装JDK"><span class="nav-number">2.</span> <span class="nav-text">安装JDK</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#nginx安装"><span class="nav-number">3.</span> <span class="nav-text">nginx安装</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#使用SecureCRT连接服务器"><span class="nav-number">1.</span> <span class="nav-text">使用SecureCRT连接服务器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装JDK"><span class="nav-number">2.</span> <span class="nav-text">安装JDK</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#nginx安装"><span class="nav-number">3.</span> <span class="nav-text">nginx安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#nginx配置"><span class="nav-number">4.</span> <span class="nav-text">nginx配置</span></a></li></ol></div>
             
           </div>
         </section>
