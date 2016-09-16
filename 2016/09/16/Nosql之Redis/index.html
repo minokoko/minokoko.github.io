@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="淘淘商城,SSM,maven," />
+  <meta name="keywords" content="Nosql,redis," />
 
 
 
@@ -84,25 +84,22 @@
 
 
 
-<meta name="description" content="综述昨天没有什么写太多的代码，github也都没有更新，因为一直在linux搞nginx和图片服务器的东西。
-今天也没有写太多的代码，但是还是更新了下github，两天不更新，感觉是不是有点懒惰。
-因为要把图片上传到服务器，而tomcat用来做静态资源服务器难免大材小用了，所以学习了nginx服务器，以及fastdfs插件。
-在linux下操作还是有些不熟悉，还得自己搭建一个服务器，的确头有点头大">
+<meta name="description" content="什么是NoSql为了解决高并发、高可扩展、高可用、大数据存储问题而产生的数据库解决方案，就是NoSql数据库。
+NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为关系型数据库的良好补充。
+什么是RedisRedis是用C语言开发的一个开源的高性能键值对（key-value）数据库。它通过提供多种键值数据类型来适应不同场景下的存储需求，目前为止Redis支持的键值数据">
 <meta property="og:type" content="article">
-<meta property="og:title" content="淘淘商城开发记录(三)">
-<meta property="og:url" content="http://jessyon.com/2016/08/21/淘淘商城开发记录-三/index.html">
+<meta property="og:title" content="Nosql之Redis">
+<meta property="og:url" content="http://jessyon.com/2016/09/16/Nosql之Redis/index.html">
 <meta property="og:site_name" content="OneStack">
-<meta property="og:description" content="综述昨天没有什么写太多的代码，github也都没有更新，因为一直在linux搞nginx和图片服务器的东西。
-今天也没有写太多的代码，但是还是更新了下github，两天不更新，感觉是不是有点懒惰。
-因为要把图片上传到服务器，而tomcat用来做静态资源服务器难免大材小用了，所以学习了nginx服务器，以及fastdfs插件。
-在linux下操作还是有些不熟悉，还得自己搭建一个服务器，的确头有点头大">
-<meta property="og:updated_time" content="2016-08-21T13:42:51.972Z">
+<meta property="og:description" content="什么是NoSql为了解决高并发、高可扩展、高可用、大数据存储问题而产生的数据库解决方案，就是NoSql数据库。
+NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为关系型数据库的良好补充。
+什么是RedisRedis是用C语言开发的一个开源的高性能键值对（key-value）数据库。它通过提供多种键值数据类型来适应不同场景下的存储需求，目前为止Redis支持的键值数据">
+<meta property="og:updated_time" content="2016-09-16T04:52:08.491Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="淘淘商城开发记录(三)">
-<meta name="twitter:description" content="综述昨天没有什么写太多的代码，github也都没有更新，因为一直在linux搞nginx和图片服务器的东西。
-今天也没有写太多的代码，但是还是更新了下github，两天不更新，感觉是不是有点懒惰。
-因为要把图片上传到服务器，而tomcat用来做静态资源服务器难免大材小用了，所以学习了nginx服务器，以及fastdfs插件。
-在linux下操作还是有些不熟悉，还得自己搭建一个服务器，的确头有点头大">
+<meta name="twitter:title" content="Nosql之Redis">
+<meta name="twitter:description" content="什么是NoSql为了解决高并发、高可扩展、高可用、大数据存储问题而产生的数据库解决方案，就是NoSql数据库。
+NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为关系型数据库的良好补充。
+什么是RedisRedis是用C语言开发的一个开源的高性能键值对（key-value）数据库。它通过提供多种键值数据类型来适应不同场景下的存储需求，目前为止Redis支持的键值数据">
 
 
 
@@ -123,9 +120,9 @@
 
 
 
-  <link rel="canonical" href="http://jessyon.com/2016/08/21/淘淘商城开发记录-三/"/>
+  <link rel="canonical" href="http://jessyon.com/2016/09/16/Nosql之Redis/"/>
 
-  <title> 淘淘商城开发记录(三) | OneStack </title>
+  <title> Nosql之Redis | OneStack </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -245,7 +242,7 @@
             
             
               
-                淘淘商城开发记录(三)
+                Nosql之Redis
               
             
           </h1>
@@ -257,8 +254,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-08-21T20:39:49+08:00" content="2016-08-21">
-              2016-08-21
+            <time itemprop="dateCreated" datetime="2016-09-16T11:55:31+08:00" content="2016-09-16">
+              2016-09-16
             </time>
           </span>
 
@@ -268,8 +265,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/08/21/淘淘商城开发记录-三/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/21/淘淘商城开发记录-三/" itemprop="commentsCount"></span>
+                <a href="/2016/09/16/Nosql之Redis/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/16/Nosql之Redis/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -292,24 +289,39 @@
       
 
       
-        <h1 id="综述"><a href="#综述" class="headerlink" title="综述"></a><strong>综述</strong></h1><p>昨天没有什么写太多的代码，github也都没有更新，因为一直在linux搞nginx和图片服务器的东西。</p>
-<p>今天也没有写太多的代码，但是还是更新了下github，两天不更新，感觉是不是有点懒惰。</p>
-<p>因为要把图片上传到服务器，而tomcat用来做静态资源服务器难免大材小用了，所以学习了nginx服务器，以及fastdfs插件。</p>
-<p>在linux下操作还是有些不熟悉，还得自己搭建一个服务器，的确头有点头大。稍微总结了下用到的命令:</p>
-<ul>
-<li>mkdir 创建新文件夹</li>
-<li>cd 返回上层目录 cd /usr/localhost/ 进入usr下的localhost目录</li>
-<li>rm -rf  a/  强制删除目录a</li>
-<li>ll 显示当前目录所有文件</li>
-<li>cp /a/b/c  d/e/f  将a/b 目录下的c文件复制到d/e/f目录下</li>
-<li>pwd 显示当前目录全路经</li>
-<li>ifconfig 相当于ipconfig在windows下的效果,查看网关，ip等信息</li>
-<li>tar -zxf nginx-1.8.0.tar.gz 解压nginx-1.8.0.tar.gz到当前目录</li>
-</ul>
-<p>在windows下经常使用SecureCRT连接到linux下，同样可以操作服务器,同时配合notpad++连接到linux操作文档，双管齐下，效率高涨。</p>
-<p>nginx可以反向代理，用户访问域名，nginx服务器决定用户访问不同的应用服务器，这样可以减轻一个服务器的压力。</p>
-<p>负载均衡决定了几个不同服务器负载权重，nginx服务器决定用户访问的是哪个应用服务器。根据不同的权重，nginx服务器决定权重大的应用服务器承受更多的用户访问。</p>
-
+        <h1 id="什么是NoSql"><a href="#什么是NoSql" class="headerlink" title="什么是NoSql"></a><strong>什么是NoSql</strong></h1><pre><code>为了解决高并发、高可扩展、高可用、大数据存储问题而产生的数据库解决方案，就是NoSql数据库。
+NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为关系型数据库的良好补充。
+</code></pre><h1 id="什么是Redis"><a href="#什么是Redis" class="headerlink" title="什么是Redis"></a><strong>什么是Redis</strong></h1><p>Redis是用C语言开发的一个开源的高性能键值对（key-value）数据库。它通过提供多种键值数据类型来适应不同场景下的存储需求，目前为止Redis支持的键值数据类型如<br>下：</p>
+<pre><code>字符串类型
+散列类型
+列表类型
+集合类型
+有序集合类型
+</code></pre><h1 id="redis的应用场景"><a href="#redis的应用场景" class="headerlink" title="redis的应用场景"></a><strong>redis的应用场景</strong></h1><pre><code>缓存（数据查询、短连接、新闻内容、商品内容等等）。（最多使用）
+分布式集群架构中的session分离。
+聊天室的在线好友列表。
+任务队列。（秒杀、抢购、12306等等）
+应用排行榜。
+网站访问统计。
+数据过期处理（可以精确到毫秒）
+</code></pre><h1 id="Redis安装"><a href="#Redis安装" class="headerlink" title="Redis安装"></a><strong>Redis安装</strong></h1><p>第一步.在Linux下安装gcc环境</p>
+<pre><code>yum install gcc-c++
+</code></pre><p>第二步. 安装redis</p>
+<pre><code>1.将下载的Redis源码包上传到Linux服务器中
+2.解压缩Redis源码包到/usr/local tar -zxf redis-3.0.0.tar.gz -C /usr/local
+3.进入/usr/local/redis-3.0.0目录 
+  编译redis源码 make
+  安装redis make install PREFIX=/usr/local/redis0707
+</code></pre><p>第三部. 后端启动redis</p>
+<pre><code>1.将redis源码包中的redis.conf配置文件复制到/usr/local/redis/bin/下
+  cp redis.conf /usr/local/redis0707/bin/
+2.修改redis.conf，将daemonize由no改为yes
+  37行 daemonize yes
+3.启动redis-server 
+  ./redis-server redis.conf
+4.关闭redis-server
+  ./redis-cli shutdown
+</code></pre>
       
     </div>
 
@@ -331,11 +343,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/淘淘商城/" rel="tag">#淘淘商城</a>
+            <a href="/tags/Nosql/" rel="tag">#Nosql</a>
           
-            <a href="/tags/SSM/" rel="tag">#SSM</a>
-          
-            <a href="/tags/maven/" rel="tag">#maven</a>
+            <a href="/tags/redis/" rel="tag">#redis</a>
           
         </div>
       
@@ -344,17 +354,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/08/19/淘淘商城开发记录-二/" rel="next" title="淘淘商城开发记录(二)">
-                <i class="fa fa-chevron-left"></i> 淘淘商城开发记录(二)
+              <a href="/2016/09/16/服务器搭建-三-fastDFS图片服务器/" rel="next" title="服务器搭建(三) fastDFS图片服务器">
+                <i class="fa fa-chevron-left"></i> 服务器搭建(三) fastDFS图片服务器
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/09/15/服务器搭建-一-jdk和nginx配置/" rel="prev" title="服务器搭建(一)jdk和nginx配置">
-                服务器搭建(一)jdk和nginx配置 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -380,8 +386,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/08/21/淘淘商城开发记录-三/"
-           data-title="淘淘商城开发记录(三)" data-url="http://jessyon.com/2016/08/21/淘淘商城开发记录-三/">
+      <div class="ds-thread" data-thread-key="2016/09/16/Nosql之Redis/"
+           data-title="Nosql之Redis" data-url="http://jessyon.com/2016/09/16/Nosql之Redis/">
       </div>
     
   </div>
@@ -465,7 +471,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#综述"><span class="nav-number">1.</span> <span class="nav-text">综述</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是NoSql"><span class="nav-number">1.</span> <span class="nav-text">什么是NoSql</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是Redis"><span class="nav-number">2.</span> <span class="nav-text">什么是Redis</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#redis的应用场景"><span class="nav-number">3.</span> <span class="nav-text">redis的应用场景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis安装"><span class="nav-number">4.</span> <span class="nav-text">Redis安装</span></a></li></ol></div>
             
           </div>
         </section>
