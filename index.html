@@ -289,7 +289,7 @@
       
         
           
-            <h1 id="fastDFS搭建"><a href="#fastDFS搭建" class="headerlink" title="fastDFS搭建"></a><strong>fastDFS搭建</strong></h1><p>第一步：把fastDFS都上传到linux系统。<br>第二步：安装FastDFS之前，先安装libevent工具包。<br>yum -y install libevent<br>第三步：安装libfastcommonV1.0.7工具包。<br>1、解压缩<br>2、./make.sh<br>3、./make.sh install<br>4、把/usr/lib64/libfastcommon.so文件向/usr/lib/下复制一份<br>第四步：安装Tracker服务。<br>1、解压缩<br>2、./make.sh<br>3、./make.sh install<br>安装后在/usr/bin/目录下有以fdfs开头的文件都是编译出来的。<br>配置文件都放到/etc/fdfs文件夹<br>4、把/root/FastDFS/conf目录下的所有的配置文件都复制到/etc/fdfs下。<br>5、配置tracker服务。修改/root/FastDFS/conf/tracker.conf文件。</p>
+            <h1 id="fastDFS搭建"><a href="#fastDFS搭建" class="headerlink" title="fastDFS搭建"></a><strong>fastDFS搭建</strong></h1><p>第一步：把fastDFS都上传到linux系统。<br>第二步：安装FastDFS之前，先安装libevent工具包。<br>yum -y install libevent<br>第三步：安装libfastcommonV1.0.7工具包。<br>    1、解压缩<br>    2、./make.sh<br>    3、./make.sh install<br>    4、把/usr/lib64/libfastcommon.so文件向/usr/lib/下复制一份<br>第四步：安装Tracker服务。<br>    1、解压缩fastDFS<br>    2、./make.sh<br>    3、./make.sh install<br>    安装后在/usr/bin/目录下有以fdfs开头的文件都是编译出来的。<br>    配置文件都放到/etc/fdfs文件夹<br>    4、把/root/FastDFS/conf目录下的所有的配置文件都复制到/etc/fdfs下。<br>       cp *<br>    5、配置tracker服务。修改/root/FastDFS/conf/tracker.conf文件。</p>
 
           
         
