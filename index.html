@@ -238,6 +238,310 @@
             
               
                 
+                <a class="post-title-link" href="/2016/09/16/redis数据类型及命令/" itemprop="url">
+                  redis数据类型及命令
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-16T13:59:39+08:00" content="2016-09-16">
+              2016-09-16
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/16/redis数据类型及命令/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/16/redis数据类型及命令/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="String类型"><a href="#String类型" class="headerlink" title="String类型"></a><strong>String类型</strong></h1><p>SET key value 赋值</p>
+<pre><code>127.0.0.1:6379&gt; set test 123
+OK
+</code></pre><p>GET key  取值</p>
+<pre><code>127.0.0.1:6379&gt; get test
+&quot;123“
+</code></pre><p>GETSET key value  取值并赋值</p>
+<pre><code>127.0.0.1:6379&gt; getset s2 222
+&quot;111&quot;
+127.0.0.1:6379&gt; get s2
+&quot;222&quot;
+</code></pre><p>DEL key 删除</p>
+<pre><code>127.0.0.1:6379&gt; del test
+(integer) 1
+</code></pre><p>incr key 递增数字 </p>
+<p>当存储的字符串是整数时，Redis提供了一个实用的命令INCR，其作用是让当前键值递增，并返回递增后的值。</p>
+<pre><code>127.0.0.1:6379&gt; incr num
+(integer) 1
+127.0.0.1:6379&gt; incr num
+(integer) 2
+127.0.0.1:6379&gt; incr num
+(integer) 3
+</code></pre><p>INCRBY key increment 增加指定的整数 </p>
+<pre><code>127.0.0.1:6379&gt; incrby num 2
+(integer) 5
+127.0.0.1:6379&gt; incrby num 2
+(integer) 7
+127.0.0.1:6379&gt; incrby num 2
+(integer) 9
+</code></pre><p>DECR key  递减数值</p>
+<pre><code>127.0.0.1:6379&gt; decr num
+(integer) 9
+127.0.0.1:6379&gt; decr num
+(integer) 8
+</code></pre><p>DECRBY key decrement      减少指定的整数 </p>
+<pre><code>127.0.0.1:6379&gt; decr num
+(integer) 6
+127.0.0.1:6379&gt; decr num
+(integer) 5
+127.0.0.1:6379&gt; decrby num 3
+(integer) 2
+127.0.0.1:6379&gt; decrby num 3
+(integer) -1
+</code></pre><p>APPEND key value      向尾部追加值 </p>
+<pre><code>127.0.0.1:6379&gt; set str hello
+OK
+127.0.0.1:6379&gt; append str &quot; world!&quot;
+(integer) 12
+127.0.0.1:6379&gt; get str 
+&quot;hello world!&quot;
+</code></pre><p>STRLEN key 获取字符串长度</p>
+<pre><code>127.0.0.1:6379&gt; strlen str 
+(integer) 0
+127.0.0.1:6379&gt; set str hello
+OK
+127.0.0.1:6379&gt; strlen str 
+(integer) 5
+</code></pre><p>MSET key value [key value …] 同时设置多个值</p>
+<pre><code>127.0.0.1:6379&gt; mset k1 v1 k2 v2 k3 v3
+OK
+</code></pre><p>MGET key [key …] 同时取多个值</p>
+<pre><code>127.0.0.1:6379&gt; get k1
+&quot;v1&quot;
+127.0.0.1:6379&gt; mget k1 k3
+1) &quot;v1&quot;
+2) &quot;v3&quot;
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/09/16/Nosql之Redis/" itemprop="url">
+                  服务器搭建-四-redis配置
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-16T11:55:31+08:00" content="2016-09-16">
+              2016-09-16
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/16/Nosql之Redis/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/16/Nosql之Redis/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="什么是NoSql"><a href="#什么是NoSql" class="headerlink" title="什么是NoSql"></a><strong>什么是NoSql</strong></h1><pre><code>为了解决高并发、高可扩展、高可用、大数据存储问题而产生的数据库解决方案，就是NoSql数据库。
+NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为关系型数据库的良好补充。
+</code></pre><h1 id="什么是Redis"><a href="#什么是Redis" class="headerlink" title="什么是Redis"></a><strong>什么是Redis</strong></h1><p>Redis是用C语言开发的一个开源的高性能键值对（key-value）数据库。它通过提供多种键值数据类型来适应不同场景下的存储需求，目前为止Redis支持的键值数据类型如<br>下：</p>
+<pre><code>字符串类型 
+散列类型 (Hash类型)
+列表类型 (List)
+集合类型 (Set)
+有序集合类型 (SortedSet)
+
+在redis中的命令语句中，命令是忽略大小写的，而key是不忽略大小写的。
+</code></pre><h1 id="redis的应用场景"><a href="#redis的应用场景" class="headerlink" title="redis的应用场景"></a><strong>redis的应用场景</strong></h1><pre><code>缓存（数据查询、短连接、新闻内容、商品内容等等）。（最多使用）
+分布式集群架构中的session分离。
+聊天室的在线好友列表。
+任务队列。（秒杀、抢购、12306等等）
+应用排行榜。
+网站访问统计。
+数据过期处理（可以精确到毫秒）
+</code></pre><h1 id="Redis安装"><a href="#Redis安装" class="headerlink" title="Redis安装"></a><strong>Redis安装</strong></h1><p>第一步.在Linux下安装gcc环境</p>
+<pre><code>yum install gcc-c++
+</code></pre><p>第二步. 安装redis</p>
+<pre><code>1.将下载的Redis源码包上传到Linux服务器中
+2.解压缩Redis源码包到/usr/local tar -zxf redis-3.0.0.tar.gz -C /usr/local
+3.进入/usr/local/redis-3.0.0目录 
+  编译redis源码 make
+  安装redis make install PREFIX=/usr/local/redis0707
+</code></pre><p>第三步. 后端启动redis</p>
+<pre><code>1.将redis源码包中的redis.conf配置文件复制到/usr/local/redis/bin/下
+  cp redis.conf /usr/local/redis0707/bin/
+2.修改redis.conf，将daemonize由no改为yes
+  37行 daemonize yes
+3.启动redis-server 
+  ./redis-server redis.conf
+4.关闭redis-server
+  ./redis-cli shutdown
+5.打开redis客户端 ./redis-cli -h 127.0.0.1 -p 6379
+</code></pre><h1 id="修改访问端口"><a href="#修改访问端口" class="headerlink" title="修改访问端口"></a><strong>修改访问端口</strong></h1><pre><code>1.通过notepad++ 打开/etc/sysconfig/iptables
+2.添加-A INPUT -m state --state NEW -m tcp -p tcp --dport 6379 -j ACCEPT
+3.重启防火墙  service iptables restart
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/09/16/服务器搭建-四-redis配置/" itemprop="url">
                   服务器搭建-四-redis配置
                 </a>
@@ -1322,433 +1626,6 @@ Dao层
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/06/01/我是如何整合SSH的-三-CRM总结/" itemprop="url">
-                  我是如何整合SSH的(三)CRM总结
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-06-01T21:18:29+08:00" content="2016-06-01">
-              2016-06-01
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/06/01/我是如何整合SSH的-三-CRM总结/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/01/我是如何整合SSH的-三-CRM总结/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="前述"><a href="#前述" class="headerlink" title="前述"></a>前述</h1><p>这个周一直在逐步地完成临摹一个CRM系统的工作，并且每一小版本的工作都通过SVN记录下来。这个周初步了解学习了linux系统，选用的版本是Centos6.5，并且学会了搭建JavaEE所需要的环境，包括Tomcat7、jdk1.7、eclise，svn等基本环境。还学会了如何通过SSH远程登录服务器，如何在windows和linux之间交换数据。</p>
-<h1 id="小项目-CRM"><a href="#小项目-CRM" class="headerlink" title="小项目:CRM"></a>小项目:CRM</h1><h2 id="练习步骤"><a href="#练习步骤" class="headerlink" title="练习步骤"></a>练习步骤</h2><p>1.确定需求<br>1.1登录 （基本流程、登录拦截器、校验）<br>1.2员工管理</p>
-<ul>
-<li>查询所有</li>
-<li>添加（ajax级联）</li>
-<li>更新（标签回显）</li>
-<li>条件查询<br>1.3课程类别</li>
-<li>查询所有（条件 + 分页）</li>
-<li>添加或更新<br><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/img/CRM.jpg" alt=""></li>
-</ul>
-<p>2.根据需求创建ER图，并在数据库中添加数据<br><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/img/CRM-ER.jpg" alt=""></p>
-<p>3.在Eclips中创建CRM项目，并且将项目添加SVN版本控制器。<br><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/img/CRM-SVN.JPG" alt=""></p>
-<p>4.添加Spring、Hibernate、struts2等相关的jar包</p>
-<p>5.对应ER图，创建相应的JavaBean，并且为相应的Bean添加hibernate配置文件。</p>
-<pre><code>&lt;hibernate-mapping&gt;
-&lt;class name=&quot;com.jessyon.crm.classes.domain.CrmClass&quot; table=&quot;crm_class&quot;&gt;
-    &lt;id name=&quot;classId&quot;&gt;
-        &lt;generator class=&quot;uuid&quot;&gt;&lt;/generator&gt;
-    &lt;/id&gt;
-
-    &lt;property name=&quot;name&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;beginTime&quot;&gt;
-        &lt;column name=&quot;beginTime&quot; sql-type=&quot;datetime&quot;&gt;&lt;/column&gt;
-    &lt;/property&gt;
-    &lt;property name=&quot;endTime&quot;&gt;
-        &lt;column name=&quot;endTime&quot; sql-type=&quot;datetime&quot;&gt;&lt;/column&gt;
-    &lt;/property&gt;
-
-    &lt;property name=&quot;status&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;totalCount&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;upgradeCount&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;changeCount&quot;&gt;&lt;/property&gt;
-
-    &lt;property name=&quot;runoffCount&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;remark&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;uploadTime&quot;&gt;
-        &lt;column name=&quot;uploadTime&quot; sql-type=&quot;datetime&quot;&gt;&lt;/column&gt;
-    &lt;/property&gt;
-
-    &lt;property name=&quot;uploadPath&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;uploadFilename&quot;&gt;&lt;/property&gt;
-
-    &lt;many-to-one name=&quot;courseType&quot; class=&quot;com.jessyon.crm.coursetype.domain.CrmCourseType&quot; column=&quot;courseTypeId&quot;&gt;&lt;/many-to-one&gt;
-&lt;/class&gt;
-&lt;/hibernate-mapping&gt;
-</code></pre><p>6.配置spring</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-   xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-   xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot;
-   xmlns:tx=&quot;http://www.springframework.org/schema/tx&quot;
-   xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
-   xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans 
-                          http://www.springframework.org/schema/beans/spring-beans.xsd
-                          http://www.springframework.org/schema/tx 
-                          http://www.springframework.org/schema/tx/spring-tx.xsd
-                          http://www.springframework.org/schema/aop 
-                          http://www.springframework.org/schema/aop/spring-aop.xsd
-                          http://www.springframework.org/schema/context 
-                          http://www.springframework.org/schema/context/spring-context.xsd&quot;&gt;
-
-&lt;!-- 配置公共项 --&gt;
-&lt;!-- 1 加载properties文件 --&gt;
-&lt;context:property-placeholder location=&quot;classpath:jdbcInfo.properties&quot;/&gt;
-
-&lt;!-- 2 配置数据源 --&gt;
-&lt;bean id=&quot;dataSource&quot; class=&quot;com.mchange.v2.c3p0.ComboPooledDataSource&quot;&gt;
-    &lt;property name=&quot;driverClass&quot; value=&quot;${jdbc.driverClass}&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;jdbcUrl&quot; value=&quot;${jdbc.jdbcUrl}&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;user&quot; value=&quot;${jdbc.user}&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;password&quot; value=&quot;${jdbc.password}&quot;&gt;&lt;/property&gt;
-&lt;/bean&gt;
-
-&lt;!-- 3 session工厂 --&gt;
-&lt;bean id=&quot;sessionFactory&quot; class=&quot;org.springframework.orm.hibernate3.LocalSessionFactoryBean&quot;&gt;
-    &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;hibernateProperties&quot;&gt;
-        &lt;props&gt;
-            &lt;prop key=&quot;hibernate.dialect&quot;&gt;org.hibernate.dialect.MySQL5Dialect&lt;/prop&gt;
-            &lt;prop key=&quot;hibernate.show_sql&quot;&gt;true&lt;/prop&gt;
-            &lt;prop key=&quot;hibernate.format_sql&quot;&gt;true&lt;/prop&gt;
-            &lt;prop key=&quot;hibernate.current_session_context_class&quot;&gt;thread&lt;/prop&gt;
-            &lt;prop key=&quot;javax.persistence.validation.mode&quot;&gt;none&lt;/prop&gt;
-        &lt;/props&gt;
-    &lt;/property&gt;
-    &lt;property name=&quot;mappingLocations&quot; value=&quot;classpath:com/jessyon/crm/*/domain/*.hbx.xml&quot;&gt;&lt;/property&gt;
-</code></pre><p>   </p>
-<pre><code>&lt;!-- 4 事务管理 --&gt;
-&lt;!-- 4.1 事务管理器 --&gt;
-&lt;bean id=&quot;txManager&quot; class=&quot;org.springframework.orm.hibernate3.HibernateTransactionManager&quot;&gt;
-    &lt;property name=&quot;sessionFactory&quot; ref=&quot;sessionFactory&quot;&gt;&lt;/property&gt;
-&lt;/bean&gt;
-&lt;!-- 4.2 事务详情  --&gt;
-&lt;tx:advice id=&quot;txAdvice&quot; transaction-manager=&quot;txManager&quot;&gt;
-    &lt;tx:attributes&gt;
-        &lt;tx:method name=&quot;add*&quot;/&gt;
-        &lt;tx:method name=&quot;save*&quot;/&gt;
-        &lt;tx:method name=&quot;update*&quot;/&gt;
-        &lt;tx:method name=&quot;delete*&quot;/&gt;
-        &lt;tx:method name=&quot;find*&quot; read-only=&quot;true&quot;/&gt;
-        &lt;tx:method name=&quot;*&quot; read-only=&quot;true&quot;/&gt;
-    &lt;/tx:attributes&gt;
-&lt;/tx:advice&gt;
-&lt;!-- 4.3 aop编程  
---&gt;
-&lt;aop:config proxy-target-class=&quot;true&quot;&gt;
-    &lt;aop:advisor advice-ref=&quot;txAdvice&quot; pointcut=&quot;execution(* com.jessyon.crm.*.service..*.*(..))&quot;/&gt;
-&lt;/aop:config&gt;
-
-
-&lt;!-- 包含其他子模块 --&gt;
-&lt;!-- 员工 ,部门, 职务--&gt;
-&lt;!-- &lt;import resource=&quot;applicationContext-staff.xml&quot;/&gt;
-&lt;import resource=&quot;applicationContext-department.xml&quot;/&gt;
-&lt;import resource=&quot;applicationContext-post.xml&quot;/&gt;
-&lt;import resource=&quot;applicationContext-coursetype.xml&quot;/&gt; --&gt;
-&lt;/beans&gt;
-</code></pre><p><strong> applicationContext-courseType.xml<br>其他的相关的配置文件，比如department、post、staff的配置文件都是以下格式</strong></p>
-<pre><code>    &lt;bean id=&quot;courseTypeDao&quot; class=&quot;com.jessyon.crm.coursetype.dao.impl.CourseTypeDaoImpl&quot;&gt;
-    &lt;property name=&quot;sessionFactory&quot; ref=&quot;sessionFactory&quot;&gt;&lt;/property&gt;
-&lt;/bean&gt;
-&lt;!-- service --&gt;
-&lt;bean id=&quot;courseTypeService&quot; class=&quot;com.jessyon.crm.coursetype.service.impl.CourseTypeServiceImpl&quot;&gt;
-    &lt;property name=&quot;courseTypeDao&quot; ref=&quot;courseTypeDao&quot;&gt;&lt;/property&gt;
-&lt;/bean&gt;
-</code></pre><p>7.配置struts2</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;!DOCTYPE struts PUBLIC
-&quot;-//Apache Software Foundation//DTD Struts Configuration 2.3//EN&quot;
-&quot;http://struts.apache.org/dtds/struts-2.3.dtd&quot;&gt;
-&lt;struts&gt;
-&lt;!-- 常量 --&gt;
-&lt;constant name=&quot;struts.devMode&quot; value=&quot;true&quot;&gt;&lt;/constant&gt;
-&lt;constant name=&quot;struts.ui.theme&quot; value=&quot;simple&quot;&gt;&lt;/constant&gt;
-
-&lt;!-- 公共项 其他子模块都会继承common --&gt;
-&lt;package name=&quot;common&quot; namespace=&quot;/&quot; extends=&quot;struts-default&quot;&gt;
-    &lt;!-- 配置拦截器 --&gt;
-    &lt;interceptors&gt;
-        &lt;interceptor name=&quot;loginInterceptor&quot; class=&quot;com.jessyon.crm.web.interceptor.LoginInterceptor&quot;&gt;&lt;/interceptor&gt;
-        &lt;interceptor-stack name=&quot;loginStack&quot;&gt;
-            &lt;interceptor-ref name=&quot;defaultStack&quot;&gt;&lt;/interceptor-ref&gt;
-            &lt;interceptor-ref name=&quot;loginInterceptor&quot;&gt;
-                &lt;!-- 不需要拦截的方法,多个方法逗号隔开 --&gt;
-                &lt;param name=&quot;excludeMethods&quot;&gt;login&lt;/param&gt;
-            &lt;/interceptor-ref&gt;
-        &lt;/interceptor-stack&gt;
-    &lt;/interceptors&gt;
-    &lt;!-- &lt;default-interceptor-ref name=&quot;loginStack&quot;&gt;&lt;/default-interceptor-ref&gt; --&gt;
-    &lt;global-results&gt;
-        &lt;result name=&quot;login&quot;&gt;/WEB-INF/pages/login.jsp&lt;/result&gt;
-    &lt;/global-results&gt;
-    &lt;action name=&quot;uiAction_*_*&quot;&gt;
-
-            &lt;result&gt;/WEB-INF/pages/{1}/{2}.jsp&lt;/result&gt;
-    &lt;/action&gt;
-&lt;/package&gt;
-
-&lt;!-- 包含其他子模块 --&gt;
-&lt;include file=&quot;struts/struts-staff.xml&quot;&gt;&lt;/include&gt;
-&lt;include file=&quot;struts/struts-post.xml&quot;&gt;&lt;/include&gt;
-&lt;include file=&quot;struts/struts-department.xml&quot;&gt;&lt;/include&gt;
-&lt;include file=&quot;struts/struts-coursetype.xml&quot;&gt;&lt;/include&gt;
-&lt;/struts&gt;
-</code></pre><p><strong> struts2-courseType.xml<br>其他的相关的配置文件，比如department、post、staff的配置文件都是以下格式</strong></p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;!DOCTYPE struts PUBLIC
-&quot;-//Apache Software Foundation//DTD Struts Configuration 2.3//EN&quot;
-&quot;http://struts.apache.org/dtds/struts-2.3.dtd&quot;&gt;
-struts&gt;
-&lt;package name=&quot;coursetype&quot; namespace=&quot;/&quot; extends=&quot;common&quot;&gt;
-    &lt;action name=&quot;courseTypeAction_*&quot; class=&quot;com.jessyon.crm.coursetype.web.action.CourseTypeAction&quot; method=&quot;{1}&quot;&gt;
-        &lt;result name=&quot;findAll&quot;&gt;/WEB-INF/pages/coursetype/listCourse.jsp&lt;/result&gt;
-        &lt;result name=&quot;saveOrUpdateUI&quot;&gt;/WEB-INF/pages/coursetype/addOrEditCourse.jsp&lt;/result&gt;
-        &lt;result name=&quot;saveOrUpdate&quot; type=&quot;redirectAction&quot;&gt;
-            &lt;param name=&quot;namespace&quot;&gt;/&lt;/param&gt;
-            &lt;param name=&quot;actionName&quot;&gt;courseTypeAction_findAll&lt;/param&gt;
-        &lt;/result&gt;
-    &lt;/action&gt;
-&lt;/package&gt;
-&lt;/struts&gt;
-</code></pre><p>8.配置web.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;web-app xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns=&quot;http://java.sun.com/xml/ns/javaee&quot; xmlns:web=&quot;http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd&quot; xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd&quot; id=&quot;WebApp_ID&quot; version=&quot;2.5&quot;&gt;
-  &lt;display-name&gt;Mycrm&lt;/display-name&gt;
-  &lt;filter&gt;
-      &lt;filter-name&gt;openSession&lt;/filter-name&gt;
-      &lt;filter-class&gt;org.springframework.orm.hibernate3.support.OpenSessionInViewFilter&lt;/filter-class&gt;
-  &lt;/filter&gt;
-
-  &lt;filter-mapping&gt;
-      &lt;filter-name&gt;openSession&lt;/filter-name&gt;
-      &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
-  &lt;/filter-mapping&gt;
-
-  &lt;context-param&gt;
-      &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
-      &lt;param-value&gt;classpath:spring/applicationContext*.xml&lt;/param-value&gt;
-  &lt;/context-param&gt;
-
-  &lt;listener&gt;
-      &lt;listener-class&gt;org.springframework.web.context.ContextLoaderListener&lt;/listener-class&gt;
-  &lt;/listener&gt;
-
-  &lt;filter&gt;
-          &lt;filter-name&gt;struts2&lt;/filter-name&gt;
-          &lt;filter-class&gt;org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter&lt;/filter-class&gt;
-  &lt;/filter&gt;
-
-  &lt;filter-mapping&gt;
-          &lt;filter-name&gt;struts2&lt;/filter-name&gt;
-          &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
-  &lt;/filter-mapping&gt;
-&lt;/web-app&gt;
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/05/25/我是如何整合SSH的-二/" itemprop="url">
-                  我是如何整合SSH的(二)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-25T21:15:38+08:00" content="2016-05-25">
-              2016-05-25
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/05/25/我是如何整合SSH的-二/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/25/我是如何整合SSH的-二/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="前述"><a href="#前述" class="headerlink" title="前述"></a>前述</h1><p>这个周在初步了解SSH整合流程，同时以项目为驱动继续学习SSH。在网上找了一个CRM系统来临摹，同时辅助学习SVN版本控制器。因为之前并没有很多版本控制的概念，所以在接触SVN的时候，遇到了很多问题。CRM系统目前已经完成了登录功能，之后会通过CRM再熟悉SSH的CRUD。</p>
-<h1 id="新知识点"><a href="#新知识点" class="headerlink" title="新知识点"></a>新知识点</h1><ul>
-<li>spring配置中，可以在applicationContext.xml中通过<import resource="applicationContext-user.xml">来引入applicationContext-user.xml配置文件。</import></li>
-<li>struts2配置中，指定package的name=”common”,其他struts2配置文件可以通过<package extends="common">继承包名为common下的所有内容。</package></li>
-<li>struts2配置中，可以通过<include file="struts/struts-staff.xml"></include>来引入struts包下的struts-staff.xml配置文件中的所有内容。</li>
-<li>MD5加密，可以通过MessageDigest messageDigest=MessageDigest.getInstance(“MD5”)初始化消息摘要算法<br>通过byte[] md5value = messageDigest.digest(value.getBytes());对String类型的字符串进行加密。<br>得到内容是10进制的，通过BigInteger bigInteger = new BigInteger(1,md5value); bigInteger.toString(16);转换成16进制。</li>
-<li>SVN开启服务，打开命令行，输入svnserve -d -r f:\svn开启服务(f:\svn为仓库目录)。</li>
-<li>在svnserve.conf文件的20、27、36行，将注释打开，开启svn权限配置。<br>auth-access = write<br>password-db = passwd<br>authz-db = authz 这三行前面不能有任何空格。</li>
-<li>在passwd文件下添加用户 user1 = 1234 user1为用户名，1234为密码。</li>
-<li>在authz文件下配置权限<br>[crm:/]       配置crm文件夹的访问权限<br>jessyon = rw  用户jessyon有读写权限<br>*=r         其他所有用户为只读权限</li>
-<li>check out到本地文件，在文件夹中右键SVN checkout弹出窗口，输入svn://localhost:3690/crm便可以将服务器上的内容checkout下来。<br><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/img/checkout.jpg" alt=""></li>
-</ul>
-<h2 id="特别注意"><a href="#特别注意" class="headerlink" title="特别注意"></a>特别注意</h2><p>在eclipse中，新建的web项目并没有jstl.jar和standard.jar这两个包，如果是myeclipse中的项目导入到eclipse中并且用到了jstl，那么需要额外导入这两个jar包。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1794,7 +1671,7 @@ struts&gt;
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">22</span>
+              <span class="site-state-item-count">24</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

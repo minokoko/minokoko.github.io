@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Nosql,redis," />
+  <meta name="keywords" content="redis,Nosql," />
 
 
 
@@ -88,15 +88,15 @@
 NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为关系型数据库的良好补充。
 什么是RedisRedis是用C语言开发的一个开源的高性能键值对（key-value）数据库。它通过提供多种键值数据类型来适应不同场景下的存储需求，目前为止Redis支持的键值数据">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Nosql之Redis">
+<meta property="og:title" content="服务器搭建-四-redis配置">
 <meta property="og:url" content="http://jessyon.com/2016/09/16/Nosql之Redis/index.html">
 <meta property="og:site_name" content="OneStack">
 <meta property="og:description" content="什么是NoSql为了解决高并发、高可扩展、高可用、大数据存储问题而产生的数据库解决方案，就是NoSql数据库。
 NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为关系型数据库的良好补充。
 什么是RedisRedis是用C语言开发的一个开源的高性能键值对（key-value）数据库。它通过提供多种键值数据类型来适应不同场景下的存储需求，目前为止Redis支持的键值数据">
-<meta property="og:updated_time" content="2016-09-16T04:52:08.491Z">
+<meta property="og:updated_time" content="2016-09-16T06:00:15.245Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Nosql之Redis">
+<meta name="twitter:title" content="服务器搭建-四-redis配置">
 <meta name="twitter:description" content="什么是NoSql为了解决高并发、高可扩展、高可用、大数据存储问题而产生的数据库解决方案，就是NoSql数据库。
 NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为关系型数据库的良好补充。
 什么是RedisRedis是用C语言开发的一个开源的高性能键值对（key-value）数据库。它通过提供多种键值数据类型来适应不同场景下的存储需求，目前为止Redis支持的键值数据">
@@ -122,7 +122,7 @@ NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为�
 
   <link rel="canonical" href="http://jessyon.com/2016/09/16/Nosql之Redis/"/>
 
-  <title> Nosql之Redis | OneStack </title>
+  <title> 服务器搭建-四-redis配置 | OneStack </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -242,7 +242,7 @@ NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为�
             
             
               
-                Nosql之Redis
+                服务器搭建-四-redis配置
               
             
           </h1>
@@ -292,11 +292,13 @@ NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为�
         <h1 id="什么是NoSql"><a href="#什么是NoSql" class="headerlink" title="什么是NoSql"></a><strong>什么是NoSql</strong></h1><pre><code>为了解决高并发、高可扩展、高可用、大数据存储问题而产生的数据库解决方案，就是NoSql数据库。
 NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为关系型数据库的良好补充。
 </code></pre><h1 id="什么是Redis"><a href="#什么是Redis" class="headerlink" title="什么是Redis"></a><strong>什么是Redis</strong></h1><p>Redis是用C语言开发的一个开源的高性能键值对（key-value）数据库。它通过提供多种键值数据类型来适应不同场景下的存储需求，目前为止Redis支持的键值数据类型如<br>下：</p>
-<pre><code>字符串类型
-散列类型
-列表类型
-集合类型
-有序集合类型
+<pre><code>字符串类型 
+散列类型 (Hash类型)
+列表类型 (List)
+集合类型 (Set)
+有序集合类型 (SortedSet)
+
+在redis中的命令语句中，命令是忽略大小写的，而key是不忽略大小写的。
 </code></pre><h1 id="redis的应用场景"><a href="#redis的应用场景" class="headerlink" title="redis的应用场景"></a><strong>redis的应用场景</strong></h1><pre><code>缓存（数据查询、短连接、新闻内容、商品内容等等）。（最多使用）
 分布式集群架构中的session分离。
 聊天室的在线好友列表。
@@ -312,7 +314,7 @@ NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为�
 3.进入/usr/local/redis-3.0.0目录 
   编译redis源码 make
   安装redis make install PREFIX=/usr/local/redis0707
-</code></pre><p>第三部. 后端启动redis</p>
+</code></pre><p>第三步. 后端启动redis</p>
 <pre><code>1.将redis源码包中的redis.conf配置文件复制到/usr/local/redis/bin/下
   cp redis.conf /usr/local/redis0707/bin/
 2.修改redis.conf，将daemonize由no改为yes
@@ -321,6 +323,10 @@ NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为�
   ./redis-server redis.conf
 4.关闭redis-server
   ./redis-cli shutdown
+5.打开redis客户端 ./redis-cli -h 127.0.0.1 -p 6379
+</code></pre><h1 id="修改访问端口"><a href="#修改访问端口" class="headerlink" title="修改访问端口"></a><strong>修改访问端口</strong></h1><pre><code>1.通过notepad++ 打开/etc/sysconfig/iptables
+2.添加-A INPUT -m state --state NEW -m tcp -p tcp --dport 6379 -j ACCEPT
+3.重启防火墙  service iptables restart
 </code></pre>
       
     </div>
@@ -343,9 +349,9 @@ NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为�
       
         <div class="post-tags">
           
-            <a href="/tags/Nosql/" rel="tag">#Nosql</a>
-          
             <a href="/tags/redis/" rel="tag">#redis</a>
+          
+            <a href="/tags/Nosql/" rel="tag">#Nosql</a>
           
         </div>
       
@@ -354,13 +360,17 @@ NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为�
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/09/16/服务器搭建-三-fastDFS图片服务器/" rel="next" title="服务器搭建(三) fastDFS图片服务器">
-                <i class="fa fa-chevron-left"></i> 服务器搭建(三) fastDFS图片服务器
+              <a href="/2016/09/16/服务器搭建-四-redis配置/" rel="next" title="服务器搭建-四-redis配置">
+                <i class="fa fa-chevron-left"></i> 服务器搭建-四-redis配置
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/16/redis数据类型及命令/" rel="prev" title="redis数据类型及命令">
+                redis数据类型及命令 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -387,7 +397,7 @@ NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为�
   <div class="comments" id="comments">
     
       <div class="ds-thread" data-thread-key="2016/09/16/Nosql之Redis/"
-           data-title="Nosql之Redis" data-url="http://jessyon.com/2016/09/16/Nosql之Redis/">
+           data-title="服务器搭建-四-redis配置" data-url="http://jessyon.com/2016/09/16/Nosql之Redis/">
       </div>
     
   </div>
@@ -432,7 +442,7 @@ NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为�
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">22</span>
+              <span class="site-state-item-count">24</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -471,7 +481,7 @@ NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为�
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是NoSql"><span class="nav-number">1.</span> <span class="nav-text">什么是NoSql</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是Redis"><span class="nav-number">2.</span> <span class="nav-text">什么是Redis</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#redis的应用场景"><span class="nav-number">3.</span> <span class="nav-text">redis的应用场景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis安装"><span class="nav-number">4.</span> <span class="nav-text">Redis安装</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是NoSql"><span class="nav-number">1.</span> <span class="nav-text">什么是NoSql</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是Redis"><span class="nav-number">2.</span> <span class="nav-text">什么是Redis</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#redis的应用场景"><span class="nav-number">3.</span> <span class="nav-text">redis的应用场景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis安装"><span class="nav-number">4.</span> <span class="nav-text">Redis安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#修改访问端口"><span class="nav-number">5.</span> <span class="nav-text">修改访问端口</span></a></li></ol></div>
             
           </div>
         </section>

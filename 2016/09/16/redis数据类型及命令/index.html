@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="redis," />
 
 
 
@@ -84,15 +84,43 @@
 
 
 
-<meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="OneStack">
-<meta property="og:url" content="http://jessyon.com/archives/2016/09/index.html">
+<meta name="description" content="String类型SET key value 赋值
+127.0.0.1:6379&amp;gt; set test 123
+OK
+GET key  取值
+127.0.0.1:6379&amp;gt; get test
+&amp;quot;123“
+GETSET key value  取值并赋值
+127.0.0.1:6379&amp;gt; getset s2 222
+&amp;quot;111&amp;quot;
+127.0.0.1:6379&amp;g">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis数据类型及命令">
+<meta property="og:url" content="http://jessyon.com/2016/09/16/redis数据类型及命令/index.html">
 <meta property="og:site_name" content="OneStack">
-<meta property="og:description">
+<meta property="og:description" content="String类型SET key value 赋值
+127.0.0.1:6379&amp;gt; set test 123
+OK
+GET key  取值
+127.0.0.1:6379&amp;gt; get test
+&amp;quot;123“
+GETSET key value  取值并赋值
+127.0.0.1:6379&amp;gt; getset s2 222
+&amp;quot;111&amp;quot;
+127.0.0.1:6379&amp;g">
+<meta property="og:updated_time" content="2016-09-16T06:13:26.830Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="OneStack">
-<meta name="twitter:description">
+<meta name="twitter:title" content="redis数据类型及命令">
+<meta name="twitter:description" content="String类型SET key value 赋值
+127.0.0.1:6379&amp;gt; set test 123
+OK
+GET key  取值
+127.0.0.1:6379&amp;gt; get test
+&amp;quot;123“
+GETSET key value  取值并赋值
+127.0.0.1:6379&amp;gt; getset s2 222
+&amp;quot;111&amp;quot;
+127.0.0.1:6379&amp;g">
 
 
 
@@ -113,9 +141,9 @@
 
 
 
-  <link rel="canonical" href="http://jessyon.com/archives/2016/09/"/>
+  <link rel="canonical" href="http://jessyon.com/2016/09/16/redis数据类型及命令/"/>
 
-  <title> 归档 | OneStack </title>
+  <title> redis数据类型及命令 | OneStack </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -136,7 +164,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left  page-archive  ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -214,251 +242,194 @@
           <div id="content" class="content">
             
 
-  <section id="posts" class="posts-collapse">
-    <span class="archive-move-on"></span>
-
-    <span class="archive-page-counter">
-      
-      
-      
-        
-      
-      嗯..! 目前共计 24 篇日志。 继续努力。
-    </span>
-
+  <div id="posts" class="posts-expand">
     
-
-      
-      
-      
-
-      
-        
-        <div class="collection-title">
-          <h2 class="archive-year motion-element" id="archive-year-2016">2016</h2>
-        </div>
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2016/09/16/redis数据类型及命令/" itemprop="url">
-              
-                <span itemprop="name">redis数据类型及命令</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-09-16T13:59:39+08:00"
-              content="2016-09-16" >
-          09-16
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2016/09/16/Nosql之Redis/" itemprop="url">
-              
-                <span itemprop="name">服务器搭建-四-redis配置</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-09-16T11:55:31+08:00"
-              content="2016-09-16" >
-          09-16
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2016/09/16/服务器搭建-四-redis配置/" itemprop="url">
-              
-                <span itemprop="name">服务器搭建-四-redis配置</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-09-16T11:55:31+08:00"
-              content="2016-09-16" >
-          09-16
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2016/09/16/服务器搭建-三-fastDFS图片服务器/" itemprop="url">
-              
-                <span itemprop="name">服务器搭建(三) fastDFS图片服务器</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-09-16T09:02:42+08:00"
-              content="2016-09-16" >
-          09-16
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2016/09/15/服务器搭建-二-Nginx和fastDFS配置/" itemprop="url">
-              
-                <span itemprop="name">服务器搭建(二)Nginx和fastDFS配置</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-09-15T22:48:47+08:00"
-              content="2016-09-15" >
-          09-15
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2016/09/15/服务器搭建-一-jdk和nginx配置/" itemprop="url">
-              
-                <span itemprop="name">服务器搭建(一)jdk和nginx配置</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-09-15T20:39:25+08:00"
-              content="2016-09-15" >
-          09-15
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-  </section>
 
   
+  
 
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                redis数据类型及命令
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-16T13:59:39+08:00" content="2016-09-16">
+              2016-09-16
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/16/redis数据类型及命令/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/16/redis数据类型及命令/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="String类型"><a href="#String类型" class="headerlink" title="String类型"></a><strong>String类型</strong></h1><p>SET key value 赋值</p>
+<pre><code>127.0.0.1:6379&gt; set test 123
+OK
+</code></pre><p>GET key  取值</p>
+<pre><code>127.0.0.1:6379&gt; get test
+&quot;123“
+</code></pre><p>GETSET key value  取值并赋值</p>
+<pre><code>127.0.0.1:6379&gt; getset s2 222
+&quot;111&quot;
+127.0.0.1:6379&gt; get s2
+&quot;222&quot;
+</code></pre><p>DEL key 删除</p>
+<pre><code>127.0.0.1:6379&gt; del test
+(integer) 1
+</code></pre><p>incr key 递增数字 </p>
+<p>当存储的字符串是整数时，Redis提供了一个实用的命令INCR，其作用是让当前键值递增，并返回递增后的值。</p>
+<pre><code>127.0.0.1:6379&gt; incr num
+(integer) 1
+127.0.0.1:6379&gt; incr num
+(integer) 2
+127.0.0.1:6379&gt; incr num
+(integer) 3
+</code></pre><p>INCRBY key increment 增加指定的整数 </p>
+<pre><code>127.0.0.1:6379&gt; incrby num 2
+(integer) 5
+127.0.0.1:6379&gt; incrby num 2
+(integer) 7
+127.0.0.1:6379&gt; incrby num 2
+(integer) 9
+</code></pre><p>DECR key  递减数值</p>
+<pre><code>127.0.0.1:6379&gt; decr num
+(integer) 9
+127.0.0.1:6379&gt; decr num
+(integer) 8
+</code></pre><p>DECRBY key decrement      减少指定的整数 </p>
+<pre><code>127.0.0.1:6379&gt; decr num
+(integer) 6
+127.0.0.1:6379&gt; decr num
+(integer) 5
+127.0.0.1:6379&gt; decrby num 3
+(integer) 2
+127.0.0.1:6379&gt; decrby num 3
+(integer) -1
+</code></pre><p>APPEND key value      向尾部追加值 </p>
+<pre><code>127.0.0.1:6379&gt; set str hello
+OK
+127.0.0.1:6379&gt; append str &quot; world!&quot;
+(integer) 12
+127.0.0.1:6379&gt; get str 
+&quot;hello world!&quot;
+</code></pre><p>STRLEN key 获取字符串长度</p>
+<pre><code>127.0.0.1:6379&gt; strlen str 
+(integer) 0
+127.0.0.1:6379&gt; set str hello
+OK
+127.0.0.1:6379&gt; strlen str 
+(integer) 5
+</code></pre><p>MSET key value [key value …] 同时设置多个值</p>
+<pre><code>127.0.0.1:6379&gt; mset k1 v1 k2 v2 k3 v3
+OK
+</code></pre><p>MGET key [key …] 同时取多个值</p>
+<pre><code>127.0.0.1:6379&gt; get k1
+&quot;v1&quot;
+127.0.0.1:6379&gt; mget k1 k3
+1) &quot;v1&quot;
+2) &quot;v3&quot;
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/redis/" rel="tag">#redis</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/16/Nosql之Redis/" rel="next" title="服务器搭建-四-redis配置">
+                <i class="fa fa-chevron-left"></i> 服务器搭建-四-redis配置
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -466,6 +437,14 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/16/redis数据类型及命令/"
+           data-title="redis数据类型及命令" data-url="http://jessyon.com/2016/09/16/redis数据类型及命令/">
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -485,8 +464,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.gif"
@@ -529,6 +517,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#String类型"><span class="nav-number">1.</span> <span class="nav-text">String类型</span></a></li></ol></div>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -625,11 +624,9 @@
   
 
   
-  
-    <script type="text/javascript" id="motion.page.archive">
-      $('.archive-year').velocity('transition.slideLeftIn');
-    </script>
-  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
 
 
   
