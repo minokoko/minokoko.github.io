@@ -238,8 +238,183 @@
             
               
                 
-                <a class="post-title-link" href="/2016/09/16/redis数据类型及命令/" itemprop="url">
-                  redis数据类型及命令
+                <a class="post-title-link" href="/2016/09/16/redis数据类型Hash命令/" itemprop="url">
+                  redis数据类型Hash命令
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-16T14:36:40+08:00" content="2016-09-16">
+              2016-09-16
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/16/redis数据类型Hash命令/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/16/redis数据类型Hash命令/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Hash类型"><a href="#Hash类型" class="headerlink" title="Hash类型"></a><strong>Hash类型</strong></h1><p>hash叫散列类型，它提供了字段和字段值的映射。字段值只能是字符串类型，不支持散列类型、集合类型等其它类型。如下：<br><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/redis_hash.jpg" alt=""></p>
+<h1 id="Hash命令"><a href="#Hash命令" class="headerlink" title="Hash命令"></a><strong>Hash命令</strong></h1><p>HSET key field value  赋值</p>
+<pre><code>HSET命令不区分插入和更新操作，当执行插入操作时HSET命令返回1，当执行更新操作时返回0。
+
+127.0.0.1:6379&gt; hset user username zhangsan 
+(integer) 1
+</code></pre><p>HMSET key field value [field value …]      一次可以设置多个字段值</p>
+<pre><code>127.0.0.1:6379&gt; hmset user age 20 username lisi 
+OK
+</code></pre><p>HSETNX key field value  当字段不存在时赋值</p>
+<pre><code>当字段不存在时赋值，类似HSET，区别在于如果字段存在，该命令不执行任何操作
+
+127.0.0.1:6379&gt; hsetnx user age 30    
+如果user中没有age字段则设置age值为30，否则不做任何操作
+(integer) 0
+</code></pre><p>HGET key field  一次只能获取一个字段值</p>
+<pre><code>127.0.0.1:6379&gt; hget user username
+&quot;zhangsan“
+</code></pre><p>HMGET key field [field …]    一次可以获取多个字段值</p>
+<pre><code>127.0.0.1:6379&gt; hmget user age username
+1) &quot;20&quot;
+2) &quot;lisi&quot;
+</code></pre><p>HGETALL key     获取所有字段值</p>
+<pre><code>127.0.0.1:6379&gt; hgetall user
+1) &quot;age&quot;
+2) &quot;20&quot;
+3) &quot;username&quot;
+4) &quot;lisi&quot;
+</code></pre><p>HDEL key field [field …]  可以删除一个或多个字段，返回值是被删除的字段个数 </p>
+<pre><code>127.0.0.1:6379&gt; hdel user age
+(integer) 1
+127.0.0.1:6379&gt; hdel user age name
+(integer) 0
+127.0.0.1:6379&gt; hdel user age username
+(integer) 1 
+</code></pre><p>HINCRBY key field increment     增加值</p>
+<pre><code>127.0.0.1:6379&gt; hincrby user age 2    将用户的年龄加2
+(integer) 22
+127.0.0.1:6379&gt; hget user age        获取用户的年龄
+&quot;22“
+</code></pre><p>HEXISTS key field     判断字段是否存在</p>
+<pre><code>127.0.0.1:6379&gt; hexists user age        查看user中是否有age字段
+(integer) 1
+127.0.0.1:6379&gt; hexists user name    查看user中是否有name字段
+(integer) 0
+</code></pre><p>HKEYS key      只获取字段名</p>
+<p>HVALS key   只获取字段值</p>
+<pre><code>127.0.0.1:6379&gt; hmset user age 20 name lisi 
+OK
+127.0.0.1:6379&gt; hkeys user
+1) &quot;age&quot;
+2) &quot;name&quot;
+127.0.0.1:6379&gt; hvals user
+1) &quot;20&quot;
+2) &quot;lisi&quot;
+</code></pre><p>HLEN key 获取字段长度</p>
+<pre><code>127.0.0.1:6379&gt; hlen user    
+(integer) 2
+</code></pre><h1 id="Hash应用"><a href="#Hash应用" class="headerlink" title="Hash应用"></a><strong>Hash应用</strong></h1><h1 id="存储商品信息"><a href="#存储商品信息" class="headerlink" title="存储商品信息:"></a>存储商品信息:</h1><p>商品字段</p>
+<pre><code>【商品id、商品名称、商品描述、商品库存、商品好评】
+</code></pre><p>定义商品信息的key</p>
+<pre><code>商品1001的信息在 Redis中的key为：[items:1001]
+</code></pre><p>储商品信息</p>
+<pre><code>192.168.101.3:7003&gt; HMSET items:1001 id 3 name apple price 999.9
+OK
+</code></pre><p>获取商品信息</p>
+<pre><code>192.168.101.3:7003&gt; HGET items:1001 id
+&quot;3&quot;
+192.168.101.3:7003&gt; HGETALL items:1001
+1) &quot;id&quot;
+2) &quot;3&quot;
+3) &quot;name&quot;
+4) &quot;apple&quot;
+5) &quot;price&quot;
+6) &quot;999.9&quot;
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/09/16/redis数据类型及string命令/" itemprop="url">
+                  redis数据类型String命令
                 </a>
               
             
@@ -263,8 +438,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/09/16/redis数据类型及命令/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/16/redis数据类型及命令/" itemprop="commentsCount"></span>
+                <a href="/2016/09/16/redis数据类型及string命令/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/16/redis数据类型及string命令/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -366,8 +541,7 @@ OK
 User对象  -&gt;  json(string)  -&gt;  redis 
 如果在业务上只是更新age属性，其他的属性并不做更新我应该怎么做呢？ 
 如果仍然采用上边的方法在传输、处理时会造成资源浪费，下边讲的hash可以很好的解决这个问题。
-</code></pre><h1 id="Hash类型"><a href="#Hash类型" class="headerlink" title="Hash类型"></a><strong>Hash类型</strong></h1><p>hash叫散列类型，它提供了字段和字段值的映射。字段值只能是字符串类型，不支持散列类型、集合类型等其它类型。如下：<br><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/redis_hash.jpg" alt=""></p>
-
+</code></pre>
           
         
       
@@ -443,144 +617,6 @@ User对象  -&gt;  json(string)  -&gt;  redis
                 &nbsp; | &nbsp;
                 <a href="/2016/09/16/服务器搭建-四-redis配置/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/16/服务器搭建-四-redis配置/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="什么是NoSql"><a href="#什么是NoSql" class="headerlink" title="什么是NoSql"></a><strong>什么是NoSql</strong></h1><pre><code>为了解决高并发、高可扩展、高可用、大数据存储问题而产生的数据库解决方案，就是NoSql数据库。
-NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为关系型数据库的良好补充。
-</code></pre><h1 id="什么是Redis"><a href="#什么是Redis" class="headerlink" title="什么是Redis"></a><strong>什么是Redis</strong></h1><p>Redis是用C语言开发的一个开源的高性能键值对（key-value）数据库。它通过提供多种键值数据类型来适应不同场景下的存储需求，目前为止Redis支持的键值数据类型如<br>下：</p>
-<pre><code>字符串类型 
-散列类型 (Hash类型)
-列表类型 (List)
-集合类型 (Set)
-有序集合类型 (SortedSet)
-
-在redis中的命令语句中，命令是忽略大小写的，而key是不忽略大小写的。
-</code></pre><h1 id="redis的应用场景"><a href="#redis的应用场景" class="headerlink" title="redis的应用场景"></a><strong>redis的应用场景</strong></h1><pre><code>缓存（数据查询、短连接、新闻内容、商品内容等等）。（最多使用）
-分布式集群架构中的session分离。
-聊天室的在线好友列表。
-任务队列。（秒杀、抢购、12306等等）
-应用排行榜。
-网站访问统计。
-数据过期处理（可以精确到毫秒）
-</code></pre><h1 id="Redis安装"><a href="#Redis安装" class="headerlink" title="Redis安装"></a><strong>Redis安装</strong></h1><p>第一步.在Linux下安装gcc环境</p>
-<pre><code>yum install gcc-c++
-</code></pre><p>第二步. 安装redis</p>
-<pre><code>1.将下载的Redis源码包上传到Linux服务器中
-2.解压缩Redis源码包到/usr/local tar -zxf redis-3.0.0.tar.gz -C /usr/local
-3.进入/usr/local/redis-3.0.0目录 
-  编译redis源码 make
-  安装redis make install PREFIX=/usr/local/redis0707
-</code></pre><p>第三步. 后端启动redis</p>
-<pre><code>1.将redis源码包中的redis.conf配置文件复制到/usr/local/redis/bin/下
-  cp redis.conf /usr/local/redis0707/bin/
-2.修改redis.conf，将daemonize由no改为yes
-  37行 daemonize yes
-3.启动redis-server 
-  ./redis-server redis.conf
-4.关闭redis-server
-  ./redis-cli shutdown
-5.打开redis客户端 ./redis-cli -h 127.0.0.1 -p 6379
-</code></pre><h1 id="修改访问端口"><a href="#修改访问端口" class="headerlink" title="修改访问端口"></a><strong>修改访问端口</strong></h1><pre><code>1.通过notepad++ 打开/etc/sysconfig/iptables
-2.添加-A INPUT -m state --state NEW -m tcp -p tcp --dport 6379 -j ACCEPT
-3.重启防火墙  service iptables restart
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/16/Nosql之Redis/" itemprop="url">
-                  服务器搭建-四-redis配置
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-16T11:55:31+08:00" content="2016-09-16">
-              2016-09-16
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/09/16/Nosql之Redis/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/16/Nosql之Redis/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -1693,7 +1729,7 @@ Dao层
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-count">25</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
