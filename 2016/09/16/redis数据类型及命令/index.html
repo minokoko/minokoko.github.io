@@ -108,7 +108,8 @@ GETSET key value  取值并赋值
 127.0.0.1:6379&amp;gt; getset s2 222
 &amp;quot;111&amp;quot;
 127.0.0.1:6379&amp;g">
-<meta property="og:updated_time" content="2016-09-16T06:13:26.830Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/redis_hash.jpg">
+<meta property="og:updated_time" content="2016-09-16T06:21:12.139Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="redis数据类型及命令">
 <meta name="twitter:description" content="String类型SET key value 赋值
@@ -121,6 +122,7 @@ GETSET key value  取值并赋值
 127.0.0.1:6379&amp;gt; getset s2 222
 &amp;quot;111&amp;quot;
 127.0.0.1:6379&amp;g">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/redis_hash.jpg">
 
 
 
@@ -376,7 +378,19 @@ OK
 127.0.0.1:6379&gt; mget k1 k3
 1) &quot;v1&quot;
 2) &quot;v3&quot;
-</code></pre>
+</code></pre><h1 id="String应用"><a href="#String应用" class="headerlink" title="String应用"></a><strong>String应用</strong></h1><p>自增主键:  商品编号、订单号采用string的递增数字特性生成。</p>
+<pre><code>定义商品编号key：items:id
+192.168.101.3:7003&gt; INCR items:id
+(integer) 2
+192.168.101.3:7003&gt; INCR items:id
+(integer) 3
+</code></pre><h1 id="String存在的问题"><a href="#String存在的问题" class="headerlink" title="String存在的问题"></a><strong>String存在的问题</strong></h1><pre><code>假设有User对象以JSON序列化的形式存储到Redis中，User对象有id，username、password、age、name等属性，存储的过程如下： 
+保存、更新： 
+User对象  -&gt;  json(string)  -&gt;  redis 
+如果在业务上只是更新age属性，其他的属性并不做更新我应该怎么做呢？ 
+如果仍然采用上边的方法在传输、处理时会造成资源浪费，下边讲的hash可以很好的解决这个问题。
+</code></pre><h1 id="Hash类型"><a href="#Hash类型" class="headerlink" title="Hash类型"></a><strong>Hash类型</strong></h1><p>hash叫散列类型，它提供了字段和字段值的映射。字段值只能是字符串类型，不支持散列类型、集合类型等其它类型。如下：<br><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/redis_hash.jpg" alt=""></p>
+
       
     </div>
 
@@ -407,7 +421,7 @@ OK
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/09/16/Nosql之Redis/" rel="next" title="服务器搭建-四-redis配置">
+              <a href="/2016/09/16/服务器搭建-四-redis配置/" rel="next" title="服务器搭建-四-redis配置">
                 <i class="fa fa-chevron-left"></i> 服务器搭建-四-redis配置
               </a>
             
@@ -524,7 +538,7 @@ OK
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#String类型"><span class="nav-number">1.</span> <span class="nav-text">String类型</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#String类型"><span class="nav-number">1.</span> <span class="nav-text">String类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#String应用"><span class="nav-number">2.</span> <span class="nav-text">String应用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#String存在的问题"><span class="nav-number">3.</span> <span class="nav-text">String存在的问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hash类型"><span class="nav-number">4.</span> <span class="nav-text">Hash类型</span></a></li></ol></div>
             
           </div>
         </section>

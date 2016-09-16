@@ -355,7 +355,19 @@ OK
 127.0.0.1:6379&gt; mget k1 k3
 1) &quot;v1&quot;
 2) &quot;v3&quot;
-</code></pre>
+</code></pre><h1 id="String应用"><a href="#String应用" class="headerlink" title="String应用"></a><strong>String应用</strong></h1><p>自增主键:  商品编号、订单号采用string的递增数字特性生成。</p>
+<pre><code>定义商品编号key：items:id
+192.168.101.3:7003&gt; INCR items:id
+(integer) 2
+192.168.101.3:7003&gt; INCR items:id
+(integer) 3
+</code></pre><h1 id="String存在的问题"><a href="#String存在的问题" class="headerlink" title="String存在的问题"></a><strong>String存在的问题</strong></h1><pre><code>假设有User对象以JSON序列化的形式存储到Redis中，User对象有id，username、password、age、name等属性，存储的过程如下： 
+保存、更新： 
+User对象  -&gt;  json(string)  -&gt;  redis 
+如果在业务上只是更新age属性，其他的属性并不做更新我应该怎么做呢？ 
+如果仍然采用上边的方法在传输、处理时会造成资源浪费，下边讲的hash可以很好的解决这个问题。
+</code></pre><h1 id="Hash类型"><a href="#Hash类型" class="headerlink" title="Hash类型"></a><strong>Hash类型</strong></h1><p>hash叫散列类型，它提供了字段和字段值的映射。字段值只能是字符串类型，不支持散列类型、集合类型等其它类型。如下：<br><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/redis_hash.jpg" alt=""></p>
+
           
         
       
@@ -404,7 +416,7 @@ OK
             
               
                 
-                <a class="post-title-link" href="/2016/09/16/Nosql之Redis/" itemprop="url">
+                <a class="post-title-link" href="/2016/09/16/服务器搭建-四-redis配置/" itemprop="url">
                   服务器搭建-四-redis配置
                 </a>
               
@@ -429,8 +441,8 @@ OK
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/09/16/Nosql之Redis/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/16/Nosql之Redis/" itemprop="commentsCount"></span>
+                <a href="/2016/09/16/服务器搭建-四-redis配置/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/16/服务器搭建-四-redis配置/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -542,7 +554,7 @@ NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为�
             
               
                 
-                <a class="post-title-link" href="/2016/09/16/服务器搭建-四-redis配置/" itemprop="url">
+                <a class="post-title-link" href="/2016/09/16/Nosql之Redis/" itemprop="url">
                   服务器搭建-四-redis配置
                 </a>
               
@@ -567,8 +579,8 @@ NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为�
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/09/16/服务器搭建-四-redis配置/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/16/服务器搭建-四-redis配置/" itemprop="commentsCount"></span>
+                <a href="/2016/09/16/Nosql之Redis/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/16/Nosql之Redis/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
