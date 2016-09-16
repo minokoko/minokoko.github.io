@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="linux,服务器,fastDFS," />
+  <meta name="keywords" content="linux,fastDFS,服务器," />
 
 
 
@@ -84,16 +84,16 @@
 
 
 
-<meta name="description" content="fastDFS搭建第一步：把fastDFS都上传到linux系统。第二步：安装FastDFS之前，先安装libevent工具包。yum -y install libevent第三步：安装libfastcommonV1.0.7工具包。    1、解压缩    2、./make.sh    3、./make.sh install    4、把/usr/lib64/libfastcommon.so文件向">
+<meta name="description" content="fastDFS搭建第一步：把fastDFS都上传到linux系统。第二步：安装FastDFS之前，先安装libevent工具包。yum -y install libevent第三步：安装libfastcommonV1.0.7工具包。        1、解压缩        2、./make.sh        3、./make.sh install        4、把/usr/lib64/lib">
 <meta property="og:type" content="article">
 <meta property="og:title" content="服务器搭建(三) fastDFS图片服务器">
 <meta property="og:url" content="http://jessyon.com/2016/09/16/服务器搭建-三-fastDFS图片服务器/index.html">
 <meta property="og:site_name" content="OneStack">
-<meta property="og:description" content="fastDFS搭建第一步：把fastDFS都上传到linux系统。第二步：安装FastDFS之前，先安装libevent工具包。yum -y install libevent第三步：安装libfastcommonV1.0.7工具包。    1、解压缩    2、./make.sh    3、./make.sh install    4、把/usr/lib64/libfastcommon.so文件向">
-<meta property="og:updated_time" content="2016-09-16T01:43:50.751Z">
+<meta property="og:description" content="fastDFS搭建第一步：把fastDFS都上传到linux系统。第二步：安装FastDFS之前，先安装libevent工具包。yum -y install libevent第三步：安装libfastcommonV1.0.7工具包。        1、解压缩        2、./make.sh        3、./make.sh install        4、把/usr/lib64/lib">
+<meta property="og:updated_time" content="2016-09-16T02:54:27.057Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="服务器搭建(三) fastDFS图片服务器">
-<meta name="twitter:description" content="fastDFS搭建第一步：把fastDFS都上传到linux系统。第二步：安装FastDFS之前，先安装libevent工具包。yum -y install libevent第三步：安装libfastcommonV1.0.7工具包。    1、解压缩    2、./make.sh    3、./make.sh install    4、把/usr/lib64/libfastcommon.so文件向">
+<meta name="twitter:description" content="fastDFS搭建第一步：把fastDFS都上传到linux系统。第二步：安装FastDFS之前，先安装libevent工具包。yum -y install libevent第三步：安装libfastcommonV1.0.7工具包。        1、解压缩        2、./make.sh        3、./make.sh install        4、把/usr/lib64/lib">
 
 
 
@@ -283,7 +283,7 @@
       
 
       
-        <h1 id="fastDFS搭建"><a href="#fastDFS搭建" class="headerlink" title="fastDFS搭建"></a><strong>fastDFS搭建</strong></h1><p>第一步：把fastDFS都上传到linux系统。<br>第二步：安装FastDFS之前，先安装libevent工具包。<br>yum -y install libevent<br>第三步：安装libfastcommonV1.0.7工具包。<br>    1、解压缩<br>    2、./make.sh<br>    3、./make.sh install<br>    4、把/usr/lib64/libfastcommon.so文件向/usr/lib/下复制一份<br>第四步：安装Tracker服务。<br>    1、解压缩fastDFS<br>    2、./make.sh<br>    3、./make.sh install<br>    安装后在/usr/bin/目录下有以fdfs开头的文件都是编译出来的。<br>    配置文件都放到/etc/fdfs文件夹<br>    4、把/root/FastDFS/conf目录下的所有的配置文件都复制到/etc/fdfs下。<br>       cp *<br>    5、配置tracker服务。修改/root/FastDFS/conf/tracker.conf文件。</p>
+        <h1 id="fastDFS搭建"><a href="#fastDFS搭建" class="headerlink" title="fastDFS搭建"></a><strong>fastDFS搭建</strong></h1><p>第一步：把fastDFS都上传到linux系统。<br>第二步：安装FastDFS之前，先安装libevent工具包。<br>yum -y install libevent<br>第三步：安装libfastcommonV1.0.7工具包。<br>        1、解压缩<br>        2、./make.sh<br>        3、./make.sh install<br>        4、把/usr/lib64/libfastcommon.so文件向/usr/lib/下复制一份<br>第四步：安装Tracker服务。<br>        1、解压缩fastDFS,将文件移动到/usr/local下<br>        2、./make.sh<br>        3、./make.sh install<br>        安装后在/usr/bin/目录下有以fdfs开头的文件都是编译出来的。<br>        配置文件都放到/etc/fdfs文件夹<br>        4、把/usr/local/FastDFS/conf目录下的所有的配置文件都复制到/etc/fdfs下。<br>           cp * /etc/fdfs/<br>        5、配置tracker服务。修改/usr/local/FastDFS/conf/tracker.conf文件。<br>        6、修改tracker.conf中22行,base_path=/home/fastdfs/tracker<br>        7、启动tracker。/usr/bin/fdfs_trackerd /etc/fdfs/tracker.conf<br>        重启使用命令：/usr/bin/fdfs_trackerd /etc/fdfs/tracker.conf restart<br>第五步：安装storage服务。<br>        1、如果是在不同的服务器安装，第四步的1~4需要重新执行。<br>        2、配置storage服务。修改/usr/local/FastDFS/conf/storage.conf文件<br>        41行 base_path=/home/fastdfs/storage<br>        109行 store_path0=/home/fastdfs/storage<br>        118行 tracker_server=115.159.93.201:22122<br>        3、启动storage服务。<br>        /usr/bin/fdfs_storaged /etc/fdfs/storage.conf restart<br>第六步：测试服务。<br>        1、修改配置文件/etc/fdfs/client.conf<br>        10行 base_path=/home/fastdfs/client<br>        14行 tracker_server=115.159.93.201:22122<br>        2、测试 /usr/bin/fdfs_test /etc/fdfs/client.conf upload anti-steal.jpg (在/etc/fdfs目录下)<br>        生成 <a href="http://115.159.93.201/group1/M00/00/00/CmkaiVfbXw-ABpAJAABdrZgsqUU916_big.jpg" target="_blank" rel="external">http://115.159.93.201/group1/M00/00/00/CmkaiVfbXw-ABpAJAABdrZgsqUU916_big.jpg</a> 为图片的地址</p>
 
       
     </div>
@@ -308,9 +308,9 @@
           
             <a href="/tags/linux/" rel="tag">#linux</a>
           
-            <a href="/tags/服务器/" rel="tag">#服务器</a>
-          
             <a href="/tags/fastDFS/" rel="tag">#fastDFS</a>
+          
+            <a href="/tags/服务器/" rel="tag">#服务器</a>
           
         </div>
       
