@@ -238,6 +238,193 @@
             
               
                 
+                <a class="post-title-link" href="/2016/09/16/redis数据类型List命令/" itemprop="url">
+                  redis数据类型List命令
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-16T15:02:19+08:00" content="2016-09-16">
+              2016-09-16
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/16/redis数据类型List命令/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/16/redis数据类型List命令/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="redis-list介绍"><a href="#redis-list介绍" class="headerlink" title="redis list介绍"></a><strong>redis list介绍</strong></h1><pre><code>列表类型（list）可以存储一个有序的字符串列表，
+常用的操作是向列表两端添加元素，或者获得列表的某一个片段。
+列表类型内部是使用双向链表（double linked list）实现的，
+所以向列表两端添加元素的时间复杂度为0(1)，获取越接近两端的元素速度就越快。
+这意味着即使是一个有几千万个元素的列表，获取头部或尾部的10条记录也是极快的。
+</code></pre><h1 id="向列表两端增加元素"><a href="#向列表两端增加元素" class="headerlink" title="向列表两端增加元素"></a>向列表两端增加元素</h1><p>LPUSH key value [value …]  向列表左边增加元素 </p>
+<pre><code>127.0.0.1:6379&gt; lpush list:1 1 2 3
+(integer) 3
+</code></pre><p>RPUSH key value [value …]  向列表右边增加元素 </p>
+<pre><code>127.0.0.1:6379&gt; rpush list:1 4 5 6
+(integer) 3
+</code></pre><h1 id="查看列表"><a href="#查看列表" class="headerlink" title="查看列表"></a>查看列表</h1><pre><code>LRANGE命令是列表类型最常用的命令之一，
+获取列表中的某一片段，将返回start、stop之间的所有元素（包含两端的元素），
+索引从0开始。索引可以是负数，如：“-1”代表最后边的一个元素。
+</code></pre><p>LRANGE key start stop </p>
+<pre><code>127.0.0.1:6379&gt; lrange list:1 0 2
+1) &quot;2&quot;
+2) &quot;1&quot;
+3) &quot;4&quot;
+</code></pre><h1 id="从列表两端弹出元素"><a href="#从列表两端弹出元素" class="headerlink" title="从列表两端弹出元素"></a>从列表两端弹出元素</h1><pre><code>LPOP命令从列表左边弹出一个元素，会分两步完成：
+第一步是将列表左边的元素从列表中移除
+第二步是返回被移除的元素值。
+</code></pre><p>LPOP key </p>
+<p>RPOP key</p>
+<pre><code>127.0.0.1:6379&gt; lpop list:1
+&quot;3“
+127.0.0.1:6379&gt; rpop list:1
+&quot;6“
+</code></pre><h1 id="获取列表中元素的个数"><a href="#获取列表中元素的个数" class="headerlink" title="获取列表中元素的个数"></a>获取列表中元素的个数</h1><pre><code>127.0.0.1:6379&gt; llen list:1
+(integer) 2
+</code></pre><h1 id="删除列表中指定的值"><a href="#删除列表中指定的值" class="headerlink" title="删除列表中指定的值"></a>删除列表中指定的值</h1><pre><code>LREM命令会删除列表中前count个值为value的元素，返回实际删除的元素个数。根据count值的不同，该命令的执行方式会有所不同： 
+当count&gt;0时， LREM会从列表左边开始删除。 
+当count&lt;0时， LREM会从列表后边开始删除。 
+当count=0时， LREM删除所有值为value的元素。 
+
+语法：LREM key count value
+</code></pre><h1 id="获得-设置指定索引的元素值"><a href="#获得-设置指定索引的元素值" class="headerlink" title="获得/设置指定索引的元素值"></a>获得/设置指定索引的元素值</h1><p>LINDEX key index     获得指定索引的元素值</p>
+<pre><code>127.0.0.1:6379&gt; lindex l:list 2
+&quot;1&quot;
+</code></pre><p>LSET key index value      设置指定索引的元素值</p>
+<pre><code>127.0.0.1:6379&gt; lset l:list 2 2
+OK
+127.0.0.1:6379&gt; lrange l:list 0 -1
+1) &quot;6&quot;
+2) &quot;5&quot;
+3) &quot;2&quot;
+4) &quot;2&quot;
+</code></pre><h1 id="只保留列表指定片段"><a href="#只保留列表指定片段" class="headerlink" title="只保留列表指定片段"></a>只保留列表指定片段</h1><p>LTRIM key start stop 指定范围和LRANGE一致 </p>
+<pre><code>127.0.0.1:6379&gt; lrange l:list 0 -1
+1) &quot;6&quot;
+2) &quot;5&quot;
+3) &quot;0&quot;
+4) &quot;2&quot;
+127.0.0.1:6379&gt; ltrim l:list 0 2
+OK
+127.0.0.1:6379&gt; lrange l:list 0 -1
+1) &quot;6&quot;
+2) &quot;5&quot;
+3) &quot;0&quot;
+</code></pre><h1 id="向列表中插入元素"><a href="#向列表中插入元素" class="headerlink" title="向列表中插入元素"></a>向列表中插入元素</h1><pre><code>该命令首先会在列表中从左到右查找值为pivot的元素，
+然后根据第二个参数是BEFORE还是AFTER来决定将value插入到该元素的前面还是后面。
+</code></pre><p>LINSERT key BEFORE|AFTER pivot value</p>
+<pre><code>127.0.0.1:6379&gt; lrange list 0 -1
+1) &quot;3&quot;
+2) &quot;2&quot;
+3) &quot;1&quot;
+127.0.0.1:6379&gt; linsert list after 3 4
+(integer) 4
+127.0.0.1:6379&gt; lrange list 0 -1
+1) &quot;3&quot;
+2) &quot;4&quot;
+3) &quot;2&quot;
+4) &quot;1&quot;
+</code></pre><h1 id="将元素从一个列表转移到另一个列表中"><a href="#将元素从一个列表转移到另一个列表中" class="headerlink" title="将元素从一个列表转移到另一个列表中"></a>将元素从一个列表转移到另一个列表中</h1><p>RPOPLPUSH source destination</p>
+<pre><code>127.0.0.1:6379&gt; rpoplpush list newlist 
+&quot;1&quot;
+127.0.0.1:6379&gt; lrange newlist 0 -1
+1) &quot;1&quot;
+127.0.0.1:6379&gt; lrange list 0 -1
+1) &quot;3&quot;
+2) &quot;4&quot;
+3) &quot;2&quot;
+</code></pre><h1 id="List应用"><a href="#List应用" class="headerlink" title="List应用"></a>List应用</h1><h2 id="商品评论列表"><a href="#商品评论列表" class="headerlink" title="商品评论列表"></a>商品评论列表</h2><pre><code>在Redis中创建商品评论列表
+用户发布商品评论，将评论信息转成json存储到list中。
+用户在页面查询评论列表，从redis中取出json数据展示到页面。
+</code></pre><p>商品编号为1001的商品评论key【items: comment:1001】</p>
+<pre><code>192.168.101.3:7001&gt; LPUSH items:comment:1001 &apos;{&quot;id&quot;:1,&quot;name&quot;:&quot;商品不错，很好！！&quot;,&quot;date&quot;:1430295077289}&apos;
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/09/16/redis数据类型Hash命令/" itemprop="url">
                   redis数据类型Hash命令
                 </a>
@@ -1475,205 +1662,6 @@ NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为�
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/08/16/AccountManage开发记录/" itemprop="url">
-                  AccountManage开发记录
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-08-16T20:58:12+08:00" content="2016-08-16">
-              2016-08-16
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/08/16/AccountManage开发记录/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/16/AccountManage开发记录/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="整体概况"><a href="#整体概况" class="headerlink" title="整体概况"></a>整体概况</h1><p>  完成这个面试题前前后后用了10天，因为期间也在准备另外一个实习的面试。加上指定的技术栈我不是特别熟悉，所以花费了比较多的时间来学习，但是依然只完成了指定功能的80%左右。<br>  第一天就遇到了很大的麻烦，由于spring-boot-starter-parent版本不是用的最新版，一直启动不了main。后来又遇到了json数据传输的问题，不知道spring-boot怎样处理json数据。<br>  后来又遇到了包扫描的坑，之前没有在注入的bean之前加上@Component标签，造成bean没有注入，main无法启动等一系列问题。</p>
-<h2 id="关于maven生成的jar包的说明"><a href="#关于maven生成的jar包的说明" class="headerlink" title="关于maven生成的jar包的说明"></a>关于maven生成的jar包的说明</h2><p>  在AccountManage-0.0.1-SNAPSHOT.jar所在的位置启动命令行，输入<br>  java -jar AccountManage-0.0.1-SNAPSHOT.jar<br>  可启动内置的tomcat服务器，在浏览器输入<br><a href="http://localhost:8080/findAll" target="_blank" rel="external">http://localhost:8080/findAll</a><br>就可以出现以下界面,我使用的是本地mysql数据库,所以访问数据可能会有点问题。</p>
-<p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/img/AccountManage.jpg" alt=""></p>
-<h1 id="核心代码"><a href="#核心代码" class="headerlink" title="核心代码"></a>核心代码</h1><pre><code class="bash">    @SpringBootApplication
-    @Controller
-    public class Application {
-
-    @Autowired(required=<span class="literal">true</span>) 
-    private AccountManageService accountManageService;
-
-    // freemarker
-    @RequestMapping(<span class="string">"/hello"</span>)
-    public String web(Map&lt;String, Object&gt; model) {
-        model.put(<span class="string">"time"</span>, new Date());
-        <span class="built_in">return</span> <span class="string">"hello"</span>;// 返回的内容就是templetes下面文件的名称
-    }
-
-    //
-    @RequestMapping(value = <span class="string">"/update"</span>, method = RequestMethod.POST)
-    @ResponseBody
-    public void update(@RequestBody AccountManage account) {
-        accountManageService.update(account);
-    }
-
-    @RequestMapping(value = <span class="string">"/add"</span>, method = RequestMethod.POST)
-    @ResponseBody
-    public void add(@RequestBody AccountManage account) {
-        System.out.println(account);
-        accountManageService.add(account);
-    }
-
-    @RequestMapping(value = <span class="string">"/delete"</span>, method = RequestMethod.POST)
-    @ResponseBody
-    public void delete(@RequestBody AccountManage account) {
-        accountManageService.deletById(account.getId());
-    }
-
-    @RequestMapping(<span class="string">"/findAll"</span>)
-    public String findAll(@ModelAttribute(<span class="string">"model"</span>) ModelMap model) {
-        List&lt;AccountManage&gt; list = accountManageService.findAll();
-        model.addAttribute(<span class="string">"infos"</span>, list);
-        model.addAttribute(<span class="string">"time"</span>, new Date().toLocaleString());
-        System.out.println(new Date().toLocaleString());
-        <span class="built_in">return</span> <span class="string">"hello"</span>;
-    }
-
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-    }
-}
-
-
-Dao层
-
-    @Component
-    @Repository
-    public class AccountManageDaoImpl implements AccountManageDao{
-        @Autowired
-        private JdbcTemplate jdbcTemplate;
-
-        public List&lt;AccountManage&gt; <span class="function"><span class="title">findAll</span></span>() {
-            String sql = <span class="string">"select * from info"</span>;
-            <span class="built_in">return</span> (List&lt;AccountManage&gt;) jdbcTemplate.query(sql, new RowMapper&lt;AccountManage&gt;() {
-
-                public AccountManage mapRow(ResultSet rs, int rowNum) throws SQLException {
-                    AccountManage accountManage = new AccountManage();
-                    accountManage.setCountType(rs.getString(<span class="string">"count_type"</span>));
-                    accountManage.setCreateTime(rs.getString(<span class="string">"create_time"</span>));
-                    accountManage.setId(rs.getString(<span class="string">"id"</span>));
-                    accountManage.setLastTime(rs.getString(<span class="string">"last_time"</span>));
-                    accountManage.setName(rs.getString(<span class="string">"name"</span>));
-                    accountManage.setStatus(rs.getString(<span class="string">"status"</span>));
-                    accountManage.setRemark(rs.getString(<span class="string">"remark"</span>));
-                    System.out.println(accountManage.toString());
-                    <span class="built_in">return</span> accountManage;
-                }
-            });
-        }
-
-        public void add(AccountManage account) {
-            jdbcTemplate.update(
-                    <span class="string">"insert into info(id,name,create_time,status,count_type,last_time,remark ) values(?,?,?,?,?,?,?)"</span>,
-                    account.getId(), account.getName(), account.getCreateTime(), account.getStatus(),
-                    account.getCountType(), account.getLastTime(), account.getRemark());
-        }
-
-        public void deleteById(String id) {
-            jdbcTemplate.update(<span class="string">"delete from info where id = ?"</span>, id);
-        }
-
-        @Override
-        public void update(AccountManage account) {
-            jdbcTemplate.update(
-                    <span class="string">"update  info(name,create_time,status,count_type,last_time,remark ) values(?,?,?,?,?,?) where id=?"</span>,
-                     account.getName(), account.getCreateTime(), account.getStatus(),
-                    account.getCountType(), account.getLastTime(), account.getRemark(),account.getId());
-        }
-    }
-</code></pre>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1719,7 +1707,7 @@ Dao层
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">24</span>
+              <span class="site-state-item-count">25</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1729,7 +1717,7 @@ Dao层
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-count">26</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
