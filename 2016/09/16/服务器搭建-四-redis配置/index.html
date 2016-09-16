@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="linux,服务器,fastDFS," />
+  <meta name="keywords" content="Nosql,redis," />
 
 
 
@@ -84,39 +84,22 @@
 
 
 
-<meta name="description" content="fastDFS流程可以使用一台虚拟机来模拟，只有一个Tracker、一个Storage服务。配置nginx访问图片。
-fastDFS搭建第一步：把fastDFS都上传到linux系统。
-第二步：安装FastDFS之前，先安装libevent工具包。
-yum -y install libevent
-第三步：安装libfastcommonV1.0.7工具包。
-1、解压缩
-2、./make.sh
-3、.">
+<meta name="description" content="什么是NoSql为了解决高并发、高可扩展、高可用、大数据存储问题而产生的数据库解决方案，就是NoSql数据库。
+NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为关系型数据库的良好补充。
+什么是RedisRedis是用C语言开发的一个开源的高性能键值对（key-value）数据库。它通过提供多种键值数据类型来适应不同场景下的存储需求，目前为止Redis支持的键值数据">
 <meta property="og:type" content="article">
-<meta property="og:title" content="服务器搭建(三) fastDFS图片服务器">
-<meta property="og:url" content="http://jessyon.com/2016/09/16/服务器搭建-三-fastDFS图片服务器/index.html">
+<meta property="og:title" content="服务器搭建-四-redis配置">
+<meta property="og:url" content="http://jessyon.com/2016/09/16/服务器搭建-四-redis配置/index.html">
 <meta property="og:site_name" content="OneStack">
-<meta property="og:description" content="fastDFS流程可以使用一台虚拟机来模拟，只有一个Tracker、一个Storage服务。配置nginx访问图片。
-fastDFS搭建第一步：把fastDFS都上传到linux系统。
-第二步：安装FastDFS之前，先安装libevent工具包。
-yum -y install libevent
-第三步：安装libfastcommonV1.0.7工具包。
-1、解压缩
-2、./make.sh
-3、.">
-<meta property="og:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/fastDFS.jpg">
-<meta property="og:updated_time" content="2016-09-16T03:35:56.753Z">
+<meta property="og:description" content="什么是NoSql为了解决高并发、高可扩展、高可用、大数据存储问题而产生的数据库解决方案，就是NoSql数据库。
+NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为关系型数据库的良好补充。
+什么是RedisRedis是用C语言开发的一个开源的高性能键值对（key-value）数据库。它通过提供多种键值数据类型来适应不同场景下的存储需求，目前为止Redis支持的键值数据">
+<meta property="og:updated_time" content="2016-09-16T05:16:09.252Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="服务器搭建(三) fastDFS图片服务器">
-<meta name="twitter:description" content="fastDFS流程可以使用一台虚拟机来模拟，只有一个Tracker、一个Storage服务。配置nginx访问图片。
-fastDFS搭建第一步：把fastDFS都上传到linux系统。
-第二步：安装FastDFS之前，先安装libevent工具包。
-yum -y install libevent
-第三步：安装libfastcommonV1.0.7工具包。
-1、解压缩
-2、./make.sh
-3、.">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/fastDFS.jpg">
+<meta name="twitter:title" content="服务器搭建-四-redis配置">
+<meta name="twitter:description" content="什么是NoSql为了解决高并发、高可扩展、高可用、大数据存储问题而产生的数据库解决方案，就是NoSql数据库。
+NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为关系型数据库的良好补充。
+什么是RedisRedis是用C语言开发的一个开源的高性能键值对（key-value）数据库。它通过提供多种键值数据类型来适应不同场景下的存储需求，目前为止Redis支持的键值数据">
 
 
 
@@ -137,9 +120,9 @@ yum -y install libevent
 
 
 
-  <link rel="canonical" href="http://jessyon.com/2016/09/16/服务器搭建-三-fastDFS图片服务器/"/>
+  <link rel="canonical" href="http://jessyon.com/2016/09/16/服务器搭建-四-redis配置/"/>
 
-  <title> 服务器搭建(三) fastDFS图片服务器 | OneStack </title>
+  <title> 服务器搭建-四-redis配置 | OneStack </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -259,7 +242,7 @@ yum -y install libevent
             
             
               
-                服务器搭建(三) fastDFS图片服务器
+                服务器搭建-四-redis配置
               
             
           </h1>
@@ -271,7 +254,7 @@ yum -y install libevent
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-16T09:02:42+08:00" content="2016-09-16">
+            <time itemprop="dateCreated" datetime="2016-09-16T11:55:31+08:00" content="2016-09-16">
               2016-09-16
             </time>
           </span>
@@ -282,8 +265,8 @@ yum -y install libevent
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/09/16/服务器搭建-三-fastDFS图片服务器/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/16/服务器搭建-三-fastDFS图片服务器/" itemprop="commentsCount"></span>
+                <a href="/2016/09/16/服务器搭建-四-redis配置/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/16/服务器搭建-四-redis配置/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -306,72 +289,45 @@ yum -y install libevent
       
 
       
-        <h2 id="fastDFS流程"><a href="#fastDFS流程" class="headerlink" title="fastDFS流程"></a>fastDFS流程</h2><p>可以使用一台虚拟机来模拟，只有一个Tracker、一个Storage服务。配置nginx访问图片。<br><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/fastDFS.jpg" alt=""></p>
-<h1 id="fastDFS搭建"><a href="#fastDFS搭建" class="headerlink" title="fastDFS搭建"></a><strong>fastDFS搭建</strong></h1><p>第一步：把fastDFS都上传到linux系统。</p>
-<p>第二步：安装FastDFS之前，先安装libevent工具包。</p>
-<pre><code>yum -y install libevent
-</code></pre><p>第三步：安装libfastcommonV1.0.7工具包。</p>
-<pre><code>1、解压缩
-2、./make.sh
-3、./make.sh install
-4、把/usr/lib64/libfastcommon.so文件向/usr/lib/下复制一份
-</code></pre><p>第四步：安装Tracker服务。</p>
-<pre><code>1、解压缩fastDFS,将文件移动到/usr/local下
-2、./make.sh
-3、./make.sh install
-安装后在/usr/bin/目录下有以fdfs开头的文件都是编译出来的。
-配置文件都放到/etc/fdfs文件夹
-4、把/usr/local/FastDFS/conf目录下的所有的配置文件都复制到/etc/fdfs下。
-   cp * /etc/fdfs/
-5、配置tracker服务。修改/usr/local/FastDFS/conf/tracker.conf文件。
-6、修改tracker.conf中22行,base_path=/home/fastdfs/tracker
-7、启动tracker。/usr/bin/fdfs_trackerd /etc/fdfs/tracker.conf
-重启使用命令：/usr/bin/fdfs_trackerd /etc/fdfs/tracker.conf restart
-</code></pre><p>第五步：安装storage服务。</p>
-<p>1、如果是在不同的服务器安装，第四步的1~4需要重新执行。<br>2、配置storage服务。修改/usr/local/FastDFS/conf/storage.conf文件</p>
-<pre><code>41行 base_path=/home/fastdfs/storage
-109行 store_path0=/home/fastdfs/storage
-118行 tracker_server=115.159.93.201:22122
-</code></pre><p>3、启动storage服务。</p>
-<pre><code>/usr/bin/fdfs_storaged /etc/fdfs/storage.conf restart    
-</code></pre><p>第六步：测试服务。</p>
-<p>1、修改配置文件/etc/fdfs/client.conf</p>
-<pre><code>10行 base_path=/home/fastdfs/client
-14行 tracker_server=115.159.93.201:22122
-</code></pre><p>2、测试 </p>
-<pre><code>/usr/bin/fdfs_test /etc/fdfs/client.conf upload anti-steal.jpg (在/etc/fdfs目录下)
+        <h1 id="什么是NoSql"><a href="#什么是NoSql" class="headerlink" title="什么是NoSql"></a><strong>什么是NoSql</strong></h1><pre><code>为了解决高并发、高可扩展、高可用、大数据存储问题而产生的数据库解决方案，就是NoSql数据库。
+NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为关系型数据库的良好补充。
+</code></pre><h1 id="什么是Redis"><a href="#什么是Redis" class="headerlink" title="什么是Redis"></a><strong>什么是Redis</strong></h1><p>Redis是用C语言开发的一个开源的高性能键值对（key-value）数据库。它通过提供多种键值数据类型来适应不同场景下的存储需求，目前为止Redis支持的键值数据类型如<br>下：</p>
+<pre><code>字符串类型 
+散列类型 (Hash类型)
+列表类型 (List)
+集合类型 (Set)
+有序集合类型 (SortedSet)
 
-生成 http://115.159.93.201/group1/M00/00/00/CmkaiVfbXw-ABpAJAABdrZgsqUU916_big.jpg 为图片的地址
-</code></pre><p>第七步：搭建nginx提供http服务。</p>
-<p>可以使用官方提供的nginx插件。要使用nginx插件需要重新编译。<br>fastdfs-nginx-module_v1.16.tar.gz</p>
-<pre><code>1、解压插件压缩包,并移动到/usr/local
-2、修改/usr/local/fastdfs-nginx-module/src/config文件，把其中的local去掉。
-</code></pre><p>3、对nginx重新config</p>
-<pre><code>./configure \
---prefix=/usr/local/nginx \
---pid-path=/var/run/nginx/nginx.pid \
---lock-path=/var/lock/nginx.lock \
---error-log-path=/var/log/nginx/error.log \
---http-log-path=/var/log/nginx/access.log \
---with-http_gzip_static_module \
---http-client-body-temp-path=/var/temp/nginx/client \
---http-proxy-temp-path=/var/temp/nginx/proxy \
---http-fastcgi-temp-path=/var/temp/nginx/fastcgi \
---http-uwsgi-temp-path=/var/temp/nginx/uwsgi \
---http-scgi-temp-path=/var/temp/nginx/scgi \
---add-module=/usr/local/fastdfs-nginx-module/src
-</code></pre><p>4、make<br>5、make install<br>6、把/root/fastdfs-nginx-module/src/mod_fastdfs.conf文件复制到/etc/fdfs目录下。编辑：</p>
-<pre><code>40行 tracker_server=115.159.93.201:22122
-53行 url_have_group_name = true
-62行 store_path0=/home/fastdfs/storage
-</code></pre><p>7、nginx的配置<br>        在nginx的配置文件中添加一个Server：<br>        server {<br>                listen       80;<br>                server_name  115.159.93.201;</p>
-<pre><code>        location /group1/M00/{
-                #root /home/FastDFS/fdfs_storage/data;
-                ngx_fastdfs_module;
-        }
-}
-</code></pre><p>8、将libfdfsclient.so拷贝至/usr/lib下<br>cp /usr/lib64/libfdfsclient.so /usr/lib/<br>9、启动nginx</p>
-
+在redis中的命令语句中，命令是忽略大小写的，而key是不忽略大小写的。
+</code></pre><h1 id="redis的应用场景"><a href="#redis的应用场景" class="headerlink" title="redis的应用场景"></a><strong>redis的应用场景</strong></h1><pre><code>缓存（数据查询、短连接、新闻内容、商品内容等等）。（最多使用）
+分布式集群架构中的session分离。
+聊天室的在线好友列表。
+任务队列。（秒杀、抢购、12306等等）
+应用排行榜。
+网站访问统计。
+数据过期处理（可以精确到毫秒）
+</code></pre><h1 id="Redis安装"><a href="#Redis安装" class="headerlink" title="Redis安装"></a><strong>Redis安装</strong></h1><p>第一步.在Linux下安装gcc环境</p>
+<pre><code>yum install gcc-c++
+</code></pre><p>第二步. 安装redis</p>
+<pre><code>1.将下载的Redis源码包上传到Linux服务器中
+2.解压缩Redis源码包到/usr/local tar -zxf redis-3.0.0.tar.gz -C /usr/local
+3.进入/usr/local/redis-3.0.0目录 
+  编译redis源码 make
+  安装redis make install PREFIX=/usr/local/redis0707
+</code></pre><p>第三步. 后端启动redis</p>
+<pre><code>1.将redis源码包中的redis.conf配置文件复制到/usr/local/redis/bin/下
+  cp redis.conf /usr/local/redis0707/bin/
+2.修改redis.conf，将daemonize由no改为yes
+  37行 daemonize yes
+3.启动redis-server 
+  ./redis-server redis.conf
+4.关闭redis-server
+  ./redis-cli shutdown
+5.打开redis客户端 ./redis-cli -h 127.0.0.1 -p 6379
+</code></pre><h1 id="修改访问端口"><a href="#修改访问端口" class="headerlink" title="修改访问端口"></a><strong>修改访问端口</strong></h1><pre><code>1.通过notepad++ 打开/etc/sysconfig/iptables
+2.添加-A INPUT -m state --state NEW -m tcp -p tcp --dport 6379 -j ACCEPT
+3.重启防火墙  service iptables restart
+</code></pre>
       
     </div>
 
@@ -393,11 +349,9 @@ yum -y install libevent
       
         <div class="post-tags">
           
-            <a href="/tags/linux/" rel="tag">#linux</a>
+            <a href="/tags/Nosql/" rel="tag">#Nosql</a>
           
-            <a href="/tags/服务器/" rel="tag">#服务器</a>
-          
-            <a href="/tags/fastDFS/" rel="tag">#fastDFS</a>
+            <a href="/tags/redis/" rel="tag">#redis</a>
           
         </div>
       
@@ -406,17 +360,13 @@ yum -y install libevent
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/09/15/服务器搭建-二-Nginx和fastDFS配置/" rel="next" title="服务器搭建(二)Nginx和fastDFS配置">
-                <i class="fa fa-chevron-left"></i> 服务器搭建(二)Nginx和fastDFS配置
+              <a href="/2016/09/16/服务器搭建-三-fastDFS图片服务器/" rel="next" title="服务器搭建(三) fastDFS图片服务器">
+                <i class="fa fa-chevron-left"></i> 服务器搭建(三) fastDFS图片服务器
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/09/16/服务器搭建-四-redis配置/" rel="prev" title="服务器搭建-四-redis配置">
-                服务器搭建-四-redis配置 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -442,8 +392,8 @@ yum -y install libevent
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/09/16/服务器搭建-三-fastDFS图片服务器/"
-           data-title="服务器搭建(三) fastDFS图片服务器" data-url="http://jessyon.com/2016/09/16/服务器搭建-三-fastDFS图片服务器/">
+      <div class="ds-thread" data-thread-key="2016/09/16/服务器搭建-四-redis配置/"
+           data-title="服务器搭建-四-redis配置" data-url="http://jessyon.com/2016/09/16/服务器搭建-四-redis配置/">
       </div>
     
   </div>
@@ -527,7 +477,7 @@ yum -y install libevent
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#fastDFS流程"><span class="nav-number">1.</span> <span class="nav-text">fastDFS流程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#fastDFS搭建"><span class="nav-number"></span> <span class="nav-text">fastDFS搭建</span></a></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是NoSql"><span class="nav-number">1.</span> <span class="nav-text">什么是NoSql</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是Redis"><span class="nav-number">2.</span> <span class="nav-text">什么是Redis</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#redis的应用场景"><span class="nav-number">3.</span> <span class="nav-text">redis的应用场景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis安装"><span class="nav-number">4.</span> <span class="nav-text">Redis安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#修改访问端口"><span class="nav-number">5.</span> <span class="nav-text">修改访问端口</span></a></li></ol></div>
             
           </div>
         </section>
