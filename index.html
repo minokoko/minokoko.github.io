@@ -386,139 +386,6 @@
             
               
                 
-                <a class="post-title-link" href="/2016/09/15/服务器搭建-一-基本配置/" itemprop="url">
-                  服务器搭建(一)jdk和nginx配置
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-15T20:39:25+08:00" content="2016-09-15">
-              2016-09-15
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/09/15/服务器搭建-一-基本配置/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/15/服务器搭建-一-基本配置/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="使用SecureCRT连接服务器"><a href="#使用SecureCRT连接服务器" class="headerlink" title="使用SecureCRT连接服务器"></a><strong>使用SecureCRT连接服务器</strong></h1><p>1.点击new session新建连接，选择SSH2<br>2.hostname填服务器的地址，Port填22,SecureFX选择SFTP</p>
-<h1 id="安装JDK"><a href="#安装JDK" class="headerlink" title="安装JDK"></a><strong>安装JDK</strong></h1><p>1.通过Connect SFTP Session将jdk上传至服务器<br>2.使用命令tar -zxvf jdk-7u55-linux-i586.tar.gz解压压缩包<br>3.将解压后的文件移到/usr/local下 mv jdk1.7.0_55 /usr/local<br>4.cd /usr/local 查看文件是否存在<br>5.通过notepad++连接服务器,找到/etc/profile编辑<br>6.加入内容如下：<br>export JAVA_HOME=/usr/local/jdk1.7.0_55<br>export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar<br>export PATH=$JAVA_HOME/bin:$PATH<br>7.加载刚设置的变量 source /etc/profile<br>8.java -version 查看是否成功安装jdk</p>
-<h1 id="nginx安装"><a href="#nginx安装" class="headerlink" title="nginx安装"></a><strong>nginx安装</strong></h1><p>nginx是一个使用c语言开发的高性能的http服务器及反向代理服务器。<br>Nginx是一款高性能的http 服务器/反向代理服务器及电子邮件（IMAP/POP3）代理服务器。由俄罗斯的程序设计师Igor Sysoev所开发，官方测试nginx能够支支撑5万并发链接，并且cpu、内存等资源消耗却非常低，运行非常稳定。</p>
-<ol>
-<li>gcc<br>安装nginx需要先将官网下载的源码进行编译，编译依赖gcc环境，如果没有gcc环境，需要安装gcc：yum install gcc-c++ </li>
-<li>PCRE<br>PCRE(Perl Compatible Regular Expressions)是一个Perl库，包括 perl 兼容的正则表达式库。nginx的http模块使用pcre来解析正则表达式，所以需要在linux上安装pcre库。<br>yum install -y pcre pcre-devel<br>注：pcre-devel是使用pcre开发的一个二次开发库。nginx也需要此库。</li>
-<li><p>zlib<br>zlib库提供了很多种压缩和解压缩的方式，nginx使用zlib对http包的内容进行gzip，所以需要在linux上安装zlib库。<br>yum install -y zlib zlib-devel</p>
-</li>
-<li><p>openssl<br>OpenSSL 是一个强大的安全套接字层密码库，囊括主要的密码算法、常用的密钥和证书封装管理功能及SSL协议，并提供丰富的应用程序供测试或其它目的使用。<br>nginx不仅支持http协议，还支持https（即在ssl协议上传输http），所以需要在linux安装openssl库。<br>yum install -y openssl openssl-devel</p>
-</li>
-<li>将nginx-1.8.0.tar.gz拷贝至linux服务器</li>
-<li>解压 tar -zxvf nginx-1.8.0.tar.gz</li>
-<li>移到/usr/local mv nginx-1.8.0 /usr/local</li>
-<li><p>进入nginx目录,参数设置如下：<br>./configure \<br>–prefix=/usr/local/nginx \<br>–pid-path=/var/run/nginx/nginx.pid \<br>–lock-path=/var/lock/nginx.lock \<br>–error-log-path=/var/log/nginx/error.log \<br>–http-log-path=/var/log/nginx/access.log \<br>–with-http_gzip_static_module \<br>–http-client-body-temp-path=/var/temp/nginx/client \<br>–http-proxy-temp-path=/var/temp/nginx/proxy \<br>–http-fastcgi-temp-path=/var/temp/nginx/fastcgi \<br>–http-uwsgi-temp-path=/var/temp/nginx/uwsgi \<br>–http-scgi-temp-path=/var/temp/nginx/scgi</p>
-<p>注意：上边将临时文件目录指定为/var/temp/nginx，需要在/var下创建temp及nginx目录cd /var -&gt; mkdir temp -&gt; cd temp -&gt; mkdir nginx</p>
-</li>
-<li>在nginx目录,编译make，安装make install,安装在了/usr/local/nginx目录下</li>
-<li>启动：进入nginx的sbin目录，./nginx就可以启动。关闭:./nginx -s stop<br>ps aux|grep nginx 查看nginx进程</li>
-</ol>
-<h1 id="nginx配置"><a href="#nginx配置" class="headerlink" title="nginx配置"></a><strong>nginx配置</strong></h1><p>在/usr/local/nginx/conf目录下nginx.conf文件是nginx的配置文件。<br>在nginx.conf文件中添加一个Service节点，修改端口号就可以</p>
-<pre><code>server {                        //一个server是一个虚拟主机
-        listen       80;        //当前虚拟主机监听的端口号
-        server_name  localhost; //当前虚拟主机的名称
-
-        #charset koi8-r;
-
-        #access_log  logs/host.access.log  main;
-
-        location / {
-            root   html;     //虚拟主机的根目录
-            index  index.html index.htm; //欢迎页,顺序查找
-        }
-   }
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
                 <a class="post-title-link" href="/2016/09/15/服务器搭建-一-jdk和nginx配置/" itemprop="url">
                   服务器搭建(一)jdk和nginx配置
                 </a>
@@ -1681,11 +1548,153 @@ struts&gt;
 
 
     
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/05/18/我是如何学习Spring的-三/" itemprop="url">
+                  我是如何学习Spring的(三)--AspectJ
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-18T14:50:23+08:00" content="2016-05-18">
+              2016-05-18
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/05/18/我是如何学习Spring的-三/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/18/我是如何学习Spring的-三/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Aspect概述"><a href="#Aspect概述" class="headerlink" title="Aspect概述"></a>Aspect概述</h2><p>AspectJ是一个面向切面的框架，它扩展了Java语言。AspectJ定义了AOP语法所以它有一个专门的编译器用来生成遵守Java字节编码规范的Class文件。</p>
+<ul>
+<li>AspectJ是一个基于Java语言的AOP框架</li>
+<li>Spring2.0以后新增了对AspectJ切点表达式支持</li>
+<li>AspectJ注解 是AspectJ1.5新增功能，通过JDK5注解技术，允许直接在Bean类中定义切面</li>
+<li>常用自定义内容开发。例如：性能监控等</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line">//自定义切面类</span><br><span class="line">  public class MyAspect &#123;</span><br><span class="line"></span><br><span class="line">	public void <span class="function"><span class="title">mybefore</span></span>()&#123;</span><br><span class="line">		System.out.println(<span class="string">"前置通知"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//Service接口类</span><br><span class="line">public interface UserService &#123;</span><br><span class="line"></span><br><span class="line">	public void addUser();</span><br><span class="line">	public void update();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//Service实例</span><br><span class="line">public class UserServiceImpl implements UserService&#123;</span><br><span class="line"></span><br><span class="line">	public void <span class="function"><span class="title">addUser</span></span>() &#123;</span><br><span class="line">		System.out.println(<span class="string">"addUser"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	public void <span class="function"><span class="title">update</span></span>() &#123;</span><br><span class="line">		System.out.println(<span class="string">"update"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//测试类</span><br><span class="line">@Test</span><br><span class="line">	public void <span class="function"><span class="title">Test01</span></span>()&#123;</span><br><span class="line">		String xmlPath = <span class="string">"com/jessyon/aspectj/beans.xml"</span>;</span><br><span class="line">		ApplicationContext applicationContext = new ClassPathXmlApplicationContext(xmlPath);</span><br><span class="line">		</span><br><span class="line">		//从spring获得bean数据</span><br><span class="line">		UserService userService = (UserService) applicationContext.getBean(<span class="string">"userService"</span>);</span><br><span class="line">		userService.addUser();</span><br><span class="line">		userService.update();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">//beans.xml配置文件</span><br><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</span><br><span class="line">&lt;beans xmlns=<span class="string">"http://www.springframework.org/schema/beans"</span></span><br><span class="line">       xmlns:xsi=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span><br><span class="line">       xmlns:aop=<span class="string">"http://www.springframework.org/schema/aop"</span></span><br><span class="line">       xsi:schemaLocation=<span class="string">"http://www.springframework.org/schema/beans </span><br><span class="line">       					   http://www.springframework.org/schema/beans/spring-beans.xsd</span><br><span class="line">       					   http://www.springframework.org/schema/aop </span><br><span class="line">       					   http://www.springframework.org/schema/aop/spring-aop.xsd"</span>&gt;</span><br><span class="line"></span><br><span class="line">&lt;bean id=<span class="string">"userService"</span> class=<span class="string">"com.jessyon.aspectj.UserServiceImpl"</span>&gt;&lt;/bean&gt; //配置一个Service类</span><br><span class="line">&lt;bean id=<span class="string">"MyAspect"</span> class=<span class="string">"com.jessyon.aspectj.MyAspect"</span>&gt;&lt;/bean&gt;           //配置一个自定义切面类</span><br><span class="line">&lt;aop:config&gt;    														   //配置aop</span><br><span class="line">	&lt;aop:aspect ref=<span class="string">"MyAspect"</span>&gt;                                            //配置切面类，将自定义切面类注入进来</span><br><span class="line">	</span><br><span class="line">	   //定义切点,切点为包名为com.jessyon.aspectj下的任意参数，任意返回值的任意方法</span><br><span class="line">	   &lt;aop:pointcut expression=<span class="string">"execution(* com.jessyon.aspectj.*.*(..))"</span> id=<span class="string">"myPointcut"</span>/&gt; </span><br><span class="line">	   &lt;aop:before method=<span class="string">"mybefore"</span> pointcut-ref=<span class="string">"myPointcut"</span>/&gt;           //定义切面类为前置通知，将myPointcut注入</span><br><span class="line">	&lt;/aop:aspect&gt;</span><br><span class="line">&lt;/aop:config&gt;</span><br><span class="line">&lt;/beans&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//测试结果(在每个方法执行前，都会打印<span class="string">"前置通知"</span>)</span><br><span class="line"></span><br><span class="line">前置通知</span><br><span class="line">addUser</span><br><span class="line">前置通知</span><br><span class="line">update</span><br></pre></td></tr></table></figure>
+<h2 id="切入点表达式"><a href="#切入点表达式" class="headerlink" title="切入点表达式"></a>切入点表达式</h2><p>execution(表达式)  用于确定方法（可以为不同的方法进行确定）<br>         修饰符<br>            public        修饰符公共</p>
+<pre><code>   *            任意修饰符
+返回值
+   String        返回字符串
+   *            返回任意
+包    
+   com.jessyon.service                    指定包(某一个模块)
+   com.jessyon.*.service                子模块（子文件夹）任意
+   com.jessyon.service..                service目录当前目录 ，以及子目录（孙子）
+   com.jessyon.*.service..                jessyon下所有的子模块，service目录所有目录
+类
+   UserService                指定类名
+   User*                    以User开头类
+   *Service                以Service结尾类
+   *                        任意类
+方法
+   addUser                    指定方法
+   add*                    add开头方法
+   *User                    以User结尾方法
+   *                        任意方法
+参数列表
+   ()                        没有参数
+   (int)                    一个参数
+   (int,int)                两个参数
+   (..)                    参数任意
+</code></pre><h2 id="AspectJ通知类型"><a href="#AspectJ通知类型" class="headerlink" title="AspectJ通知类型"></a>AspectJ通知类型</h2><p>定义6中通知类型，掌握1种，知道4种，了解1种。</p>
+<ul>
+<li>before:前置通知(应用：各种校验) 在方法执行前执行，如果通知抛出异常，阻止方法运行</li>
+<li>afterReturning:后置通知(应用：常规数据处理) 方法正常返回后执行，如果方法中抛出异常，通知无法执行。必须在方法执行后才执行，所以可以获得方法的返回值。</li>
+<li>around:环绕通知(应用：十分强大，可以做任何事情) 方法执行前后分别执行，可以阻止方法的执行</li>
+<li>afterThrowing:抛出异常通知(应用：包装异常信息) 方法抛出异常后执行，如果方法没有抛出异常，无法执行</li>
+<li>after:最终通知(应用：清理现场) 方法执行完毕后执行，无论方法中是否出现异常<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line">public class MyAspect&#123;</span><br><span class="line">	</span><br><span class="line">	public void myBefore(JoinPoint joinPoint)&#123;</span><br><span class="line">		System.out.println(<span class="string">"前置通知 :"</span> + joinPoint.getSignature().getName());</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	public void myAfterReturning(JoinPoint joinPoint,Object ret)&#123;</span><br><span class="line">		System.out.println(<span class="string">"后置通知："</span> + joinPoint.getSignature().getName() + <span class="string">" , "</span> + ret);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	public Object myAround(ProceedingJoinPoint joinPoint) throws Throwable&#123;</span><br><span class="line">		System.out.println(<span class="string">"环绕前"</span>);</span><br><span class="line">		//执行目标方法</span><br><span class="line">		Object obj = joinPoint.proceed();</span><br><span class="line">		</span><br><span class="line">		System.out.println(<span class="string">"环绕后"</span>);</span><br><span class="line">		<span class="built_in">return</span> obj;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	public void myAfterThrowing(JoinPoint joinPoint, Throwable e)&#123;</span><br><span class="line">		System.out.println(<span class="string">"抛出异常通知："</span> + joinPoint.getSignature().getName() + <span class="string">" , "</span> + e.getMessage());</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	public void myAfter(JoinPoint joinPoint)&#123;</span><br><span class="line">		System.out.println(<span class="string">"最终"</span>+ joinPoint.getSignature().getName() );</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//注解版本</span><br><span class="line">@Component</span><br><span class="line">@Aspect</span><br><span class="line">public class MyAspect&#123;</span><br><span class="line">	</span><br><span class="line">	//定义：公共切入点表达式。之后使用直接调用方法名</span><br><span class="line">	@Pointcut(<span class="string">"execution(* com.jessyon.annotation.*.*(..))"</span>)</span><br><span class="line">	private void <span class="function"><span class="title">myPointCut</span></span>()&#123;&#125;</span><br><span class="line">	</span><br><span class="line">	//@Before(<span class="string">"execution(* com.jessyon.annotation.*.*(..))"</span>)</span><br><span class="line">	public void myBefore(JoinPoint joinPoint)&#123;</span><br><span class="line">		System.out.println(<span class="string">"前置通知 :"</span> + joinPoint.getSignature().getName());</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	//@AfterReturning(value=<span class="string">"execution(* com.jessyon.annotation.*.*(..))"</span>,returning=<span class="string">"ret"</span>)</span><br><span class="line">	public void myAfterReturning(JoinPoint joinPoint,Object ret)&#123;</span><br><span class="line">		System.out.println(<span class="string">"后置通知："</span> + joinPoint.getSignature().getName() + <span class="string">" , "</span> + ret);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	//@Around(<span class="string">"myPointCut()"</span>)</span><br><span class="line">	public Object myAround(ProceedingJoinPoint joinPoint) throws Throwable&#123;</span><br><span class="line">		System.out.println(<span class="string">"环绕前"</span>);</span><br><span class="line">		//执行目标方法</span><br><span class="line">		Object obj = joinPoint.proceed();</span><br><span class="line">		</span><br><span class="line">		System.out.println(<span class="string">"环绕后"</span>);</span><br><span class="line">		<span class="built_in">return</span> obj;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	//@AfterThrowing(value=<span class="string">"myPointCut()"</span>,throwing=<span class="string">"e"</span>)</span><br><span class="line">	public void myAfterThrowing(JoinPoint joinPoint, Throwable e)&#123;</span><br><span class="line">		System.out.println(<span class="string">"抛出异常通知："</span> + joinPoint.getSignature().getName() + <span class="string">" , "</span> + e.getMessage());</span><br><span class="line">	&#125;</span><br><span class="line">	@After(<span class="string">"myPointCut()"</span>)</span><br><span class="line">	public void myAfter(JoinPoint joinPoint)&#123;</span><br><span class="line">		System.out.println(<span class="string">"最终"</span>+ joinPoint.getSignature().getName() );</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;!-- 注解aspectj 必须进行配置 --&gt;</span><br><span class="line">	&lt;aop:aspectj-autoproxy&gt;&lt;/aop:aspectj-autoproxy&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1726,7 +1735,7 @@ struts&gt;
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">21</span>
+              <span class="site-state-item-count">20</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
