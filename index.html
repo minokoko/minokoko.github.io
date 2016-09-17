@@ -238,6 +238,501 @@
             
               
                 
+                <a class="post-title-link" href="/2016/09/16/redis集群搭建/" itemprop="url">
+                  redis集群搭建
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-16T19:30:10+08:00" content="2016-09-16">
+              2016-09-16
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/16/redis集群搭建/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/16/redis集群搭建/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/09/16/redis持久化及主从复制/" itemprop="url">
+                  redis持久化及主从复制
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-16T19:03:36+08:00" content="2016-09-16">
+              2016-09-16
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/16/redis持久化及主从复制/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/16/redis持久化及主从复制/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Redis持久化方案"><a href="#Redis持久化方案" class="headerlink" title="Redis持久化方案"></a><strong>Redis持久化方案</strong></h1><h2 id="RDB持久化"><a href="#RDB持久化" class="headerlink" title="RDB持久化"></a>RDB持久化</h2><pre><code>RDB方式的持久化是通过快照（snapshotting）完成的，
+当符合一定条件时Redis会自动将内存中的数据进行快照并持久化到硬盘。
+RDB是Redis默认采用的持久化方式。
+</code></pre><p>在redis.conf配置文件中默认有此下配置：</p>
+<pre><code>save 900 1
+save 300 10
+save 60 10000
+
+save 开头的一行就是持久化配置，可以配置多个条件（每行配置一个条件），每个条件之间是“或”的关系。
+
+“save 900 1”表示15分钟（900秒钟）内至少1个键被更改则进行快照。
+
+“save 300 10”表示5分钟（300秒）内至少10个键被更改则进行快照。
+</code></pre><p>配置dir指定rdb快照文件的位置:</p>
+<pre><code># Note that you must specify a directory here, not a file name.
+dir ./
+</code></pre><p>Redis启动后会读取RDB快照文件，将数据从硬盘载入到内存。<br>根据数据量大小与结构和服务器性能不同，这个时间也不同。<br>通常将记录一千万个字符串类型键、大小为1GB的快照文件载入到内存中需要花费20～30秒钟。</p>
+<h2 id="RDB问题总结"><a href="#RDB问题总结" class="headerlink" title="RDB问题总结"></a>RDB问题总结</h2><pre><code>通过RDB方式实现持久化，一旦Redis异常退出，就会丢失最后一次快照以后更改的所有数据。
+这就需要开发者根据具体的应用场合，通过组合设置自动快照条件的方式来将可能发生的数据损失控制在能够接受的范围。
+如果数据很重要以至于无法承受任何损失，则可以考虑使用AOF方式进行持久化。
+</code></pre><h2 id="AOF持久化"><a href="#AOF持久化" class="headerlink" title="AOF持久化"></a>AOF持久化</h2><pre><code>默认情况下Redis没有开启AOF（append only file）方式的持久化
+</code></pre><p>可以通过修改redis.conf配置文件中的appendonly参数开启</p>
+<pre><code>appendonly yes
+</code></pre><p>开启AOF持久化后每执行一条会更改Redis中的数据的命令，Redis就会将该命令写入硬<br>盘中的AOF文件。</p>
+<p>AOF文件的保存位置和RDB文件的位置相同，都是通过dir参数设置的。</p>
+<pre><code>dir ./
+</code></pre><p>默认的文件名是appendonly.aof，可以通过appendfilename参数修改：</p>
+<pre><code>appendfilename appendonly.aof
+</code></pre><h1 id="Redis的主从复制"><a href="#Redis的主从复制" class="headerlink" title="Redis的主从复制"></a><strong>Redis的主从复制</strong></h1><pre><code>持久化保证了即使redis服务重启也不会丢失数据，
+因为redis服务重启后会将硬盘上持久化的数据恢复到内存中，
+但是当redis服务器的硬盘损坏了可能会导致数据丢失，
+如果通过redis的主从复制机制就可以避免这种单点故障，如下图：
+</code></pre><p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/copy.jpg" alt=""></p>
+<pre><code>主redis中的数据有两个副本（replication）即从redis1和从redis2，即使一台redis服务器宕机其它两台redis服务也可以继续提供服务。
+主redis中的数据和从redis上的数据保持实时同步，当主redis写入数据时通过主从复制机制会复制到两个从redis服务上。
+只有一个主redis，可以有多个从redis。
+主从复制不会阻塞master，在同步数据时，master 可以继续处理client 请求
+一个redis可以即是主又是从
+</code></pre><h2 id="主从配置"><a href="#主从配置" class="headerlink" title="主从配置"></a>主从配置</h2><p>修改从redis服务器上的redis.conf文件</p>
+<pre><code># slaveof &lt;masterip&gt; &lt;masterport&gt;
+slaveof 192.168.101.3 6379
+</code></pre><p>上边的配置说明当前该【从redis服务器】所对应的【主redis服务器】的IP是192.168.101.3，<br>端口是6379。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/09/16/redis数据类型Set命令/" itemprop="url">
+                  redis数据类型Set命令
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-16T18:12:48+08:00" content="2016-09-16">
+              2016-09-16
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/16/redis数据类型Set命令/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/16/redis数据类型Set命令/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Redis-Set介绍"><a href="#Redis-Set介绍" class="headerlink" title="Redis Set介绍"></a><strong>Redis Set介绍</strong></h1><pre><code>集合中的数据是不重复且没有顺序。
+集合类型的常用操作是向集合中加入或删除元素、判断某个元素是否存在等，
+由于集合类型的Redis内部是使用值为空的散列表实现，
+所有这些操作的时间复杂度都为0(1)。 
+Redis还提供了多个集合之间的交集、并集、差集的运算。
+</code></pre><p>SADD key member [member …]  SREM key member [member …] 增加/删除元素</p>
+<pre><code>127.0.0.1:6379&gt; sadd set a b c
+(integer) 3
+127.0.0.1:6379&gt; sadd set a
+(integer) 0
+
+127.0.0.1:6379&gt; srem set c d
+(integer) 1
+</code></pre><p>SMEMBERS key 获得集合中的所有元素 </p>
+<pre><code>127.0.0.1:6379&gt; smembers set
+1) &quot;b&quot;
+2) &quot;a”
+</code></pre><p>SISMEMBER key member 判断元素是否在集合中</p>
+<pre><code>127.0.0.1:6379&gt; sismember set a
+(integer) 1
+127.0.0.1:6379&gt; sismember set h
+(integer) 0
+</code></pre><p>SDIFF key [key …] 集合的差集运算 A-B</p>
+<pre><code>属于A并且不属于B的元素构成的集合
+
+127.0.0.1:6379&gt; sadd setA 1 2 3
+(integer) 3
+127.0.0.1:6379&gt; sadd setB 2 3 4
+(integer) 3
+127.0.0.1:6379&gt; sdiff setA setB 
+1) &quot;1&quot;
+127.0.0.1:6379&gt; sdiff setB setA 
+1) &quot;4&quot;
+</code></pre><p>SINTER key [key …] 集合的交集运算 A ∩ B</p>
+<pre><code>属于A且属于B的元素构成的集合
+
+127.0.0.1:6379&gt; sinter setA setB 
+1) &quot;2&quot;
+2) &quot;3&quot;
+</code></pre><p>SUNION key [key …] 集合的并集运算 A ∪ B</p>
+<pre><code>属于A或者属于B的元素构成的集合
+
+127.0.0.1:6379&gt; sunion setA setB
+1) &quot;1&quot;
+2) &quot;2&quot;
+3) &quot;3&quot;
+4) &quot;4&quot;
+</code></pre><p>SCARD key 获得集合中元素的个数</p>
+<pre><code>127.0.0.1:6379&gt; smembers setA 
+1) &quot;1&quot;
+2) &quot;2&quot;
+3) &quot;3&quot;
+127.0.0.1:6379&gt; scard setA 
+(integer) 3
+</code></pre><p>SPOP key 从集合中弹出一个元素</p>
+<pre><code>由于集合是无序的，所有SPOP命令会从集合中随机选择一个元素弹出
+127.0.0.1:6379&gt; spop setA 
+&quot;1&quot;
+</code></pre><h1 id="SortedSet类型zset"><a href="#SortedSet类型zset" class="headerlink" title="SortedSet类型zset"></a><strong>SortedSet类型zset</strong></h1><pre><code>在集合类型的基础上，有序集合类型为集合中的每个元素都关联一个分数，
+这使得我们不仅可以完成插入、删除和判断元素是否存在在集合中，
+还能够获得分数最高或最低的前N个元素、获取指定分数范围内的元素等与分数有关的操作。 
+</code></pre><p>在某些方面有序集合和列表类型有些相似。 </p>
+<pre><code>1、二者都是有序的。 
+2、二者都可以获得某一范围的元素。 
+</code></pre><p>但是，二者有着很大区别： </p>
+<pre><code>1、列表类型是通过链表实现的，获取靠近两端的数据速度极快，而当元素增多后，访问中间数据的速度会变慢。 
+2、有序集合类型使用散列表实现，所有即使读取位于中间部分的数据也很快。 
+3、列表中不能简单的调整某个元素的位置，但是有序集合可以（通过更改分数实现） 
+4、有序集合要比列表类型更耗内存。 
+</code></pre><p>ZADD key score member [score member …] 增加元素</p>
+<pre><code>向有序集合中加入一个元素和该元素的分数，如果该元素已经存在则会用新的分数替换原有的分数。
+返回值是新加入到集合中的元素个数，不包含之前已经存在的元素。 
+
+127.0.0.1:6379&gt; zadd scoreboard 80 zhangsan 89 lisi 94 wangwu 
+(integer) 3
+127.0.0.1:6379&gt; zadd scoreboard 97 lisi 
+(integer) 0
+</code></pre><p>ZSCORE key member    获取元素的分数 </p>
+<pre><code>127.0.0.1:6379&gt; zscore scoreboard lisi 
+&quot;97&quot;
+</code></pre><p>ZREM key member [member …] 删除元素</p>
+<pre><code>移除有序集key中的一个或多个成员，不存在的成员将被忽略。
+当key存在但不是有序集类型时，返回一个错误。
+
+127.0.0.1:6379&gt; zrem scoreboard lisi
+(integer) 1
+</code></pre><p>ZRANGE key start stop [WITHSCORES] 获得排名在某个范围的元素列表</p>
+<pre><code>按照元素分数从小到大的顺序返回索引从start到stop之间的所有元素（包含两端的元素）
+
+127.0.0.1:6379&gt; zrange scoreboard 0 2
+1) &quot;zhangsan&quot;
+2) &quot;wangwu&quot;
+3) &quot;lisi“
+</code></pre><p>ZREVRANGE key start stop [WITHSCORES]</p>
+<pre><code>按照元素分数从大到小的顺序返回索引从start到stop之间的所有元素（包含两端的元素）
+
+127.0.0.1:6379&gt; zrevrange scoreboard 0 2
+1) &quot; lisi &quot;
+2) &quot;wangwu&quot;
+3) &quot; zhangsan “
+
+如果需要获得元素的分数的可以在命令尾部加上WITHSCORES参数 
+
+127.0.0.1:6379&gt; zrange scoreboard 0 1 WITHSCORES
+1) &quot;zhangsan&quot;
+2) &quot;80&quot;
+3) &quot;wangwu&quot;
+4) &quot;94&quot;
+</code></pre><p>ZRANGEBYSCORE key min max [WITHSCORES] [LIMIT offset count]<br>获得指定分数范围的元素 </p>
+<pre><code>127.0.0.1:6379&gt; ZRANGEBYSCORE scoreboard 90 97 WITHSCORES
+1) &quot;wangwu&quot;
+2) &quot;94&quot;
+3) &quot;lisi&quot;
+4) &quot;97&quot;
+127.0.0.1:6379&gt; ZRANGEBYSCORE scoreboard 70 100 limit 1 2
+1) &quot;wangwu&quot;
+2) &quot;lisi&quot;
+</code></pre><p>ZINCRBY  key increment member 增加某个元素的分数,返回值是更改后的分数 </p>
+<pre><code>127.0.0.1:6379&gt; ZINCRBY scoreboard 4 lisi 
+&quot;101“
+</code></pre><p>ZCARD key 获得集合中元素的数量 </p>
+<pre><code>127.0.0.1:6379&gt; ZCARD scoreboard
+(integer) 3
+</code></pre><p>ZCOUNT key min max 获得指定分数范围内的元素个数</p>
+<pre><code>127.0.0.1:6379&gt; ZCOUNT scoreboard 80 90
+(integer) 1
+</code></pre><p>ZREMRANGEBYRANK key start stop     按照排名范围删除元素</p>
+<pre><code>127.0.0.1:6379&gt; ZREMRANGEBYRANK scoreboard 0 1
+(integer) 2 
+127.0.0.1:6379&gt; ZRANGE scoreboard 0 -1
+1) &quot;lisi&quot;
+</code></pre><p>ZREMRANGEBYSCORE key min max 按照分数范围删除元素</p>
+<pre><code>127.0.0.1:6379&gt; zadd scoreboard 84 zhangsan    
+(integer) 1
+127.0.0.1:6379&gt; ZREMRANGEBYSCORE scoreboard 80 100
+(integer) 1
+</code></pre><p>ZRANK key member 获取元素的排名 从小到大</p>
+<pre><code>127.0.0.1:6379&gt; ZRANK scoreboard lisi 
+(integer) 0
+</code></pre><p>ZREVRANK key member 从大到小</p>
+<pre><code>127.0.0.1:6379&gt; ZREVRANK scoreboard zhangsan 
+(integer) 1
+</code></pre><h1 id="ZSet应用"><a href="#ZSet应用" class="headerlink" title="ZSet应用"></a><strong>ZSet应用</strong></h1><h2 id="商品销售排行榜"><a href="#商品销售排行榜" class="headerlink" title="商品销售排行榜"></a>商品销售排行榜</h2><pre><code>需求：根据商品销售量对商品进行排行显示
+思路：定义商品销售排行榜（sorted set集合），Key为items:sellsort，分数为商品销售量。
+
+写入商品销售量：商品编号1001的销量是9，商品编号1002的销量是10
+192.168.101.3:7007&gt; ZADD items:sellsort 9 1001 10 1002
+
+商品编号1001的销量加1
+192.168.101.3:7001&gt; ZINCRBY items:sellsort 1 1001
+
+商品销量前10名
+192.168.101.3:7001&gt; ZRANGE items:sellsort 0 9 withscores
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/09/16/redis数据类型List命令/" itemprop="url">
                   redis数据类型List命令
                 </a>
@@ -1340,328 +1835,6 @@ NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为�
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/08/21/淘淘商城开发记录-三/" itemprop="url">
-                  淘淘商城开发记录(三)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-08-21T20:39:49+08:00" content="2016-08-21">
-              2016-08-21
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/08/21/淘淘商城开发记录-三/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/21/淘淘商城开发记录-三/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="综述"><a href="#综述" class="headerlink" title="综述"></a><strong>综述</strong></h1><p>昨天没有什么写太多的代码，github也都没有更新，因为一直在linux搞nginx和图片服务器的东西。</p>
-<p>今天也没有写太多的代码，但是还是更新了下github，两天不更新，感觉是不是有点懒惰。</p>
-<p>因为要把图片上传到服务器，而tomcat用来做静态资源服务器难免大材小用了，所以学习了nginx服务器，以及fastdfs插件。</p>
-<p>在linux下操作还是有些不熟悉，还得自己搭建一个服务器，的确头有点头大。稍微总结了下用到的命令:</p>
-<ul>
-<li>mkdir 创建新文件夹</li>
-<li>cd 返回上层目录 cd /usr/localhost/ 进入usr下的localhost目录</li>
-<li>rm -rf  a/  强制删除目录a</li>
-<li>ll 显示当前目录所有文件</li>
-<li>cp /a/b/c  d/e/f  将a/b 目录下的c文件复制到d/e/f目录下</li>
-<li>pwd 显示当前目录全路经</li>
-<li>ifconfig 相当于ipconfig在windows下的效果,查看网关，ip等信息</li>
-<li>tar -zxf nginx-1.8.0.tar.gz 解压nginx-1.8.0.tar.gz到当前目录</li>
-</ul>
-<p>在windows下经常使用SecureCRT连接到linux下，同样可以操作服务器,同时配合notpad++连接到linux操作文档，双管齐下，效率高涨。</p>
-<p>nginx可以反向代理，用户访问域名，nginx服务器决定用户访问不同的应用服务器，这样可以减轻一个服务器的压力。</p>
-<p>负载均衡决定了几个不同服务器负载权重，nginx服务器决定用户访问的是哪个应用服务器。根据不同的权重，nginx服务器决定权重大的应用服务器承受更多的用户访问。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/08/19/淘淘商城开发记录-二/" itemprop="url">
-                  淘淘商城开发记录(二)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-08-19T21:49:14+08:00" content="2016-08-19">
-              2016-08-19
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/08/19/淘淘商城开发记录-二/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/19/淘淘商城开发记录-二/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="前述"><a href="#前述" class="headerlink" title="前述"></a><strong>前述</strong></h1><p>昨天完成了环境和框架的搭建，万里长征迈出了第一步，是一个完美的开始。今天完成了后台主页的展示，理解了从前端发送ajax的Restful风格的请求。将请求发送给springMVC，通过RequestMapping找到请求的页面，再返回到前端，渲染到页面。</p>
-<h1 id="分页查询"><a href="#分页查询" class="headerlink" title="分页查询"></a><strong>分页查询</strong></h1><p>然后是数据的部分，无论是什么系统，都离不开CRUD，所以从最简单的查询开始。但是有一点不同的是，我使用了mybatis分页的插件pageHelper。插件的使用帮助我们大大减少了开发的难度。但是这次后台使用的是EasyUI来展示页面，相比于boostrap的插件Data Tables强大的分页和查询功能来说，自己利用插件分页和查询还是有些复杂。</p>
-<h1 id="EasyUI异步树控件"><a href="#EasyUI异步树控件" class="headerlink" title="EasyUI异步树控件"></a><strong>EasyUI异步树控件</strong></h1><p>无论EasyUI在表格数据上表现如何，它在树形数据展示上还是比较可靠的。树控件内建异步加载模式的支持，用户先创建一个空的树，然后指定一个服务器端，执行检索后动态返回JSON数据来填充树并完成异步请求。EasyUITreeNode只需要三个关键属性，id，text，state。state有两个值，closed表示有子节点，ajax将会再发送请求直到返回的节点的state为open ,open的时候代表这个节点是叶子节点，将不再发送ajax请求。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/08/18/淘淘商城开发记录-一/" itemprop="url">
-                  淘淘商城开发记录(一)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-08-18T19:25:03+08:00" content="2016-08-18">
-              2016-08-18
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/08/18/淘淘商城开发记录-一/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/18/淘淘商城开发记录-一/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="前述"><a href="#前述" class="headerlink" title="前述"></a><strong>前述</strong></h1><p>  学习javaEE已经有半年多了吧，但是还没有正式用所学的内容开发一个比较完整的项目。所以就照着网上的视频边学边做这个淘淘商城这个网站，这次的目标是熟悉JavaWeb开发的全流程，包括代码，项目架构，代码托管等。<br>  第一天熟悉了项目的技术架构，功能架构，完成了基础功能模块的搭建，并且掌握了将代码托管到github，总之这是一件很令人兴奋的事情。因为之前很久我都不太熟悉github，不知道怎么用，更不知道为何要用。在使用过SVN后，才知道版本控制，之后才知道github的强大并喜欢上了他。</p>
-<h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a><strong>环境搭建</strong></h1><p>我是在eclipse下开发的淘淘商城，我之前使用的eclipse版本没有自带maven，所以刚开始找插件就令我非常头痛，因为插件的site很早就没有更新了。后来索性下载了最新版的eclipse，果然有惊喜，原来eclipse mars就已经自带了maven，非常棒。<br>我建立了一个聚合工程，在这个聚合工程中，我又分别创建了dao层，service层，web层。这样的分层结构让我的开发很有节奏感，知道到了哪一步该做什么，有条不紊。所以上手搭建SSM框架也是很快速的事情，而且很快就跑通了第一个测试，nice。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1707,7 +1880,7 @@ NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为�
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">25</span>
+              <span class="site-state-item-count">28</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1717,7 +1890,7 @@ NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为�
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-count">27</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

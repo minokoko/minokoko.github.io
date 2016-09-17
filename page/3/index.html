@@ -238,6 +238,406 @@
             
               
                 
+                <a class="post-title-link" href="/2016/05/05/我是如何学习Hibernate的-六/" itemprop="url">
+                  我是如何学习Hibernate的(六)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-05T22:24:58+08:00" content="2016-05-05">
+              2016-05-05
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/05/05/我是如何学习Hibernate的-六/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/05/我是如何学习Hibernate的-六/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="前述"><a href="#前述" class="headerlink" title="前述"></a>前述</h1><p>缓存在操作系统中经常被使用，在CPU和内存之间有高速cache。在内存读取硬盘的时候也有缓存，也有相应的缓存页面置换算法：  FIFO（First In First Out）先进先出、LRU（Least Recently Used）最近很少使用、 LFU（Least Frequently Used）最近不常被使用（命中率低）。在Hibernate中也有使用一级缓存和二级缓存来加快读取数据库的操作，节省开销。</p>
+<h1 id="一级缓存"><a href="#一级缓存" class="headerlink" title="一级缓存"></a>一级缓存</h1><p>一级缓存，又称为session级别的缓存。当获得一次会话,hibernate在session中创建多个集合(Map),用于存放操作数据(PO对象)，为程序优化服务，如果之后需要相应的数据，hibernate优先从session缓存中获取，如果有就使用，没有再查询。</p>
+<ul>
+<li>缓存工作原理<br><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/img/cache.jpg" alt=""></li>
+<li>一级缓存是默认的，查询都将数据存放在一级缓存中。</li>
+<li>一级缓存缓存的是对象本身。</li>
+<li>一级缓存常用的API<br>evict():用于对某个对象从session的一级缓存中清除<br>clear()：将一级缓存中所有对象全部清除<br>flush()：刷新一级缓存区的内容,使之与数据库数据保持同步。<br>注意： 常用的Query方法中，query.list()是不使用一级缓存的，每次都是重新查询数据库的。 </li>
+</ul>
+<h2 id="一级缓存的操作"><a href="#一级缓存的操作" class="headerlink" title="一级缓存的操作"></a>一级缓存的操作</h2><pre><code>//1 查询 id = 1
+User user = (User) session.get(User.class, 1);
+System.out.println(user);
+//2 再查询 -- 不执行select语句，将从一级缓存获得
+User user2 = (User) session.get(User.class, 1);   //此时 user 与user2是同一个对象
+</code></pre><h2 id="清除缓存"><a href="#清除缓存" class="headerlink" title="清除缓存"></a>清除缓存</h2><pre><code>User user = (User) session.get(User.class, 1); 
+System.out.println(user);
+//清除
+//session.clear();
+session.evict(user);
+// 一级缓存没有缓存对象，从数据库直接查询
+User user2 = (User) session.get(User.class, 1); 
+System.out.println(user2);    //此时user 与 user2 为两个不同对象
+</code></pre><h2 id="一级缓存的快照-备份"><a href="#一级缓存的快照-备份" class="headerlink" title="一级缓存的快照(备份)"></a>一级缓存的快照(备份)</h2><p>快照：与一级缓存一样的存放位置，对一级缓存数据备份。保证数据库的数据与一级数据缓存必须一致。如果一级缓存修改，在执行commit提交时，将自动刷新一级缓存，执行update语句，将一级缓存保存到数据库中。</p>
+<ul>
+<li>问题：一级缓存什么时候刷新？能否修改刷新时机？<br>默认情况下，执行commit()时。当修改了一级缓存后，三种情况：session查询，手动刷新flush，commit底层自动flush</li>
+</ul>
+<h1 id="二级缓存"><a href="#二级缓存" class="headerlink" title="二级缓存"></a>二级缓存</h1><h2 id="使用annotation配置缓存"><a href="#使用annotation配置缓存" class="headerlink" title="使用annotation配置缓存:"></a>使用annotation配置缓存:</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">@Entity</span><br><span class="line">//@BatchSize(size=5)</span><br><span class="line">@Cache(usage = CacheConcurrencyStrategy.READ_WRITE) </span><br><span class="line">@region=<span class="string">"gionName"</span></span><br><span class="line">public class Category &#123;</span><br><span class="line">	private int id;</span><br><span class="line">	private String name;</span><br><span class="line">	@Id</span><br><span class="line">	@GeneratedValue</span><br><span class="line">	public int <span class="function"><span class="title">getId</span></span>() &#123;</span><br><span class="line">		<span class="built_in">return</span> id;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="缓存策略-CacheConcurrencyStrategy-的取值"><a href="#缓存策略-CacheConcurrencyStrategy-的取值" class="headerlink" title="缓存策略(CacheConcurrencyStrategy)的取值"></a>缓存策略(CacheConcurrencyStrategy)的取值</h2><ul>
+<li>只读缓存（Strategy：read only）(常用)<br>如果你的应用程序只需读取一个持久化类的实例，而无需对其修改， 那么就可以对其进行只读 缓存。这是最简单，也是实用性最好的方法。甚至在集群中，它也能完美地运作。</li>
+<li>读写/缓存（Strategy：read/write）(常用)<br>如果应用程序需要更新数据，那么使用读/写缓存 比较合适。 如果应用程序要求“序列化事务”的隔离级别（serializable transaction isolation level），那么就决不能使用这种缓存策略。 如果在 JTA 环境中使用缓存，你必须指定 hibernate.transaction.manager_lookup_class 属性的值， 通过它，Hibernate 才能知道该应用程序中 JTA 的TransactionManager的具体策略。 在其它环境中，你必须保证在 Session.close()、或 Session.disconnect() 调用前， 整个事务已经结束。 如果你想在集群环境中使用此策略，你必须保证底层的缓存实现支持锁定（locking）。Hibernate 内置的缓存策略并不支持锁定功能。</li>
+<li>非严格读/写缓存（Strategy：nonstrict read/write）<br>如果应用程序只偶尔需要更新数据（也就是说，两个事务同时更新同一记录的情况很不常见），也不需要十分严格的事务隔离，那么比较适合使用非严格读/写缓存策略。如果在 JTA 环境中使用该策略，你必须为其指定 hibernate.transaction.manager_lookup_class 属性的值，在其它环境中，你必须保证在Session.close()、或 Session.disconnect() 调用前，整个事务已经结束。</li>
+<li>事务缓存（transactional）<br>Hibernate 的事务缓存策略提供了全事务的缓存支持，例如对 JBoss TreeCache 的支持。这样的缓存只能用于 JTA 环境中，你必须指定为其 hibernate.transaction.manager_lookup_class 属性。<h2 id="region的取值"><a href="#region的取值" class="headerlink" title="region的取值"></a>region的取值</h2>在ehcache.xml中，可以自定义缓存类型,比如:<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;cache name=<span class="string">"sampleCache1"</span></span><br><span class="line">maxElementsInMemory=<span class="string">"10000"</span> //最大缓存数量</span><br><span class="line">eternal=<span class="string">"false"</span>             //是否能被清除</span><br><span class="line">timeToIdleSeconds=<span class="string">"300"</span>     //300秒没被访问就被清除</span><br><span class="line">timeToLiveSeconds=<span class="string">"600"</span>     //已经存在600秒就可以被清除</span><br><span class="line">overflowToDisk=<span class="string">"true"</span>       //溢出时放在硬盘上</span><br><span class="line">/&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>那么@region=”sampleCache1”<br>配置文件中:<br>  //不使用二级缓存<br>  <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property><br>  //hibernate中默认的二级缓存ehcache<br>  <property name="cache.use_second_level_cache">true</property><br>  <property name="cache.provider_class">org.hibernate.cache.EhCacheProvider</property><br>  //启用查询缓存<br>  <property name="cache.use_query_cache">true</property></p>
+<ul>
+<li>load默认使用二级缓存，iterate默认使用二级缓存</li>
+<li>list默认往二级缓存加数据，但是查询的时候不使用</li>
+<li>如果要query用二级缓存，需打开查询缓存<br><property name="cache.use_query_cache">true</property><br>调用Query的setCachable (true)方法指明使用二级缓存<br>例如：session.createQuery(“from Category”).setCacheable(true).list();</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/05/04/我是如何学习Hibernate的-五/" itemprop="url">
+                  我是如何学习Hibernate的(五)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-04T21:23:39+08:00" content="2016-05-04">
+              2016-05-04
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/05/04/我是如何学习Hibernate的-五/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/04/我是如何学习Hibernate的-五/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="前述"><a href="#前述" class="headerlink" title="前述"></a>前述</h1><p>Hibernate中的级联关系和抓取策略是放在一起使用的，应当先搞清楚级联关系的一对一、多对一、一对多、多对多。再搞清楚抓取策略中的fetch、lazy的使用，然后再将二者结合一起使用。</p>
+<h2 id="多对一-重点-、-一对一"><a href="#多对一-重点-、-一对一" class="headerlink" title="多对一(重点) 、 一对一"></a>多对一(重点) 、 一对一</h2><p><many-to-one fetch="select" lazy="proxy"><br>多端维护关联关系，多端持有一个一端的引用，在多端加入一个外键，指向一端。<br>使用多个User对一个Group举例(Annotation版本+XML配置版本)<br>注意:使用Annotation配置，可以不用像以前一样配置XML文件，在hiberna.cfg.xml中需要使用:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;mapping class=<span class="string">"com.hibernate.User"</span> /&gt;</span><br><span class="line">&lt;mapping class=<span class="string">"com.hibernate.Group"</span> /&gt;</span><br></pre></td></tr></table></figure></many-to-one></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">package com.hibernate;</span><br><span class="line">// 多端：User类，省略不重要的包和get、<span class="built_in">set</span>方法</span><br><span class="line">@Entity</span><br><span class="line">@Table(name=<span class="string">"t_user"</span>)</span><br><span class="line">public class User &#123;</span><br><span class="line">	private int id;</span><br><span class="line">	private String name;</span><br><span class="line">	private Group group;</span><br><span class="line">	</span><br><span class="line">	@ManyToOne</span><br><span class="line">	public Group <span class="function"><span class="title">getGroup</span></span>() &#123;</span><br><span class="line">		<span class="built_in">return</span> group;</span><br><span class="line">	&#125;</span><br><span class="line">	@Id</span><br><span class="line">	@GeneratedValue</span><br><span class="line">	public int <span class="function"><span class="title">getId</span></span>() &#123;</span><br><span class="line">		<span class="built_in">return</span> id;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">XML主要配置:</span><br><span class="line">&lt;hibernate-mapping&gt;</span><br><span class="line">	&lt;class name=<span class="string">"com.hibernate.User"</span> table=<span class="string">"t_user"</span>&gt;</span><br><span class="line">		&lt;id name=<span class="string">"id"</span>&gt;</span><br><span class="line">			&lt;generator class=<span class="string">"native"</span>&gt;&lt;/generator&gt;</span><br><span class="line">		&lt;/id&gt;</span><br><span class="line">		</span><br><span class="line">		&lt;property name=<span class="string">"name"</span>&gt;&lt;/property&gt;</span><br><span class="line">		&lt;many-to-one name=<span class="string">"group"</span> column=<span class="string">"groupId"</span> /&gt;</span><br><span class="line">    &lt;/class&gt;</span><br><span class="line">	</span><br><span class="line">&lt;/hibernate-mapping&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">package com.hibernate;</span><br><span class="line">// 一端：Group类，省略不重要的包和get、<span class="built_in">set</span>方法</span><br><span class="line">@Entity</span><br><span class="line">@Table(name=<span class="string">"t_group"</span>)</span><br><span class="line">public class Group &#123;</span><br><span class="line">	private int id;</span><br><span class="line">	private String name;</span><br><span class="line">	@Id</span><br><span class="line">	@GeneratedValue</span><br><span class="line">	public int <span class="function"><span class="title">getId</span></span>() &#123;</span><br><span class="line">		<span class="built_in">return</span> id;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">XML主要配置：</span><br><span class="line">	&lt;class name=<span class="string">"com.hibernate.Group"</span> table=<span class="string">"t_group"</span>&gt;</span><br><span class="line">		&lt;id name=<span class="string">"id"</span>&gt;</span><br><span class="line">			&lt;generator class=<span class="string">"native"</span>&gt;&lt;/generator&gt;</span><br><span class="line">		&lt;/id&gt;</span><br><span class="line">		&lt;property name=<span class="string">"name"</span>&gt;&lt;/property&gt;</span><br><span class="line">	&lt;class&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="多对一总结"><a href="#多对一总结" class="headerlink" title="多对一总结"></a>多对一总结</h2><ul>
+<li><p>只需要在多端User的getGroup方法上端进行注解配置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@ManyToOne //多对一关联 User是多的一方 Group是一的一方</span><br><span class="line">@JoinColumn(name=<span class="string">"groupid"</span>) //指定User表中生成与Group对应的字段名</span><br><span class="line">public Group <span class="function"><span class="title">getGroup</span></span>() &#123;</span><br><span class="line">       <span class="built_in">return</span> group;</span><br><span class="line">     &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>xml：<many-to-one name="group" column="groupId"><br>标签会在多端添加外键,相当于在数据库中添加外键,生成的表为：<br>user(id,name,groupid),t_group(id,groupname)</many-to-one></p>
+</li>
+<li>属性cascade<br><many-to-one name="group" column="groupid" cascade="all"><br>取值all,none,save-update,delete,对象间的级联操作,只对增删改起作用.<br>在存储时User时,设置了cascade=”all”会自动存储相应的t_group.而不用管user关联的对象(通常情况下会优先存储关联的对象,然后再存储user)。</many-to-one></li>
+</ul>
+<h2 id="多对一抓取策略"><a href="#多对一抓取策略" class="headerlink" title="多对一抓取策略"></a>多对一抓取策略</h2><p><many-to-one name="group" column="groupId" fetch="select" lazy="proxy"></many-to-one></p>
+<ul>
+<li>fetch取值:join select<br>join:底层使用迫切左外连接，lazy无效。<br>select:使用多条查询语句查询。</li>
+<li><p>lazy取值：false、proxy、no-proxy<br>false:不实用懒加载，在查询的时候把所有字段全部加载到缓存中。<br>proxy:采用关联对象，类级别检索策略。</p>
+</li>
+<li><p>fetch=”select” lazy=”proxy”是否延迟，取决于关联对象所设定的类级别检索策略。比如:<br>多端(User端)：<many-to-one name="group" column="groupId" fetch="select" lazy="proxy"><br>一端(Group端)：<class name="com.hibernate.Group" table="t_group" lazy="false"><br>同时查询User和Group会同时生成两条select语句。</class></many-to-one></p>
+</li>
+</ul>
+<p>多端(User端)：<many-to-one name="group" column="groupId" fetch="select" lazy="proxy"><br>一端(Group端)：<class name="com.hibernate.Group" table="t_group" lazy="true"><br>同时查询User和Group，先生成select User的语句，当使用到Group属性时，再生成select Group的语句。</class></many-to-one></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/05/03/我是如何学习Hibernate的-四/" itemprop="url">
+                  我是如何学习Hibernate的(四)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-03T22:48:55+08:00" content="2016-05-03">
+              2016-05-03
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/05/03/我是如何学习Hibernate的-四/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/03/我是如何学习Hibernate的-四/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="前述"><a href="#前述" class="headerlink" title="前述"></a>前述</h1><p>框架的出现是为了适应一些繁琐的重复的工作，从连接数据库到CRUD的实现，再到存储过程，事务。如果自己曾经从头到尾写过JDBC的实现，那么多半会怀疑人生。其实，在自己写JDBC的时候，可能很多人都违背DRY(Don’t Repeat Youself)的原则。框架出现的意义就是前辈们将自己踩过的坑填平，让后辈能够走得更平坦一些。</p>
+<h2 id="抓取策略"><a href="#抓取策略" class="headerlink" title="抓取策略"></a><strong>抓取策略</strong></h2><ul>
+<li>立即检索：立即查询，在执行查询语句时，立即查询所有数据。</li>
+<li>延迟检索：延迟查询，在执行查询语句以后，在需要数据时再查询(懒加载)。</li>
+<li>类级别检索：当前类的属性获取是否需要延迟。<br> get：立即检索<br> Load:延迟检索，默认情况，如果只使用OID的值不进行查询，如果要使用其他属性值，将进行查询。<br>Customer.hbm.xml <class lazy="true|false"><br>lazy默认为true，如果设置为false则会立即检索(不使用代理)。</class></li>
+<li>关联级别检索：当前类关联的别一个类是否需要延迟。<h3 id="一对多、多对多"><a href="#一对多、多对多" class="headerlink" title="一对多、多对多"></a>一对多、多对多</h3>容器<set>提供了两个属性：fetch、lazy<br>以Customer和Order作为例子:<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">package com.hibernate3;</span><br><span class="line">//Customer类及配置文件</span><br><span class="line">public class Customer &#123;</span><br><span class="line"></span><br><span class="line">	private Integer uid;</span><br><span class="line">	private String name;</span><br><span class="line">	private Set&lt;Order&gt; orderSet = new HashSet&lt;Order&gt;();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">  &lt;hibernate-mapping&gt;</span><br><span class="line">    &lt;class name=<span class="string">"com.hibernate3.Customer"</span> table=<span class="string">"customer"</span>&gt;</span><br><span class="line">    &lt;id name=<span class="string">"uid"</span> column=<span class="string">"id"</span> &gt;</span><br><span class="line">      &lt;generator class=<span class="string">"native"</span> /&gt;</span><br><span class="line">    &lt;/id&gt;</span><br><span class="line">    &lt;<span class="built_in">set</span> name=<span class="string">"orderSet"</span> fetch=<span class="string">"select"</span> lazy=<span class="string">"false"</span>&gt;</span><br><span class="line">      &lt;key column=<span class="string">"customer_id"</span> /&gt;</span><br><span class="line">      &lt;one-to-many class=<span class="string">"com.hibernate3.Order"</span>/&gt;</span><br><span class="line">    &lt;/<span class="built_in">set</span>&gt;</span><br><span class="line">    &lt;property name=<span class="string">"name"</span> column=<span class="string">"name"</span> /&gt;</span><br><span class="line">    &lt;/class&gt;</span><br><span class="line">    &lt;/hibernate-mapping&gt;</span><br></pre></td></tr></table></figure>
+</set></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">//Order类及其配置文件</span><br><span class="line">package com.hibernate3;</span><br><span class="line"></span><br><span class="line">public class Order &#123;</span><br><span class="line"></span><br><span class="line">	private Integer oid;</span><br><span class="line">	private Integer price;</span><br><span class="line">	private Customer customer;</span><br><span class="line">	</span><br><span class="line">	&lt;hibernate-mapping&gt; </span><br><span class="line">    &lt;class name=<span class="string">"com.hibernate3.Order"</span> table=<span class="string">"t_order"</span>&gt;</span><br><span class="line">    &lt;id name=<span class="string">"oid"</span> column=<span class="string">"id"</span> &gt;</span><br><span class="line">          &lt;generator class=<span class="string">"native"</span> /&gt;</span><br><span class="line">    &lt;/id&gt;</span><br><span class="line">    &lt;many-to-one name=<span class="string">"customer"</span> class=<span class="string">"com.hibernate3.Customer"</span> column=<span class="string">"customer_id"</span>&gt;</span><br><span class="line">    &lt;/many-to-one&gt;</span><br><span class="line">      &lt;property name=<span class="string">"price"</span> /&gt;</span><br><span class="line">    &lt;/class&gt;</span><br><span class="line">    &lt;/hibernate-mapping&gt;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">//业务逻辑</span><br><span class="line">//1 查询订单</span><br><span class="line">   Customer customer = (Customer) session.get(Customer.class, 1);</span><br><span class="line">System.out.println(customer.getCname());</span><br><span class="line">	</span><br><span class="line">//2 查询客户订单数</span><br><span class="line">Set&lt;Order&gt; orderSet = customer.getOrderSet();</span><br><span class="line">System.out.println(orderSet.size());</span><br><span class="line">	</span><br><span class="line">//3 查询客户订单详情</span><br><span class="line"><span class="keyword">for</span> (Order order : orderSet) &#123;</span><br><span class="line">	System.out.println(order);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>fetch：确定使用SQL格式(Join fetching、Select fetching、Subselect fetching)<br>Join：使用Outer join(外连接)来获取关联实例或者关联集合。当fetch=join时，lazy无效。<br>Select：如果没有指定lazy=false，禁止延迟加载，那么当真正访问关联关系时，会执行另一条SQL。<br>Subselect：另外发送一条SQL，抓去前面抓取到的所有实体对象的集合。当真正访问关联关系时，会执行另一条SQL。必须使用query，否则看不到效果</p>
+</li>
+<li><p>lazy：关联对象是否延迟(Immediate、Lazy collection、Extra-lazy)<br>Immeaiate 立即抓取  (lazy=flase)：当宿主被加载时，关联、集合属性被立即抓取。<br>Lazy collection fetching 延迟加载集合  (lazy=true)：直到应用程序对集合进行了一次操作时，集合才被抓取(默认)。<br>Extra-lazy 集合抓取  (lazy=extra)：对集合中的每个元素而言，都是直到需要时才进行访问数据库。(适用于非常大的集合)<br>  <img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/img/fetch.jpg" alt=""></p>
+</li>
+<li><p>fetch=”join”，lazy无效，底层会使用迫切左外连接，只是用一条select语句将所有的内容全部查询。</p>
+</li>
+<li>fetch=”select” lazy=”false” ，立即查询，先查询客户select，再查询订单select。(同时执行两条语句)</li>
+<li>fetch=”select” lazy=”true” ，立即查询第一条语句，当需要Order数据时，再查询第二条。</li>
+<li>fetch=”select” lazy=”extra” ，立即查询第一条语句，当需要时，第二条语句使用聚合函数select count(*)查询，一共三条语句。</li>
+</ul>
+<p>fetch=”subselect” lazy=”和上面一样” ，将使用子查询。必须使用Query，不然看不到效果。<br>业务逻辑变为：</p>
+<pre><code>//1 查询客户
+List&lt;Customer&gt; allCustomer = session.createQuery(&quot;from Customer&quot;).list();
+Customer customer = allCustomer.get(0);
+System.out.println(customer.getCname());
+
+//2 查询客户订单数
+Set&lt;Order&gt; orderSet = customer.getOrderSet();
+System.out.println(orderSet.size());
+
+//3 查询客户订单详情
+for (Order order : orderSet) {
+    System.out.println(order);
+}
+</code></pre><ul>
+<li>fetch=”subselect” lazy=”false” ，同时执行两条select，第二条使用子查询(select …from…where id in(select…))</li>
+<li>fetch=”subselect” lazy=”true” ，第二条语句延迟查询。</li>
+<li>fetch=”subselect” lazy=”extra” ，第二条语句使用聚合函数，第三条语句使用子查询。</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/05/02/我是如何学习Hibernate的-三/" itemprop="url">
                   我是如何学习Hibernate的(三)
                 </a>
@@ -919,7 +1319,7 @@ public class TRegister  implements java.io.Serializable {
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">25</span>
+              <span class="site-state-item-count">28</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -929,7 +1329,7 @@ public class TRegister  implements java.io.Serializable {
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-count">27</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

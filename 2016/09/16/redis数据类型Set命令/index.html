@@ -1,0 +1,760 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="redis,set," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Redis Set介绍集合中的数据是不重复且没有顺序。
+集合类型的常用操作是向集合中加入或删除元素、判断某个元素是否存在等，
+由于集合类型的Redis内部是使用值为空的散列表实现，
+所有这些操作的时间复杂度都为0(1)。 
+Redis还提供了多个集合之间的交集、并集、差集的运算。
+SADD key member [member …]  SREM key member [member …] 增加/删">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis数据类型Set命令">
+<meta property="og:url" content="http://jessyon.com/2016/09/16/redis数据类型Set命令/index.html">
+<meta property="og:site_name" content="OneStack">
+<meta property="og:description" content="Redis Set介绍集合中的数据是不重复且没有顺序。
+集合类型的常用操作是向集合中加入或删除元素、判断某个元素是否存在等，
+由于集合类型的Redis内部是使用值为空的散列表实现，
+所有这些操作的时间复杂度都为0(1)。 
+Redis还提供了多个集合之间的交集、并集、差集的运算。
+SADD key member [member …]  SREM key member [member …] 增加/删">
+<meta property="og:updated_time" content="2016-09-16T10:53:36.438Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="redis数据类型Set命令">
+<meta name="twitter:description" content="Redis Set介绍集合中的数据是不重复且没有顺序。
+集合类型的常用操作是向集合中加入或删除元素、判断某个元素是否存在等，
+由于集合类型的Redis内部是使用值为空的散列表实现，
+所有这些操作的时间复杂度都为0(1)。 
+Redis还提供了多个集合之间的交集、并集、差集的运算。
+SADD key member [member …]  SREM key member [member …] 增加/删">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://jessyon.com/2016/09/16/redis数据类型Set命令/"/>
+
+  <title> redis数据类型Set命令 | OneStack </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">OneStack</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">The Blog Powered By jessyon</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                redis数据类型Set命令
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-16T18:12:48+08:00" content="2016-09-16">
+              2016-09-16
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/16/redis数据类型Set命令/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/16/redis数据类型Set命令/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Redis-Set介绍"><a href="#Redis-Set介绍" class="headerlink" title="Redis Set介绍"></a><strong>Redis Set介绍</strong></h1><pre><code>集合中的数据是不重复且没有顺序。
+集合类型的常用操作是向集合中加入或删除元素、判断某个元素是否存在等，
+由于集合类型的Redis内部是使用值为空的散列表实现，
+所有这些操作的时间复杂度都为0(1)。 
+Redis还提供了多个集合之间的交集、并集、差集的运算。
+</code></pre><p>SADD key member [member …]  SREM key member [member …] 增加/删除元素</p>
+<pre><code>127.0.0.1:6379&gt; sadd set a b c
+(integer) 3
+127.0.0.1:6379&gt; sadd set a
+(integer) 0
+
+127.0.0.1:6379&gt; srem set c d
+(integer) 1
+</code></pre><p>SMEMBERS key 获得集合中的所有元素 </p>
+<pre><code>127.0.0.1:6379&gt; smembers set
+1) &quot;b&quot;
+2) &quot;a”
+</code></pre><p>SISMEMBER key member 判断元素是否在集合中</p>
+<pre><code>127.0.0.1:6379&gt; sismember set a
+(integer) 1
+127.0.0.1:6379&gt; sismember set h
+(integer) 0
+</code></pre><p>SDIFF key [key …] 集合的差集运算 A-B</p>
+<pre><code>属于A并且不属于B的元素构成的集合
+
+127.0.0.1:6379&gt; sadd setA 1 2 3
+(integer) 3
+127.0.0.1:6379&gt; sadd setB 2 3 4
+(integer) 3
+127.0.0.1:6379&gt; sdiff setA setB 
+1) &quot;1&quot;
+127.0.0.1:6379&gt; sdiff setB setA 
+1) &quot;4&quot;
+</code></pre><p>SINTER key [key …] 集合的交集运算 A ∩ B</p>
+<pre><code>属于A且属于B的元素构成的集合
+
+127.0.0.1:6379&gt; sinter setA setB 
+1) &quot;2&quot;
+2) &quot;3&quot;
+</code></pre><p>SUNION key [key …] 集合的并集运算 A ∪ B</p>
+<pre><code>属于A或者属于B的元素构成的集合
+
+127.0.0.1:6379&gt; sunion setA setB
+1) &quot;1&quot;
+2) &quot;2&quot;
+3) &quot;3&quot;
+4) &quot;4&quot;
+</code></pre><p>SCARD key 获得集合中元素的个数</p>
+<pre><code>127.0.0.1:6379&gt; smembers setA 
+1) &quot;1&quot;
+2) &quot;2&quot;
+3) &quot;3&quot;
+127.0.0.1:6379&gt; scard setA 
+(integer) 3
+</code></pre><p>SPOP key 从集合中弹出一个元素</p>
+<pre><code>由于集合是无序的，所有SPOP命令会从集合中随机选择一个元素弹出
+127.0.0.1:6379&gt; spop setA 
+&quot;1&quot;
+</code></pre><h1 id="SortedSet类型zset"><a href="#SortedSet类型zset" class="headerlink" title="SortedSet类型zset"></a><strong>SortedSet类型zset</strong></h1><pre><code>在集合类型的基础上，有序集合类型为集合中的每个元素都关联一个分数，
+这使得我们不仅可以完成插入、删除和判断元素是否存在在集合中，
+还能够获得分数最高或最低的前N个元素、获取指定分数范围内的元素等与分数有关的操作。 
+</code></pre><p>在某些方面有序集合和列表类型有些相似。 </p>
+<pre><code>1、二者都是有序的。 
+2、二者都可以获得某一范围的元素。 
+</code></pre><p>但是，二者有着很大区别： </p>
+<pre><code>1、列表类型是通过链表实现的，获取靠近两端的数据速度极快，而当元素增多后，访问中间数据的速度会变慢。 
+2、有序集合类型使用散列表实现，所有即使读取位于中间部分的数据也很快。 
+3、列表中不能简单的调整某个元素的位置，但是有序集合可以（通过更改分数实现） 
+4、有序集合要比列表类型更耗内存。 
+</code></pre><p>ZADD key score member [score member …] 增加元素</p>
+<pre><code>向有序集合中加入一个元素和该元素的分数，如果该元素已经存在则会用新的分数替换原有的分数。
+返回值是新加入到集合中的元素个数，不包含之前已经存在的元素。 
+
+127.0.0.1:6379&gt; zadd scoreboard 80 zhangsan 89 lisi 94 wangwu 
+(integer) 3
+127.0.0.1:6379&gt; zadd scoreboard 97 lisi 
+(integer) 0
+</code></pre><p>ZSCORE key member    获取元素的分数 </p>
+<pre><code>127.0.0.1:6379&gt; zscore scoreboard lisi 
+&quot;97&quot;
+</code></pre><p>ZREM key member [member …] 删除元素</p>
+<pre><code>移除有序集key中的一个或多个成员，不存在的成员将被忽略。
+当key存在但不是有序集类型时，返回一个错误。
+
+127.0.0.1:6379&gt; zrem scoreboard lisi
+(integer) 1
+</code></pre><p>ZRANGE key start stop [WITHSCORES] 获得排名在某个范围的元素列表</p>
+<pre><code>按照元素分数从小到大的顺序返回索引从start到stop之间的所有元素（包含两端的元素）
+
+127.0.0.1:6379&gt; zrange scoreboard 0 2
+1) &quot;zhangsan&quot;
+2) &quot;wangwu&quot;
+3) &quot;lisi“
+</code></pre><p>ZREVRANGE key start stop [WITHSCORES]</p>
+<pre><code>按照元素分数从大到小的顺序返回索引从start到stop之间的所有元素（包含两端的元素）
+
+127.0.0.1:6379&gt; zrevrange scoreboard 0 2
+1) &quot; lisi &quot;
+2) &quot;wangwu&quot;
+3) &quot; zhangsan “
+
+如果需要获得元素的分数的可以在命令尾部加上WITHSCORES参数 
+
+127.0.0.1:6379&gt; zrange scoreboard 0 1 WITHSCORES
+1) &quot;zhangsan&quot;
+2) &quot;80&quot;
+3) &quot;wangwu&quot;
+4) &quot;94&quot;
+</code></pre><p>ZRANGEBYSCORE key min max [WITHSCORES] [LIMIT offset count]<br>获得指定分数范围的元素 </p>
+<pre><code>127.0.0.1:6379&gt; ZRANGEBYSCORE scoreboard 90 97 WITHSCORES
+1) &quot;wangwu&quot;
+2) &quot;94&quot;
+3) &quot;lisi&quot;
+4) &quot;97&quot;
+127.0.0.1:6379&gt; ZRANGEBYSCORE scoreboard 70 100 limit 1 2
+1) &quot;wangwu&quot;
+2) &quot;lisi&quot;
+</code></pre><p>ZINCRBY  key increment member 增加某个元素的分数,返回值是更改后的分数 </p>
+<pre><code>127.0.0.1:6379&gt; ZINCRBY scoreboard 4 lisi 
+&quot;101“
+</code></pre><p>ZCARD key 获得集合中元素的数量 </p>
+<pre><code>127.0.0.1:6379&gt; ZCARD scoreboard
+(integer) 3
+</code></pre><p>ZCOUNT key min max 获得指定分数范围内的元素个数</p>
+<pre><code>127.0.0.1:6379&gt; ZCOUNT scoreboard 80 90
+(integer) 1
+</code></pre><p>ZREMRANGEBYRANK key start stop     按照排名范围删除元素</p>
+<pre><code>127.0.0.1:6379&gt; ZREMRANGEBYRANK scoreboard 0 1
+(integer) 2 
+127.0.0.1:6379&gt; ZRANGE scoreboard 0 -1
+1) &quot;lisi&quot;
+</code></pre><p>ZREMRANGEBYSCORE key min max 按照分数范围删除元素</p>
+<pre><code>127.0.0.1:6379&gt; zadd scoreboard 84 zhangsan    
+(integer) 1
+127.0.0.1:6379&gt; ZREMRANGEBYSCORE scoreboard 80 100
+(integer) 1
+</code></pre><p>ZRANK key member 获取元素的排名 从小到大</p>
+<pre><code>127.0.0.1:6379&gt; ZRANK scoreboard lisi 
+(integer) 0
+</code></pre><p>ZREVRANK key member 从大到小</p>
+<pre><code>127.0.0.1:6379&gt; ZREVRANK scoreboard zhangsan 
+(integer) 1
+</code></pre><h1 id="ZSet应用"><a href="#ZSet应用" class="headerlink" title="ZSet应用"></a><strong>ZSet应用</strong></h1><h2 id="商品销售排行榜"><a href="#商品销售排行榜" class="headerlink" title="商品销售排行榜"></a>商品销售排行榜</h2><pre><code>需求：根据商品销售量对商品进行排行显示
+思路：定义商品销售排行榜（sorted set集合），Key为items:sellsort，分数为商品销售量。
+
+写入商品销售量：商品编号1001的销量是9，商品编号1002的销量是10
+192.168.101.3:7007&gt; ZADD items:sellsort 9 1001 10 1002
+
+商品编号1001的销量加1
+192.168.101.3:7001&gt; ZINCRBY items:sellsort 1 1001
+
+商品销量前10名
+192.168.101.3:7001&gt; ZRANGE items:sellsort 0 9 withscores
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/redis/" rel="tag">#redis</a>
+          
+            <a href="/tags/set/" rel="tag">#set</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/16/redis数据类型List命令/" rel="next" title="redis数据类型List命令">
+                <i class="fa fa-chevron-left"></i> redis数据类型List命令
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/16/redis持久化及主从复制/" rel="prev" title="redis持久化及主从复制">
+                redis持久化及主从复制 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/16/redis数据类型Set命令/"
+           data-title="redis数据类型Set命令" data-url="http://jessyon.com/2016/09/16/redis数据类型Set命令/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Jessyon" />
+          <p class="site-author-name" itemprop="name">Jessyon</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">28</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis-Set介绍"><span class="nav-number">1.</span> <span class="nav-text">Redis Set介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SortedSet类型zset"><span class="nav-number">2.</span> <span class="nav-text">SortedSet类型zset</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ZSet应用"><span class="nav-number">3.</span> <span class="nav-text">ZSet应用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#商品销售排行榜"><span class="nav-number">3.1.</span> <span class="nav-text">商品销售排行榜</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jessyon</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jessyon"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

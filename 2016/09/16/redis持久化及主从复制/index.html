@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="redis,String," />
+  <meta name="keywords" content="redis," />
 
 
 
@@ -84,43 +84,42 @@
 
 
 
-<meta name="description" content="String类型SET key value 赋值
-127.0.0.1:6379&amp;gt; set test 123
-OK
-GET key  取值
-127.0.0.1:6379&amp;gt; get test
-&amp;quot;123“
-GETSET key value  取值并赋值
-127.0.0.1:6379&amp;gt; getset s2 222
-&amp;quot;111&amp;quot;
-127.0.0.1:6379&amp;g">
+<meta name="description" content="Redis持久化方案RDB持久化RDB方式的持久化是通过快照（snapshotting）完成的，
+当符合一定条件时Redis会自动将内存中的数据进行快照并持久化到硬盘。
+RDB是Redis默认采用的持久化方式。
+在redis.conf配置文件中默认有此下配置：
+save 900 1
+save 300 10
+save 60 10000
+
+save 开头的一行就是持久化配置，可以配置多个条件（每行配置">
 <meta property="og:type" content="article">
-<meta property="og:title" content="redis数据类型String命令">
-<meta property="og:url" content="http://jessyon.com/2016/09/16/redis数据类型及string命令/index.html">
+<meta property="og:title" content="redis持久化及主从复制">
+<meta property="og:url" content="http://jessyon.com/2016/09/16/redis持久化及主从复制/index.html">
 <meta property="og:site_name" content="OneStack">
-<meta property="og:description" content="String类型SET key value 赋值
-127.0.0.1:6379&amp;gt; set test 123
-OK
-GET key  取值
-127.0.0.1:6379&amp;gt; get test
-&amp;quot;123“
-GETSET key value  取值并赋值
-127.0.0.1:6379&amp;gt; getset s2 222
-&amp;quot;111&amp;quot;
-127.0.0.1:6379&amp;g">
-<meta property="og:updated_time" content="2016-09-16T06:38:35.413Z">
+<meta property="og:description" content="Redis持久化方案RDB持久化RDB方式的持久化是通过快照（snapshotting）完成的，
+当符合一定条件时Redis会自动将内存中的数据进行快照并持久化到硬盘。
+RDB是Redis默认采用的持久化方式。
+在redis.conf配置文件中默认有此下配置：
+save 900 1
+save 300 10
+save 60 10000
+
+save 开头的一行就是持久化配置，可以配置多个条件（每行配置">
+<meta property="og:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/copy.jpg">
+<meta property="og:updated_time" content="2016-09-16T11:25:59.351Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="redis数据类型String命令">
-<meta name="twitter:description" content="String类型SET key value 赋值
-127.0.0.1:6379&amp;gt; set test 123
-OK
-GET key  取值
-127.0.0.1:6379&amp;gt; get test
-&amp;quot;123“
-GETSET key value  取值并赋值
-127.0.0.1:6379&amp;gt; getset s2 222
-&amp;quot;111&amp;quot;
-127.0.0.1:6379&amp;g">
+<meta name="twitter:title" content="redis持久化及主从复制">
+<meta name="twitter:description" content="Redis持久化方案RDB持久化RDB方式的持久化是通过快照（snapshotting）完成的，
+当符合一定条件时Redis会自动将内存中的数据进行快照并持久化到硬盘。
+RDB是Redis默认采用的持久化方式。
+在redis.conf配置文件中默认有此下配置：
+save 900 1
+save 300 10
+save 60 10000
+
+save 开头的一行就是持久化配置，可以配置多个条件（每行配置">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/copy.jpg">
 
 
 
@@ -141,9 +140,9 @@ GETSET key value  取值并赋值
 
 
 
-  <link rel="canonical" href="http://jessyon.com/2016/09/16/redis数据类型及string命令/"/>
+  <link rel="canonical" href="http://jessyon.com/2016/09/16/redis持久化及主从复制/"/>
 
-  <title> redis数据类型String命令 | OneStack </title>
+  <title> redis持久化及主从复制 | OneStack </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -263,7 +262,7 @@ GETSET key value  取值并赋值
             
             
               
-                redis数据类型String命令
+                redis持久化及主从复制
               
             
           </h1>
@@ -275,7 +274,7 @@ GETSET key value  取值并赋值
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-16T13:59:39+08:00" content="2016-09-16">
+            <time itemprop="dateCreated" datetime="2016-09-16T19:03:36+08:00" content="2016-09-16">
               2016-09-16
             </time>
           </span>
@@ -286,8 +285,8 @@ GETSET key value  取值并赋值
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/09/16/redis数据类型及string命令/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/16/redis数据类型及string命令/" itemprop="commentsCount"></span>
+                <a href="/2016/09/16/redis持久化及主从复制/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/16/redis持久化及主从复制/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -310,84 +309,49 @@ GETSET key value  取值并赋值
       
 
       
-        <h1 id="String类型"><a href="#String类型" class="headerlink" title="String类型"></a><strong>String类型</strong></h1><p>SET key value 赋值</p>
-<pre><code>127.0.0.1:6379&gt; set test 123
-OK
-</code></pre><p>GET key  取值</p>
-<pre><code>127.0.0.1:6379&gt; get test
-&quot;123“
-</code></pre><p>GETSET key value  取值并赋值</p>
-<pre><code>127.0.0.1:6379&gt; getset s2 222
-&quot;111&quot;
-127.0.0.1:6379&gt; get s2
-&quot;222&quot;
-</code></pre><p>DEL key 删除</p>
-<pre><code>127.0.0.1:6379&gt; del test
-(integer) 1
-</code></pre><p>incr key 递增数字 </p>
-<p>当存储的字符串是整数时，Redis提供了一个实用的命令INCR，其作用是让当前键值递增，并返回递增后的值。</p>
-<pre><code>127.0.0.1:6379&gt; incr num
-(integer) 1
-127.0.0.1:6379&gt; incr num
-(integer) 2
-127.0.0.1:6379&gt; incr num
-(integer) 3
-</code></pre><p>INCRBY key increment 增加指定的整数 </p>
-<pre><code>127.0.0.1:6379&gt; incrby num 2
-(integer) 5
-127.0.0.1:6379&gt; incrby num 2
-(integer) 7
-127.0.0.1:6379&gt; incrby num 2
-(integer) 9
-</code></pre><p>DECR key  递减数值</p>
-<pre><code>127.0.0.1:6379&gt; decr num
-(integer) 9
-127.0.0.1:6379&gt; decr num
-(integer) 8
-</code></pre><p>DECRBY key decrement      减少指定的整数 </p>
-<pre><code>127.0.0.1:6379&gt; decr num
-(integer) 6
-127.0.0.1:6379&gt; decr num
-(integer) 5
-127.0.0.1:6379&gt; decrby num 3
-(integer) 2
-127.0.0.1:6379&gt; decrby num 3
-(integer) -1
-</code></pre><p>APPEND key value      向尾部追加值 </p>
-<pre><code>127.0.0.1:6379&gt; set str hello
-OK
-127.0.0.1:6379&gt; append str &quot; world!&quot;
-(integer) 12
-127.0.0.1:6379&gt; get str 
-&quot;hello world!&quot;
-</code></pre><p>STRLEN key 获取字符串长度</p>
-<pre><code>127.0.0.1:6379&gt; strlen str 
-(integer) 0
-127.0.0.1:6379&gt; set str hello
-OK
-127.0.0.1:6379&gt; strlen str 
-(integer) 5
-</code></pre><p>MSET key value [key value …] 同时设置多个值</p>
-<pre><code>127.0.0.1:6379&gt; mset k1 v1 k2 v2 k3 v3
-OK
-</code></pre><p>MGET key [key …] 同时取多个值</p>
-<pre><code>127.0.0.1:6379&gt; get k1
-&quot;v1&quot;
-127.0.0.1:6379&gt; mget k1 k3
-1) &quot;v1&quot;
-2) &quot;v3&quot;
-</code></pre><h1 id="String应用"><a href="#String应用" class="headerlink" title="String应用"></a><strong>String应用</strong></h1><p>自增主键:  商品编号、订单号采用string的递增数字特性生成。</p>
-<pre><code>定义商品编号key：items:id
-192.168.101.3:7003&gt; INCR items:id
-(integer) 2
-192.168.101.3:7003&gt; INCR items:id
-(integer) 3
-</code></pre><h1 id="String存在的问题"><a href="#String存在的问题" class="headerlink" title="String存在的问题"></a><strong>String存在的问题</strong></h1><pre><code>假设有User对象以JSON序列化的形式存储到Redis中，User对象有id，username、password、age、name等属性，存储的过程如下： 
-保存、更新： 
-User对象  -&gt;  json(string)  -&gt;  redis 
-如果在业务上只是更新age属性，其他的属性并不做更新我应该怎么做呢？ 
-如果仍然采用上边的方法在传输、处理时会造成资源浪费，下边讲的hash可以很好的解决这个问题。
-</code></pre>
+        <h1 id="Redis持久化方案"><a href="#Redis持久化方案" class="headerlink" title="Redis持久化方案"></a><strong>Redis持久化方案</strong></h1><h2 id="RDB持久化"><a href="#RDB持久化" class="headerlink" title="RDB持久化"></a>RDB持久化</h2><pre><code>RDB方式的持久化是通过快照（snapshotting）完成的，
+当符合一定条件时Redis会自动将内存中的数据进行快照并持久化到硬盘。
+RDB是Redis默认采用的持久化方式。
+</code></pre><p>在redis.conf配置文件中默认有此下配置：</p>
+<pre><code>save 900 1
+save 300 10
+save 60 10000
+
+save 开头的一行就是持久化配置，可以配置多个条件（每行配置一个条件），每个条件之间是“或”的关系。
+
+“save 900 1”表示15分钟（900秒钟）内至少1个键被更改则进行快照。
+
+“save 300 10”表示5分钟（300秒）内至少10个键被更改则进行快照。
+</code></pre><p>配置dir指定rdb快照文件的位置:</p>
+<pre><code># Note that you must specify a directory here, not a file name.
+dir ./
+</code></pre><p>Redis启动后会读取RDB快照文件，将数据从硬盘载入到内存。<br>根据数据量大小与结构和服务器性能不同，这个时间也不同。<br>通常将记录一千万个字符串类型键、大小为1GB的快照文件载入到内存中需要花费20～30秒钟。</p>
+<h2 id="RDB问题总结"><a href="#RDB问题总结" class="headerlink" title="RDB问题总结"></a>RDB问题总结</h2><pre><code>通过RDB方式实现持久化，一旦Redis异常退出，就会丢失最后一次快照以后更改的所有数据。
+这就需要开发者根据具体的应用场合，通过组合设置自动快照条件的方式来将可能发生的数据损失控制在能够接受的范围。
+如果数据很重要以至于无法承受任何损失，则可以考虑使用AOF方式进行持久化。
+</code></pre><h2 id="AOF持久化"><a href="#AOF持久化" class="headerlink" title="AOF持久化"></a>AOF持久化</h2><pre><code>默认情况下Redis没有开启AOF（append only file）方式的持久化
+</code></pre><p>可以通过修改redis.conf配置文件中的appendonly参数开启</p>
+<pre><code>appendonly yes
+</code></pre><p>开启AOF持久化后每执行一条会更改Redis中的数据的命令，Redis就会将该命令写入硬<br>盘中的AOF文件。</p>
+<p>AOF文件的保存位置和RDB文件的位置相同，都是通过dir参数设置的。</p>
+<pre><code>dir ./
+</code></pre><p>默认的文件名是appendonly.aof，可以通过appendfilename参数修改：</p>
+<pre><code>appendfilename appendonly.aof
+</code></pre><h1 id="Redis的主从复制"><a href="#Redis的主从复制" class="headerlink" title="Redis的主从复制"></a><strong>Redis的主从复制</strong></h1><pre><code>持久化保证了即使redis服务重启也不会丢失数据，
+因为redis服务重启后会将硬盘上持久化的数据恢复到内存中，
+但是当redis服务器的硬盘损坏了可能会导致数据丢失，
+如果通过redis的主从复制机制就可以避免这种单点故障，如下图：
+</code></pre><p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/copy.jpg" alt=""></p>
+<pre><code>主redis中的数据有两个副本（replication）即从redis1和从redis2，即使一台redis服务器宕机其它两台redis服务也可以继续提供服务。
+主redis中的数据和从redis上的数据保持实时同步，当主redis写入数据时通过主从复制机制会复制到两个从redis服务上。
+只有一个主redis，可以有多个从redis。
+主从复制不会阻塞master，在同步数据时，master 可以继续处理client 请求
+一个redis可以即是主又是从
+</code></pre><h2 id="主从配置"><a href="#主从配置" class="headerlink" title="主从配置"></a>主从配置</h2><p>修改从redis服务器上的redis.conf文件</p>
+<pre><code># slaveof &lt;masterip&gt; &lt;masterport&gt;
+slaveof 192.168.101.3 6379
+</code></pre><p>上边的配置说明当前该【从redis服务器】所对应的【主redis服务器】的IP是192.168.101.3，<br>端口是6379。</p>
+
       
     </div>
 
@@ -411,8 +375,6 @@ User对象  -&gt;  json(string)  -&gt;  redis
           
             <a href="/tags/redis/" rel="tag">#redis</a>
           
-            <a href="/tags/String/" rel="tag">#String</a>
-          
         </div>
       
 
@@ -420,16 +382,16 @@ User对象  -&gt;  json(string)  -&gt;  redis
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/09/16/服务器搭建-四-redis配置/" rel="next" title="服务器搭建-四-redis配置">
-                <i class="fa fa-chevron-left"></i> 服务器搭建-四-redis配置
+              <a href="/2016/09/16/redis数据类型Set命令/" rel="next" title="redis数据类型Set命令">
+                <i class="fa fa-chevron-left"></i> redis数据类型Set命令
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/09/16/redis数据类型Hash命令/" rel="prev" title="redis数据类型Hash命令">
-                redis数据类型Hash命令 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/09/16/redis集群搭建/" rel="prev" title="redis集群搭建">
+                redis集群搭建 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -456,8 +418,8 @@ User对象  -&gt;  json(string)  -&gt;  redis
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/09/16/redis数据类型及string命令/"
-           data-title="redis数据类型String命令" data-url="http://jessyon.com/2016/09/16/redis数据类型及string命令/">
+      <div class="ds-thread" data-thread-key="2016/09/16/redis持久化及主从复制/"
+           data-title="redis持久化及主从复制" data-url="http://jessyon.com/2016/09/16/redis持久化及主从复制/">
       </div>
     
   </div>
@@ -541,7 +503,7 @@ User对象  -&gt;  json(string)  -&gt;  redis
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#String类型"><span class="nav-number">1.</span> <span class="nav-text">String类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#String应用"><span class="nav-number">2.</span> <span class="nav-text">String应用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#String存在的问题"><span class="nav-number">3.</span> <span class="nav-text">String存在的问题</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis持久化方案"><span class="nav-number">1.</span> <span class="nav-text">Redis持久化方案</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#RDB持久化"><span class="nav-number">1.1.</span> <span class="nav-text">RDB持久化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RDB问题总结"><span class="nav-number">1.2.</span> <span class="nav-text">RDB问题总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AOF持久化"><span class="nav-number">1.3.</span> <span class="nav-text">AOF持久化</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis的主从复制"><span class="nav-number">2.</span> <span class="nav-text">Redis的主从复制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#主从配置"><span class="nav-number">2.1.</span> <span class="nav-text">主从配置</span></a></li></ol></li></ol></div>
             
           </div>
         </section>
