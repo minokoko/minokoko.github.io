@@ -317,12 +317,25 @@ redis 会根据节点数量大致均等的将哈希槽映射到不同的节点
 </code></pre><p>第六步：启动所有的redis实例。</p>
 <pre><code>在/usr/local/redis-cluster 目录下新建一个startup-all.sh文件，内容如下:
 
-redis01/redis-server redis.conf
-redis02/redis-server redis.conf
-redis03/redis-server redis.conf
-redis04/redis-server redis.conf
-redis05/redis-server redis.conf
-redis06/redis-server redis.conf        
+cd redis01
+./redis-server redis.conf
+cd ..
+cd redis02
+./redis-server redis.conf
+cd ..
+cd redis03
+./redis-server redis.conf
+cd ..
+cd redis04
+./redis-server redis.conf
+cd ..
+cd redis05
+./redis-server redis.conf
+cd ..
+cd redis06
+./redis-server redis.conf
+cd ..
+
 
 在redis-cluster目录下，chmod +x startup-all.sh 修改文件权限
 ./start-all.sh 执行命令,启动6个redis
@@ -331,7 +344,27 @@ ps aux|grep redis 查看redis是否启动
 </code></pre><p>第七步：使用redis-trib.rb创建集群。</p>
 <pre><code>./redis-trib.rb create --replicas 1 115.159.93.201:7001 115.159.93.201:7002 115.159.93.201:7003 115.159.93.201:7004 115.159.93.201:7005 115.159.93.201:7006
 
-使用客户端连接集群： redis01/redis-cli -p 7001 -c
+使用客户端连接集群： ./redis-cli -h 115.159.93.201 -p 7001 -c
+</code></pre><h1 id="维护节点"><a href="#维护节点" class="headerlink" title="维护节点"></a>维护节点</h1><p>集群创建成功后可以向集群中添加节点，下面是添加一个master主节点 </p>
+<p>添加7007结点作为新节点:</p>
+<pre><code>在/usr/local/redis-cluster
+./redis-trib.rb add-node 115.159.93.201:7007 115.159.93.201:7001
+</code></pre><p>查看集群状态:</p>
+<pre><code>cluster info
+</code></pre><p>查看集群中的节点:</p>
+<pre><code>cluster nodes
+</code></pre><h1 id="hash槽重新分配"><a href="#hash槽重新分配" class="headerlink" title="hash槽重新分配"></a>hash槽重新分配</h1><p>添加完主节点需要对主节点进行hash槽分配，这样该主节才可以存储数据。</p>
+<p>查看集群中槽占用情况：</p>
+<pre><code>cluster nodes
+redis集群有16384个槽，集群中的每个结点分配自已槽，通过查看集群结点可以看到槽占用情况。
+</code></pre><p>给刚添加的7007结点分配槽:</p>
+<pre><code>1.连接集群上的任意一个节点
+  ./redis-cli -h 115.159.93.201 -p 7001 -c
+
+2.输入要分配的槽数量
+  how many slots do you want to move (from 1 to 16384)? 500
+
+3.给7007分配槽，通过cluster nodes查看7007节点的id:
 </code></pre>
           
         
