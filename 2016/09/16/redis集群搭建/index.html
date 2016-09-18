@@ -99,7 +99,7 @@
 (3)客户端与redis节点直连,不需要中间proxy层.客户端不需要连接集群所有节点,连接集群中任何一个可用节点即可
 (4)redis-cluster把所有的物理节点映射到[0-16383]slo">
 <meta property="og:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/redis_cluster.jpg">
-<meta property="og:updated_time" content="2016-09-18T04:49:48.706Z">
+<meta property="og:updated_time" content="2016-09-18T05:47:50.887Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="服务器配置(五)redis集群搭建">
 <meta name="twitter:description" content="redis-cluster架构图
@@ -379,6 +379,9 @@ redis集群有16384个槽，集群中的每个结点分配自已槽，通过查�
   source node#1: all
 
 5.输入yes开始移动槽点到目标节点
+</code></pre><h1 id="添加从节点"><a href="#添加从节点" class="headerlink" title="添加从节点"></a>添加从节点</h1><p>添加7008从结点，将7008作为7007的从结点</p>
+<pre><code>./redis-trib.rb add-node --slave --master-id 主节点id 新节点的ip和端口 旧节点ip和端口
+./redis-trib.rb add-node --slave --master-id 8acc53cd234cb4bcc1d4f3e0e237f2655bc9e984  115.159.93.201:7008 115.159.93.201:7007
 </code></pre>
       
     </div>
@@ -531,7 +534,7 @@ redis集群有16384个槽，集群中的每个结点分配自已槽，通过查�
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#redis-cluster架构图"><span class="nav-number">1.</span> <span class="nav-text">redis-cluster架构图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#集群搭建"><span class="nav-number">2.</span> <span class="nav-text">集群搭建</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#维护节点"><span class="nav-number">3.</span> <span class="nav-text">维护节点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#hash槽重新分配"><span class="nav-number">4.</span> <span class="nav-text">hash槽重新分配</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#redis-cluster架构图"><span class="nav-number">1.</span> <span class="nav-text">redis-cluster架构图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#集群搭建"><span class="nav-number">2.</span> <span class="nav-text">集群搭建</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#维护节点"><span class="nav-number">3.</span> <span class="nav-text">维护节点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#hash槽重新分配"><span class="nav-number">4.</span> <span class="nav-text">hash槽重新分配</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#添加从节点"><span class="nav-number">5.</span> <span class="nav-text">添加从节点</span></a></li></ol></div>
             
           </div>
         </section>
