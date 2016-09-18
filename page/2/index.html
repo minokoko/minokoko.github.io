@@ -238,6 +238,139 @@
             
               
                 
+                <a class="post-title-link" href="/2016/09/15/服务器搭建-一-jdk和nginx配置/" itemprop="url">
+                  服务器搭建(一)jdk和nginx配置
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-15T20:39:25+08:00" content="2016-09-15">
+              2016-09-15
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/15/服务器搭建-一-jdk和nginx配置/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/15/服务器搭建-一-jdk和nginx配置/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="使用SecureCRT连接服务器"><a href="#使用SecureCRT连接服务器" class="headerlink" title="使用SecureCRT连接服务器"></a><strong>使用SecureCRT连接服务器</strong></h1><p>1.点击new session新建连接，选择SSH2<br>2.hostname填服务器的地址，Port填22,SecureFX选择SFTP</p>
+<h1 id="安装JDK"><a href="#安装JDK" class="headerlink" title="安装JDK"></a><strong>安装JDK</strong></h1><p>1.通过Connect SFTP Session将jdk上传至服务器<br>2.使用命令tar -zxvf jdk-7u55-linux-i586.tar.gz解压压缩包<br>3.将解压后的文件移到/usr/local下 mv jdk1.7.0_55 /usr/local<br>4.cd /usr/local 查看文件是否存在<br>5.通过notepad++连接服务器,找到/etc/profile编辑<br>6.加入内容如下：<br>export JAVA_HOME=/usr/local/jdk1.7.0_55<br>export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar<br>export PATH=$JAVA_HOME/bin:$PATH<br>7.加载刚设置的变量 source /etc/profile<br>8.java -version 查看是否成功安装jdk</p>
+<h1 id="nginx安装"><a href="#nginx安装" class="headerlink" title="nginx安装"></a><strong>nginx安装</strong></h1><p>nginx是一个使用c语言开发的高性能的http服务器及反向代理服务器。<br>Nginx是一款高性能的http 服务器/反向代理服务器及电子邮件（IMAP/POP3）代理服务器。由俄罗斯的程序设计师Igor Sysoev所开发，官方测试nginx能够支支撑5万并发链接，并且cpu、内存等资源消耗却非常低，运行非常稳定。</p>
+<ol>
+<li>gcc<br>安装nginx需要先将官网下载的源码进行编译，编译依赖gcc环境，如果没有gcc环境，需要安装gcc：yum install gcc-c++ </li>
+<li>PCRE<br>PCRE(Perl Compatible Regular Expressions)是一个Perl库，包括 perl 兼容的正则表达式库。nginx的http模块使用pcre来解析正则表达式，所以需要在linux上安装pcre库。<br>yum install -y pcre pcre-devel<br>注：pcre-devel是使用pcre开发的一个二次开发库。nginx也需要此库。</li>
+<li><p>zlib<br>zlib库提供了很多种压缩和解压缩的方式，nginx使用zlib对http包的内容进行gzip，所以需要在linux上安装zlib库。<br>yum install -y zlib zlib-devel</p>
+</li>
+<li><p>openssl<br>OpenSSL 是一个强大的安全套接字层密码库，囊括主要的密码算法、常用的密钥和证书封装管理功能及SSL协议，并提供丰富的应用程序供测试或其它目的使用。<br>nginx不仅支持http协议，还支持https（即在ssl协议上传输http），所以需要在linux安装openssl库。<br>yum install -y openssl openssl-devel</p>
+</li>
+<li>将nginx-1.8.0.tar.gz拷贝至linux服务器</li>
+<li>解压 tar -zxvf nginx-1.8.0.tar.gz</li>
+<li>移到/usr/local mv nginx-1.8.0 /usr/local</li>
+<li><p>进入nginx目录,参数设置如下：<br>./configure \<br>–prefix=/usr/local/nginx \<br>–pid-path=/var/run/nginx/nginx.pid \<br>–lock-path=/var/lock/nginx.lock \<br>–error-log-path=/var/log/nginx/error.log \<br>–http-log-path=/var/log/nginx/access.log \<br>–with-http_gzip_static_module \<br>–http-client-body-temp-path=/var/temp/nginx/client \<br>–http-proxy-temp-path=/var/temp/nginx/proxy \<br>–http-fastcgi-temp-path=/var/temp/nginx/fastcgi \<br>–http-uwsgi-temp-path=/var/temp/nginx/uwsgi \<br>–http-scgi-temp-path=/var/temp/nginx/scgi</p>
+<p>注意：上边将临时文件目录指定为/var/temp/nginx，需要在/var下创建temp及nginx目录cd /var -&gt; mkdir temp -&gt; cd temp -&gt; mkdir nginx</p>
+</li>
+<li>在nginx目录,编译make，安装make install,安装在了/usr/local/nginx目录下</li>
+<li>启动：进入nginx的sbin目录，./nginx就可以启动。关闭:./nginx -s stop<br>ps aux|grep nginx 查看nginx进程</li>
+</ol>
+<h1 id="nginx配置"><a href="#nginx配置" class="headerlink" title="nginx配置"></a><strong>nginx配置</strong></h1><p>在/usr/local/nginx/conf目录下nginx.conf文件是nginx的配置文件。<br>在nginx.conf文件中添加一个Service节点，修改端口号就可以</p>
+<pre><code>server {                        //一个server是一个虚拟主机
+        listen       80;        //当前虚拟主机监听的端口号
+        server_name  localhost; //当前虚拟主机的名称
+
+        #charset koi8-r;
+
+        #access_log  logs/host.access.log  main;
+
+        location / {
+            root   html;     //虚拟主机的根目录
+            index  index.html index.htm; //欢迎页,顺序查找
+        }
+   }
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/08/21/淘淘商城开发记录-三/" itemprop="url">
                   淘淘商城开发记录(三)
                 </a>
@@ -1538,154 +1671,6 @@ struts&gt;
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/05/06/我是如何学习Spring的-一/" itemprop="url">
-                  我是如何学习Spring的(一)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-06T22:01:45+08:00" content="2016-05-06">
-              2016-05-06
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/05/06/我是如何学习Spring的-一/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/06/我是如何学习Spring的-一/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a><strong>简介</strong></h1><p>Spring是一个开源框架，Spring是于2003 年兴起的一个轻量级的Java 开发框架，由Rod Johnson 在其著作Expert One-On-One J2EE Development and Design中阐述的部分理念和原型衍生而来。它是为了解决企业应用开发的复杂性而创建的。框架的主要优势之一就是其分层架构，分层架构允许使用者选择使用哪一个组件，同时为 JavaEE 应用程序开发提供集成的框架。Spring使用基本的JavaBean来完成以前只可能由EJB完成的事情。然而，Spring的用途不仅限于服务器端的开发。从简单性、可测试性和松耦合的角度而言，任何Java应用都可以从Spring中受益。Spring的核心是控制反转（IoC）和面向切面（AOP）。简单来说，Spring是一个分层的JavaSE/EEfull-stack(一站式) 轻量级开源框架。</p>
-<h2 id="Spring优点"><a href="#Spring优点" class="headerlink" title="Spring优点"></a>Spring优点</h2><h3 id="方便解耦，简化开发"><a href="#方便解耦，简化开发" class="headerlink" title="方便解耦，简化开发"></a>方便解耦，简化开发</h3><p>Spring就是一个大工厂，可以将所有对象创建和依赖关系维护，交给Spring管理</p>
-<h3 id="AOP编程的支持"><a href="#AOP编程的支持" class="headerlink" title="AOP编程的支持"></a>AOP编程的支持</h3><p>Spring提供面向切面编程，可以方便的实现对程序进行权限拦截、运行监控等功能</p>
-<h3 id="声明式事务的支持"><a href="#声明式事务的支持" class="headerlink" title="声明式事务的支持"></a>声明式事务的支持</h3><p>只需要通过配置就可以完成对事务的管理，而无需手动编程</p>
-<h3 id="方便程序的测试"><a href="#方便程序的测试" class="headerlink" title="方便程序的测试"></a>方便程序的测试</h3><p>Spring对Junit4支持，可以通过注解方便的测试Spring程序</p>
-<h3 id="方便集成各种优秀框架"><a href="#方便集成各种优秀框架" class="headerlink" title="方便集成各种优秀框架"></a>方便集成各种优秀框架</h3><p>Spring不排斥各种优秀的开源框架，其内部提供了对各种优秀框架（如：Struts、Hibernate、MyBatis、Quartz等）的直接支持</p>
-<h3 id="降低JavaEE-API的使用难度"><a href="#降低JavaEE-API的使用难度" class="headerlink" title="降低JavaEE API的使用难度"></a>降低JavaEE API的使用难度</h3><p>Spring 对JavaEE开发中非常难用的一些API（JDBC、JavaMail、远程调用等），都提供了封装，使这些API应用难度大大降低</p>
-<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>Dependency 依赖：一个类的实现需要用到另一个类。<br>Injection 注入：将一个类添加到另一个类中。<br>DI (Dependency Injection) 依赖注入：A类依赖B类，A类提供set接口，当需要B类时，通过接口，将B类传递给A类。<br>IOC (Inversion of Control) 控制反转：由以前的A类创建B类，转变为由第三方IOC容器(Spring)创建B类。A类不能直接创建B类，A类通过第三方IOC容器获取B类。</p>
-<h2 id="传统方式"><a href="#传统方式" class="headerlink" title="传统方式"></a>传统方式</h2><p>传统方式创建 Model、Dao、DaoImpl、Service</p>
-<ul>
-<li><p>User Model</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public class User &#123;</span><br><span class="line">	private String username;</span><br><span class="line">	private String password;</span><br><span class="line">	//省略get、<span class="built_in">set</span>方法</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>User Dao</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public interface UserDAO &#123;</span><br><span class="line">	public void save(User user);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>User DaoImpl</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class UserDAOImpl implements UserDAO &#123;</span><br><span class="line">	public void save(User user) &#123;</span><br><span class="line"></span><br><span class="line">		System.out.println(<span class="string">"user saved!"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>User Service</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class UserService &#123;</span><br><span class="line">	private UserDAO userDAO;  </span><br><span class="line">	public void add(User user) &#123;</span><br><span class="line">		userDAO.save(user);</span><br><span class="line">	&#125;</span><br><span class="line">	public UserDAO <span class="function"><span class="title">getUserDAO</span></span>() &#123;</span><br><span class="line">		<span class="built_in">return</span> userDAO;</span><br><span class="line">	&#125;</span><br><span class="line">	public void <span class="built_in">set</span>UserDAO(UserDAO userDAO) &#123;</span><br><span class="line">		this.userDAO = userDAO;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">//创建Service层，Service层调用DaoImpl的add()方法，add()调用Dao层的save()方法。</span><br><span class="line">Service service= new Service();</span><br><span class="line">service.add(u);</span><br></pre></td></tr></table></figure>
-<h2 id="IOC方式"><a href="#IOC方式" class="headerlink" title="IOC方式"></a>IOC方式</h2><p>beans.xml配置一个bean</p>
-<pre><code class="bash">&lt;beans&gt;
-    &lt;bean id=<span class="string">"u"</span> class=<span class="string">"com.dao.impl.UserDAOImpl"</span> /&gt;          //配置一个简单类
-    &lt;bean id=<span class="string">"userService"</span> class=<span class="string">"com.service.UserService"</span> &gt;  //配置一个userService
-        &lt;property name=<span class="string">"userDAO"</span> bean=<span class="string">"u"</span>/&gt;     //为userService通过property配置一个<span class="built_in">set</span>UserDao()方法，当调用<span class="built_in">set</span>UserDao()方法时，将u这个bean传进去(注入)。
-    &lt;/bean&gt;
-&lt;/beans&gt;
-``` bash
-//IOC方式与传统方式得到的结果都一样，在控制台输出user saved!因为都执行了save(User)方法。
-public class UserServiceTest {
-    @Test
-    public void <span class="built_in">test</span>Add() throws Exception {
-        //1 加载配置文件，默认为beans.xml
-        BeanFactory applicationContext = new ClassPathXmlApplicationContext(); 
-        UserService service = (UserService)applicationContext.getBean(<span class="string">"userService"</span>);    
-
-        User u = new User();
-        u.setUsername(<span class="string">"zhangsan"</span>);
-        u.setPassword(<span class="string">"zhangsan"</span>);
-        service.add(u);
-    }
-}
-</code></pre>
-<p>## </p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1731,7 +1716,7 @@ public class UserServiceTest {
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">28</span>
+              <span class="site-state-item-count">29</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1741,7 +1726,7 @@ public class UserServiceTest {
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-count">29</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

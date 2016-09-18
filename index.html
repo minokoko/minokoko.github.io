@@ -238,6 +238,178 @@
             
               
                 
+                <a class="post-title-link" href="/2016/09/18/jedis连接集群/" itemprop="url">
+                  jedis连接集群
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-18T18:53:08+08:00" content="2016-09-18">
+              2016-09-18
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/18/jedis连接集群/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/18/jedis连接集群/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Spring配置jedis"><a href="#Spring配置jedis" class="headerlink" title="Spring配置jedis"></a>Spring配置jedis</h1><pre><code>&lt;!-- 连接池配置 --&gt;
+&lt;bean id=&quot;jedisPoolConfig&quot; class=&quot;redis.clients.jedis.JedisPoolConfig&quot;&gt;
+&lt;!-- 最大连接数 --&gt;
+&lt;property name=&quot;maxTotal&quot; value=&quot;30&quot; /&gt;
+&lt;!-- 最大空闲连接数 --&gt;
+&lt;property name=&quot;maxIdle&quot; value=&quot;10&quot; /&gt;    
+&lt;!-- 每次释放连接的最大数目 --&gt;
+&lt;property name=&quot;numTestsPerEvictionRun&quot; value=&quot;1024&quot; /&gt;
+&lt;!-- 释放连接的扫描间隔（毫秒） --&gt;
+&lt;property name=&quot;timeBetweenEvictionRunsMillis&quot; value=&quot;30000&quot; /&gt;
+&lt;!-- 连接最小空闲时间 --&gt;
+&lt;property name=&quot;minEvictableIdleTimeMillis&quot; value=&quot;1800000&quot; /&gt;
+&lt;!-- 连接空闲多久后释放, 当空闲时间&gt;该值 且 空闲连接&gt;最大空闲连接数 时直接释放 --&gt;
+&lt;property name=&quot;softMinEvictableIdleTimeMillis&quot; value=&quot;10000&quot; /&gt;
+&lt;!-- 获取连接时的最大等待毫秒数,小于零:阻塞不确定的时间,默认-1 --&gt;
+&lt;property name=&quot;maxWaitMillis&quot; value=&quot;1500&quot; /&gt;
+&lt;!-- 在获取连接的时候检查有效性, 默认false --&gt;
+&lt;property name=&quot;testOnBorrow&quot; value=&quot;true&quot; /&gt;
+&lt;!-- 在空闲时检查有效性, 默认false --&gt;
+&lt;property name=&quot;testWhileIdle&quot; value=&quot;true&quot; /&gt;
+&lt;!-- 连接耗尽时是否阻塞, false报异常,ture阻塞直到超时, 默认true --&gt;
+&lt;property name=&quot;blockWhenExhausted&quot; value=&quot;false&quot; /&gt;
+&lt;/bean&gt;
+!-- redis集群 --&gt;
+&lt;bean id=&quot;jedisCluster&quot; class=&quot;redis.clients.jedis.JedisCluster&quot;&gt;
+&lt;constructor-arg index=&quot;0&quot;&gt;
+    &lt;set&gt;
+        &lt;bean class=&quot;redis.clients.jedis.HostAndPort&quot;&gt;
+            &lt;constructor-arg index=&quot;0&quot; value=&quot;115.159.93.201&quot;&gt;&lt;/constructor-arg&gt;
+            &lt;constructor-arg index=&quot;1&quot; value=&quot;7001&quot;&gt;&lt;/constructor-arg&gt;
+        &lt;/bean&gt;
+        &lt;bean class=&quot;redis.clients.jedis.HostAndPort&quot;&gt;
+            &lt;constructor-arg index=&quot;0&quot; value=&quot;115.159.93.201&quot;&gt;&lt;/constructor-arg&gt;
+            &lt;constructor-arg index=&quot;1&quot; value=&quot;7002&quot;&gt;&lt;/constructor-arg&gt;
+        &lt;/bean&gt;
+        &lt;bean class=&quot;redis.clients.jedis.HostAndPort&quot;&gt;
+            &lt;constructor-arg index=&quot;0&quot; value=&quot;115.159.93.201&quot;&gt;&lt;/constructor-arg&gt;
+            &lt;constructor-arg index=&quot;1&quot; value=&quot;7003&quot;&gt;&lt;/constructor-arg&gt;
+        &lt;/bean&gt;
+        &lt;bean class=&quot;redis.clients.jedis.HostAndPort&quot;&gt;  
+            &lt;constructor-arg index=&quot;0&quot; value=&quot;115.159.93.201&quot;&gt;&lt;/constructor-arg&gt;
+            &lt;constructor-arg index=&quot;1&quot; value=&quot;7004&quot;&gt;&lt;/constructor-arg&gt;
+        &lt;/bean&gt;
+        &lt;bean class=&quot;redis.clients.jedis.HostAndPort&quot;&gt;
+            &lt;constructor-arg index=&quot;0&quot; value=&quot;115.159.93.201&quot;&gt;&lt;/constructor-arg&gt;
+            &lt;constructor-arg index=&quot;1&quot; value=&quot;7005&quot;&gt;&lt;/constructor-arg&gt;
+        &lt;/bean&gt;
+        &lt;bean class=&quot;redis.clients.jedis.HostAndPort&quot;&gt;
+            &lt;constructor-arg index=&quot;0&quot; value=&quot;115.159.93.201&quot;&gt;&lt;/constructor-arg&gt;
+            &lt;constructor-arg index=&quot;1&quot; value=&quot;7006&quot;&gt;&lt;/constructor-arg&gt;
+        &lt;/bean&gt;
+    &lt;/set&gt;
+&lt;/constructor-arg&gt;
+&lt;constructor-arg index=&quot;1&quot; ref=&quot;jedisPoolConfig&quot;&gt;&lt;/constructor-arg&gt;
+&lt;/bean&gt;
+</code></pre><h1 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h1><pre><code>private ApplicationContext applicationContext;
+@Before    
+public void init() {
+    applicationContext = new ClassPathXmlApplicationContext(
+            &quot;classpath:applicationContext.xml&quot;);
+}
+
+// redis集群    
+@Test
+public void testJedisCluster() {
+    JedisCluster jedisCluster = (JedisCluster) applicationContext
+            .getBean(&quot;jedisCluster&quot;);
+
+    jedisCluster.set(&quot;name&quot;, &quot;zhangsan&quot;);
+    String value = jedisCluster.get(&quot;name&quot;);
+    System.out.println(value);
+}
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/09/16/redis集群搭建/" itemprop="url">
                   服务器配置(五)redis集群搭建
                 </a>
@@ -1787,139 +1959,6 @@ NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为�
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/15/服务器搭建-一-jdk和nginx配置/" itemprop="url">
-                  服务器搭建(一)jdk和nginx配置
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-15T20:39:25+08:00" content="2016-09-15">
-              2016-09-15
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/09/15/服务器搭建-一-jdk和nginx配置/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/15/服务器搭建-一-jdk和nginx配置/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="使用SecureCRT连接服务器"><a href="#使用SecureCRT连接服务器" class="headerlink" title="使用SecureCRT连接服务器"></a><strong>使用SecureCRT连接服务器</strong></h1><p>1.点击new session新建连接，选择SSH2<br>2.hostname填服务器的地址，Port填22,SecureFX选择SFTP</p>
-<h1 id="安装JDK"><a href="#安装JDK" class="headerlink" title="安装JDK"></a><strong>安装JDK</strong></h1><p>1.通过Connect SFTP Session将jdk上传至服务器<br>2.使用命令tar -zxvf jdk-7u55-linux-i586.tar.gz解压压缩包<br>3.将解压后的文件移到/usr/local下 mv jdk1.7.0_55 /usr/local<br>4.cd /usr/local 查看文件是否存在<br>5.通过notepad++连接服务器,找到/etc/profile编辑<br>6.加入内容如下：<br>export JAVA_HOME=/usr/local/jdk1.7.0_55<br>export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar<br>export PATH=$JAVA_HOME/bin:$PATH<br>7.加载刚设置的变量 source /etc/profile<br>8.java -version 查看是否成功安装jdk</p>
-<h1 id="nginx安装"><a href="#nginx安装" class="headerlink" title="nginx安装"></a><strong>nginx安装</strong></h1><p>nginx是一个使用c语言开发的高性能的http服务器及反向代理服务器。<br>Nginx是一款高性能的http 服务器/反向代理服务器及电子邮件（IMAP/POP3）代理服务器。由俄罗斯的程序设计师Igor Sysoev所开发，官方测试nginx能够支支撑5万并发链接，并且cpu、内存等资源消耗却非常低，运行非常稳定。</p>
-<ol>
-<li>gcc<br>安装nginx需要先将官网下载的源码进行编译，编译依赖gcc环境，如果没有gcc环境，需要安装gcc：yum install gcc-c++ </li>
-<li>PCRE<br>PCRE(Perl Compatible Regular Expressions)是一个Perl库，包括 perl 兼容的正则表达式库。nginx的http模块使用pcre来解析正则表达式，所以需要在linux上安装pcre库。<br>yum install -y pcre pcre-devel<br>注：pcre-devel是使用pcre开发的一个二次开发库。nginx也需要此库。</li>
-<li><p>zlib<br>zlib库提供了很多种压缩和解压缩的方式，nginx使用zlib对http包的内容进行gzip，所以需要在linux上安装zlib库。<br>yum install -y zlib zlib-devel</p>
-</li>
-<li><p>openssl<br>OpenSSL 是一个强大的安全套接字层密码库，囊括主要的密码算法、常用的密钥和证书封装管理功能及SSL协议，并提供丰富的应用程序供测试或其它目的使用。<br>nginx不仅支持http协议，还支持https（即在ssl协议上传输http），所以需要在linux安装openssl库。<br>yum install -y openssl openssl-devel</p>
-</li>
-<li>将nginx-1.8.0.tar.gz拷贝至linux服务器</li>
-<li>解压 tar -zxvf nginx-1.8.0.tar.gz</li>
-<li>移到/usr/local mv nginx-1.8.0 /usr/local</li>
-<li><p>进入nginx目录,参数设置如下：<br>./configure \<br>–prefix=/usr/local/nginx \<br>–pid-path=/var/run/nginx/nginx.pid \<br>–lock-path=/var/lock/nginx.lock \<br>–error-log-path=/var/log/nginx/error.log \<br>–http-log-path=/var/log/nginx/access.log \<br>–with-http_gzip_static_module \<br>–http-client-body-temp-path=/var/temp/nginx/client \<br>–http-proxy-temp-path=/var/temp/nginx/proxy \<br>–http-fastcgi-temp-path=/var/temp/nginx/fastcgi \<br>–http-uwsgi-temp-path=/var/temp/nginx/uwsgi \<br>–http-scgi-temp-path=/var/temp/nginx/scgi</p>
-<p>注意：上边将临时文件目录指定为/var/temp/nginx，需要在/var下创建temp及nginx目录cd /var -&gt; mkdir temp -&gt; cd temp -&gt; mkdir nginx</p>
-</li>
-<li>在nginx目录,编译make，安装make install,安装在了/usr/local/nginx目录下</li>
-<li>启动：进入nginx的sbin目录，./nginx就可以启动。关闭:./nginx -s stop<br>ps aux|grep nginx 查看nginx进程</li>
-</ol>
-<h1 id="nginx配置"><a href="#nginx配置" class="headerlink" title="nginx配置"></a><strong>nginx配置</strong></h1><p>在/usr/local/nginx/conf目录下nginx.conf文件是nginx的配置文件。<br>在nginx.conf文件中添加一个Service节点，修改端口号就可以</p>
-<pre><code>server {                        //一个server是一个虚拟主机
-        listen       80;        //当前虚拟主机监听的端口号
-        server_name  localhost; //当前虚拟主机的名称
-
-        #charset koi8-r;
-
-        #access_log  logs/host.access.log  main;
-
-        location / {
-            root   html;     //虚拟主机的根目录
-            index  index.html index.htm; //欢迎页,顺序查找
-        }
-   }
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1965,7 +2004,7 @@ NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为�
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">28</span>
+              <span class="site-state-item-count">29</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1975,7 +2014,7 @@ NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为�
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-count">29</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
