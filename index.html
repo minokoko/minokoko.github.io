@@ -239,7 +239,7 @@
               
                 
                 <a class="post-title-link" href="/2016/09/16/redis集群搭建/" itemprop="url">
-                  redis集群搭建
+                  服务器配置(五)redis集群搭建
                 </a>
               
             
@@ -289,7 +289,50 @@
       
         
           
-            
+            <h1 id="redis-cluster架构图"><a href="#redis-cluster架构图" class="headerlink" title="redis-cluster架构图"></a>redis-cluster架构图</h1><p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/redis_cluster.jpg" alt=""></p>
+<pre><code>(1)所有的redis节点彼此互联(PING-PONG机制),内部使用二进制协议优化传输速度和带宽.
+(2)节点的fail是通过集群中超过半数的节点检测失效时才生效.
+(3)客户端与redis节点直连,不需要中间proxy层.客户端不需要连接集群所有节点,连接集群中任何一个可用节点即可
+(4)redis-cluster把所有的物理节点映射到[0-16383]slot上,cluster 负责维护node&lt;-&gt;slot&lt;-&gt;value
+
+Redis 集群中内置了 16384 个哈希槽，当需要在 Redis 集群中放置一个 key-value 时，
+redis 先对 key 使用 crc16 算法算出一个结果，然后把结果对 16384 求余数，
+这样每个 key 都会对应一个编号在 0-16383 之间的哈希槽，
+redis 会根据节点数量大致均等的将哈希槽映射到不同的节点
+</code></pre><h1 id="集群搭建"><a href="#集群搭建" class="headerlink" title="集群搭建"></a>集群搭建</h1><p>集群中应该至少有三个节点，每个节点有一备份节点。需要6台服务器。<br>搭建伪分布式，需要6个redis实例。<br>搭建集群的步骤：</p>
+<p>第一步：创建6个redis实例指定端口从7001到7006</p>
+<pre><code>在/usr/local目录下新建一个redis-cluster目录
+将/usr/local/redis0707目录下的bin复制到redis-cluster,并改名为redis01
+复制多个cp -r redis01/ redis02
+</code></pre><p>第二步：修改redis.conf 打开Cluster-enable yes前面的注释。</p>
+<pre><code>将632行的注释打开
+45行端口号分别改为7001 7002 ...... 7006
+</code></pre><p>第三步：需要一个ruby脚本。在redis源码文件夹下的src目录下 redis-trib.rb<br>第四步：把redis-trib.rb文件复制到到redis-cluster目录下。</p>
+<pre><code>cp redis-trib.rb /usr/local/redis-cluster/
+</code></pre><p>第五步：执行ruby脚本之前，需要安装ruby环境。</p>
+<pre><code>1、yum install ruby    
+2、yum install rubygems
+3、安装redis-trib.rb运行依赖的ruby的包。
+[root@bogon ~]# gem install redis-3.0.0.gem
+</code></pre><p>第六步：启动所有的redis实例。</p>
+<pre><code>在/usr/local/redis-cluster 目录下新建一个startup-all.sh文件，内容如下:
+
+redis01/redis-server redis.conf
+redis02/redis-server redis.conf
+redis03/redis-server redis.conf
+redis04/redis-server redis.conf
+redis05/redis-server redis.conf
+redis06/redis-server redis.conf        
+
+在redis-cluster目录下，chmod +x startup-all.sh 修改文件权限
+./start-all.sh 执行命令,启动6个redis
+
+ps aux|grep redis 查看redis是否启动
+</code></pre><p>第七步：使用redis-trib.rb创建集群。</p>
+<pre><code>./redis-trib.rb create --replicas 1 115.159.93.201:7001 115.159.93.201:7002 115.159.93.201:7003 115.159.93.201:7004 115.159.93.201:7005 115.159.93.201:7006
+
+使用客户端连接集群： redis01/redis-cli -p 7001 -c
+</code></pre>
           
         
       
@@ -1890,7 +1933,7 @@ NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为�
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-count">28</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
