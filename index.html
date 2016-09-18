@@ -359,12 +359,18 @@ ps aux|grep redis 查看redis是否启动
 redis集群有16384个槽，集群中的每个结点分配自已槽，通过查看集群结点可以看到槽占用情况。
 </code></pre><p>给刚添加的7007结点分配槽:</p>
 <pre><code>1.连接集群上的任意一个节点
-  ./redis-cli -h 115.159.93.201 -p 7001 -c
+  ./redis-trib.rb reshard 192 115.159.93.201:7001 
 
 2.输入要分配的槽数量
   how many slots do you want to move (from 1 to 16384)? 500
 
 3.给7007分配槽，通过cluster nodes查看7007节点的id:
+  8acc53cd234cb4bcc1d4f3e0e237f2655bc9e984
+
+4.输入源节点id:
+  source node#1: all
+
+5.输入yes开始移动槽点到目标节点
 </code></pre>
           
         
