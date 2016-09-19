@@ -444,7 +444,102 @@ heritrix（http://sourceforge.net/projects/archive-crawler/files/），Heritrix 
 包括索引和文档两部分，索引即词汇表，它是在索引中匹配搜索关键字，
 由于索引内容量有限并且采用固定优化算法搜索速度很快，找到了索引中的词汇，词汇与文档关联，从而最终找到了文档。
 </code></pre><h2 id="创建索引"><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h2><p>创建索引流程：<br><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/lucene_create_index.jpg" alt=""></p>
+<pre><code>IndexWriter是索引过程的核心组件，通过IndexWriter可以创建新索引、更新索引、删除索引操作。
+IndexWriter需要通过Directory对索引进行存储操作。
 
+Directory描述了索引的存储位置，底层封装了I/O操作，负责对索引进行存储。
+它是一个抽象类，它的子类常用的包括FSDirectory（在文件系统存储索引）、RAMDirectory（在内存存储索引）。
+</code></pre><h3 id="创建Document"><a href="#创建Document" class="headerlink" title="创建Document"></a>创建Document</h3><pre><code>采集数据的目的是为了索引，在索引前需要将原始内容创建成文档（Document），文档（Document）中包括一个一个的域（Field）。
+</code></pre><h4 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h4><pre><code>@Test
+public void createIndex() throws Exception{
+//1.采集数据
+BookDao dao = new BookDaoImpl();
+//2.采集的数据封装成dacoument对象
+List&lt;Book&gt; list = dao.queryBookList();
+
+List&lt;Document&gt; docList = new ArrayList&lt;Document&gt;();
+Document doc;
+for (Book book : list) {
+    doc = new Document();
+
+    //图书id
+    //不分词 、 不索引、要存储
+    Field idField = new StoredField(&quot;id&quot;, book.getId().toString());
+
+    //图书名称
+    //分词、索引、存储
+    Field nameField = new TextField(&quot;name&quot;, book.getName().toString(),Store.YES);
+
+    //图书价格
+    //分词、索引、存储
+    Field priceField = new FloatField(&quot;price&quot;, book.getPrice(),Store.YES);
+
+    //图书图片地址
+    //不分词 、 不索引、要存储
+    Field picField = new StoredField(&quot;pic&quot;, book.getPic());
+
+    //图片描述
+    //分词、索引、不存储
+    Field desField = new TextField(&quot;description&quot;, book.getDescription().toString(),Store.NO);
+
+    doc.add(desField);
+    doc.add(picField);
+    doc.add(priceField);
+    doc.add(nameField);
+    doc.add(idField);
+
+    docList.add(doc);
+}
+</code></pre><h3 id="分词"><a href="#分词" class="headerlink" title="分词"></a>分词</h3><h4 id="分词过程"><a href="#分词过程" class="headerlink" title="分词过程"></a>分词过程</h4><p>在对Docuemnt中的内容索引之前需要使用分词器进行分词 ，主要过程就是分词、过虑两步。</p>
+<pre><code>1.分词就是将采集到的文档内容切分成一个一个的词，具体应该说是将Document中Field的value值切分成一个一个的词。
+
+2.过虑包括去除标点符号、去除停用词（的、是、a、an、the等）、
+大写转小写、词的形还原（复数形式转成单数形参、过去式转成现在式。。。）等。 
+</code></pre><p>什么是停用词？</p>
+<pre><code>停用词是为节省存储空间和提高搜索效率，
+搜索引擎在索引页面或处理搜索请求时会自动忽略某些字或词，这些字或词即被称为Stop Words(停用词)。
+
+比如语气助词、副词、介词、连接词等，
+通常自身并无明确的意义，只有将其放入一个完整的句子中才有一定作用，如常见的“的”、“在”、“是”、“啊”等。
+</code></pre><h4 id="分词器"><a href="#分词器" class="headerlink" title="分词器"></a>分词器</h4><pre><code>Tokenizer是分词器，负责将reader转换为语汇单元即进行分词，
+Lucene提供了很多的分词器，也可以使用第三方的分词，比如IKAnalyzer一个中文分词器。
+
+tokenFilter是分词过滤器，负责对语汇单元进行过滤，
+tokenFilter可以是一个过滤器链儿，Lucene提供了很多的分词器过滤器，比如大小写转换、去除停用词等。
+</code></pre><p>如下图是语汇单元的生成过程：</p>
+<p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/lucene_tokenizer.jpg" alt=""></p>
+<p>比如下边的文档经过分析器分析如下：</p>
+<pre><code>原文档内容:
+Lucene is a Java full-text search engine.  
+
+分析后得到的语汇单元:
+lucene、java、full、text、search、engine
+
+同一个域中相同的语汇单元（Token）对应同一个Term（词），它记录了语汇单元的内容及所在域的域名等。
+不同的域中拆分出来的相同的单词对应不同的term。
+相同的域中拆分出来的相同的单词对应相同的term。
+
+例如：图书信息里面，图书名称中的java和图书描述中的java对应不同的term
+</code></pre><h4 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h4><pre><code>    //3.进行分词
+//    Analyzer analyzer = new StandardAnalyzer();
+    Analyzer analyzer = new IKAnalyzer();
+
+    //4.创建indexWriter
+    //4.1创建Directory 目录流
+    IndexWriterConfig indexconfig = new IndexWriterConfig(Version.LUCENE_4_10_3, analyzer);
+
+    //Directory 是抽象类，有两个实现类，FSDirectory(文件系统) RAMDirectory(内存)
+    Directory directory = FSDirectory.open(new File(&quot;F:\\index&quot;));
+    IndexWriter writer = new IndexWriter(directory,indexconfig);
+
+    //5.通过inexWriter将document对象写入索引库
+    for (Document document : docList) {
+        writer.addDocument(document);
+    }
+    //6.关闭IndexWriter
+    writer.close();
+}
+</code></pre>
           
         
       
