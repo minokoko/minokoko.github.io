@@ -289,7 +289,28 @@
       
         
           
-            
+            <h1 id="Field域"><a href="#Field域" class="headerlink" title="Field域"></a>Field域</h1><h2 id="Field属性"><a href="#Field属性" class="headerlink" title="Field属性"></a>Field属性</h2><pre><code>Field是文档中的域，包括Field名和Field值两部分，一个文档可以包括多个Field，
+Document只是Field的一个承载体，Field值即为要索引的内容，也是要搜索的内容。
+</code></pre><p>是否分词(tokenized)</p>
+<pre><code>是：作分词处理，即将Field值进行分词，分词的目的是为了索引。
+比如：商品名称、商品简介等，这些内容用户要输入关键字搜索，由于搜索的内容格式大、内容多需要分词后将语汇单元索引。
+
+否：不作分词处理
+比如：商品id、订单号、身份证号等 
+</code></pre><p>是否索引(indexed)</p>
+<pre><code>是：进行索引。将Field分词后的词或整个Field值进行索引，索引的目的是为了搜索。
+比如：商品名称、商品简介分析后进行索引，订单号、身份证号不用分析但也要索引，这些将来都要作为查询条件。
+
+否：不索引。该域的内容无法搜索到
+比如：商品id、文件路径、图片路径等，不用作为查询条件的不用索引。
+</code></pre><p>是否存储(stored)</p>
+<pre><code>是：将Field值存储在文档中，存储在文档中的Field才可以从Document中获取。
+比如：商品名称、订单号，凡是将来要从Document中获取的Field都要存储。
+
+否：不存储Field值，不存储的Field无法通过Document获取
+比如：商品简介，内容较大不用存储。如果要向用户展示商品简介可以从系统的关系数据库中获取商品简介。
+</code></pre><h2 id="Field常用类型"><a href="#Field常用类型" class="headerlink" title="Field常用类型"></a>Field常用类型</h2><p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/lucene_field.jpg" alt=""></p>
+
           
         
       
