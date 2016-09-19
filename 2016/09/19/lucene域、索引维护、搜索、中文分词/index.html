@@ -99,7 +99,7 @@ Document只是Field的一个承载体，Field值即为要索引的内容，也�
 是：作分词处理，即将Field值进行分词，分词的目的是为了索引。
 比如：商品名称、商品简介等，这些内容用户要输入关键字搜索，由于搜索的内容格式大、内容多">
 <meta property="og:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/lucene_field.jpg">
-<meta property="og:updated_time" content="2016-09-19T13:04:38.428Z">
+<meta property="og:updated_time" content="2016-09-19T13:50:45.923Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="lucene域、索引维护、搜索、中文分词">
 <meta name="twitter:description" content="Field域Field属性Field是文档中的域，包括Field名和Field值两部分，一个文档可以包括多个Field，
@@ -318,7 +318,346 @@ Document只是Field的一个承载体，Field值即为要索引的内容，也�
 否：不存储Field值，不存储的Field无法通过Document获取
 比如：商品简介，内容较大不用存储。如果要向用户展示商品简介可以从系统的关系数据库中获取商品简介。
 </code></pre><h2 id="Field常用类型"><a href="#Field常用类型" class="headerlink" title="Field常用类型"></a>Field常用类型</h2><p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/lucene_field.jpg" alt=""></p>
+<h2 id="Field代码说明"><a href="#Field代码说明" class="headerlink" title="Field代码说明"></a>Field代码说明</h2><pre><code>图书id：
+是否分词：不用分词，因为不会根据商品id来搜索商品 
+是否索引：不索引，因为不需要根据图书ID进行搜索
+是否存储：要存储，因为查询结果页面需要使用id这个值。
 
+图书名称：
+是否分词：要分词，因为要将图书的名称内容分词索引，根据关键搜索图书名称抽取的词。
+是否索引：要索引。
+是否存储：要存储。
+
+图书价格：
+是否分词：要分词，lucene对数字型的值只要有搜索需求的都要分词和索引，
+因为lucene对数字型的内容要特殊分词处理，本例子可能要根据价格范围搜索，需要分词和索引。
+
+是否索引：要索引
+
+是否存储：要存储
+
+图书图片地址：
+是否分词：不分词
+是否索引：不索引
+是否存储：要存储
+
+图书描述：
+是否分词：要分词
+是否索引：要索引
+是否存储：因为图书描述内容量大，不在查询结果页面直接显示，不存储。
+
+不存储是来不在lucene的索引文件中记录，节省lucene的索引文件空间，如果要在详情页面显示描述，思路：
+从lucene中取出图书的id，根据图书的id查询关系数据库中book表得到描述信息。
+</code></pre><h1 id="索引维护"><a href="#索引维护" class="headerlink" title="索引维护"></a>索引维护</h1><p>管理人员通过电商系统更改图书信息，这时更新的是数据库，如果使用lucene搜索图书信息需要在数据库表book信息变化时及时更新lucene索引库。</p>
+<h2 id="添加索引"><a href="#添加索引" class="headerlink" title="添加索引"></a>添加索引</h2><pre><code>调用 indexWriter.addDocument（doc）添加索引。
+参考入门程序的创建索引。
+</code></pre><h2 id="删除索引"><a href="#删除索引" class="headerlink" title="删除索引"></a>删除索引</h2><pre><code>private IndexWriter getWriter(){
+        try {
+            //3.进行分词
+            Analyzer analyzer = new StandardAnalyzer();
+
+            //4.创建indexWriter
+            //4.1创建Directory 目录流
+            IndexWriterConfig indexconfig = new IndexWriterConfig(Version.LUCENE_4_10_3, analyzer);
+
+            //Directory 是抽象类，有两个实现类，FSDirectory(文件系统) RAMDirectory(内存)
+            Directory directory = FSDirectory.open(new File(&quot;F:\\index&quot;));
+            return new IndexWriter(directory,indexconfig);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+@Test
+public void deleteIndex() throws Exception{
+
+        IndexWriter writer = getWriter();
+
+        writer.deleteDocuments(new Term(&quot;name&quot;,&quot;神&quot;));
+
+
+
+        //6.关闭IndexWriter
+        writer.close();
+    }
+</code></pre><h2 id="修改索引"><a href="#修改索引" class="headerlink" title="修改索引"></a>修改索引</h2><p>更新索引是先删除再添加，建议对更新需求采用此方法并且要保证对已存在的索引执行更新，可以先查询出来，确定更新记录存在执行更新操作。</p>
+<pre><code>// 修改索引
+@Test
+public void updateIndex() throws Exception {
+    // 1、指定索引库目录
+    Directory directory = FSDirectory.open(new File(&quot;F:\\index&quot;));
+    // 2、创建IndexWriterConfig
+    IndexWriterConfig cfg = new IndexWriterConfig(Version.LATEST,
+            new StandardAnalyzer());
+    // 3、 创建IndexWriter
+    IndexWriter writer = new IndexWriter(directory, cfg);
+    // 4、通过IndexWriter来修改索引
+    // a)、创建修改后的文档对象
+    Document document = new Document();
+
+    // 文件名称
+    Field filenameField = new StringField(&quot;filename&quot;, &quot;updateIndex&quot;, Store.YES);
+    document.add(filenameField);
+
+    // 修改指定索引为新的索引
+    writer.updateDocument(new Term(&quot;filename&quot;, &quot;apache&quot;), document);
+
+    // 5、关闭IndexWriter
+    writer.close();
+}
+</code></pre><h1 id="搜索"><a href="#搜索" class="headerlink" title="搜索"></a>搜索</h1><h2 id="创建查询的两种方法"><a href="#创建查询的两种方法" class="headerlink" title="创建查询的两种方法"></a>创建查询的两种方法</h2><pre><code>对要搜索的信息创建Query查询对象，Lucene会根据Query查询对象生成最终的查询语法。类似关系数据库Sql语法一样，Lucene也有自己的查询语法，
+比如：“name:lucene”表示查询Field的name为“lucene”的文档信息。
+可通过两种方法创建查询对象：
+</code></pre><p>1）使用Lucene提供Query子类</p>
+<pre><code>Query是一个抽象类，lucene提供了很多查询对象，比如TermQuery项精确查询，NumericRangeQuery数字范围查询等。
+如下代码：
+Query query = new TermQuery(new Term(&quot;name&quot;, &quot;lucene&quot;));
+</code></pre><p>2）使用QueryParse解析查询表达式</p>
+<pre><code>QueryParser会将用户输入的查询表达式解析成Query对象实例。
+如下代码：
+QueryParser queryParser = new QueryParser(&quot;name&quot;, new IKAnalyzer());
+Query query = queryParser.parse(&quot;name:lucene&quot;);
+</code></pre><h2 id="通过Query子类搜索"><a href="#通过Query子类搜索" class="headerlink" title="通过Query子类搜索"></a>通过Query子类搜索</h2><h3 id="TermQuery"><a href="#TermQuery" class="headerlink" title="TermQuery"></a>TermQuery</h3><p>TermQuery项查询，TermQuery不使用分析器，搜索关键词作为整体来匹配Field域中的词进行查询，比如订单号、分类ID号等。</p>
+<pre><code>private void doSearch(Query query) {
+    IndexReader reader = null;
+    try {
+        // a) 指定索引库目录
+        Directory indexdirectory = FSDirectory.open(new File(
+                &quot;F:\\index&quot;));
+        // b) 创建IndexReader对象
+        reader = DirectoryReader.open(indexdirectory);
+        // c) 创建IndexSearcher对象
+        IndexSearcher searcher = new IndexSearcher(reader);
+        // d) 通过IndexSearcher对象执行查询索引库，返回TopDocs对象
+        // 第一个参数：查询对象
+        // 第二个参数：最大的n条记录
+        TopDocs topDocs = searcher.search(query, 10);
+        // e) 提取TopDocs对象中的文档ID，如何找出对应的文档
+        ScoreDoc[] scoreDocs = topDocs.scoreDocs;
+        System.out.println(&quot;总共查询出的结果总数为：&quot; + topDocs.totalHits);
+        Document doc;
+        for (ScoreDoc scoreDoc : scoreDocs) {
+            // 文档对象ID
+            int docId = scoreDoc.doc;
+            doc = searcher.doc(docId);
+            // f) 输出文档内容
+            System.out.println(doc.get(&quot;filename&quot;));
+            System.out.println(doc.get(&quot;path&quot;));
+            System.out.println(doc.get(&quot;size&quot;));
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    } finally {
+        if (reader != null) {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+
+@Test
+public void testTermQuery() throws Exception {
+    // 1、 创建查询（Query对象）
+    Query query = new TermQuery(new Term(&quot;filename&quot;, &quot;apache&quot;));
+    // 2、 执行搜索
+    doSearch(query);
+}
+</code></pre><h3 id="NumbericRangeQuery"><a href="#NumbericRangeQuery" class="headerlink" title="NumbericRangeQuery"></a>NumbericRangeQuery</h3><p>NumericRangeQuery，指定数字范围查询.</p>
+<pre><code>@Test
+public void testNumbericRangeQuery() throws Exception {
+    // 创建查询
+    // 第一个参数：域名
+    // 第二个参数：最小值
+    // 第三个参数：最大值
+    // 第四个参数：是否包含最小值
+    // 第五个参数：是否包含最大值
+    Query query = NumericRangeQuery.newLongRange(&quot;size&quot;, 1l, 100l, true,true);
+    // 2、 执行搜索
+    doSearch(query);
+}
+</code></pre><h3 id="BooleanQuery"><a href="#BooleanQuery" class="headerlink" title="BooleanQuery"></a>BooleanQuery</h3><p>BooleanQuery，布尔查询，实现组合条件查询。</p>
+<pre><code>@Test
+public void booleanQuery() throws Exception {
+    BooleanQuery query = new BooleanQuery();
+    Query query1 = new TermQuery(new Term(&quot;id&quot;, &quot;3&quot;));
+    Query query2 = NumericRangeQuery.newFloatRange(&quot;price&quot;, 10f, 200f,
+            true, true);
+
+    //MUST：查询条件必须满足，相当于AND
+    //SHOULD:查询条件可选，相当于OR
+    //MUST_NOT：查询条件不能满足，相当于NOT非
+    query.add(query1, Occur.MUST);
+    query.add(query2, Occur.SHOULD);
+
+    System.out.println(query);
+
+    search(query);
+}
+</code></pre><p>组合关系代表的意思如下: </p>
+<pre><code>1、MUST和MUST表示“与”的关系，即“并集”。 
+2、MUST和MUST_NOT前者包含后者不包含。 
+3、MUST_NOT和MUST_NOT没意义 
+4、SHOULD与MUST表示MUST，SHOULD失去意义； 
+5、SHOUlD与MUST_NOT相当于MUST与MUST_NOT。 
+6、SHOULD与SHOULD表示“或”的概念。
+</code></pre><h2 id="通过QueryParser搜索"><a href="#通过QueryParser搜索" class="headerlink" title="通过QueryParser搜索"></a>通过QueryParser搜索</h2><pre><code>通过QueryParser也可以创建Query，QueryParser提供一个Parse方法，
+此方法可以直接根据查询语法来查询。Query对象执行的查询语法可通过System.out.println(query);查询。
+</code></pre><h3 id="QueryParser"><a href="#QueryParser" class="headerlink" title="QueryParser"></a>QueryParser</h3><h4 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h4><pre><code>@Test
+public void testQueryParser() throws Exception {
+    // 创建QueryParser
+    // 第一个参数：默认域名
+    // 第二个参数：分词器
+    QueryParser queryParser = new QueryParser(&quot;name&quot;, new IKAnalyzer());
+    // 指定查询语法 ，如果不指定域，就搜索默认的域
+        Query query = queryParser.parse(&quot;lucene&quot;);
+        System.out.println(query);
+    // 2、 执行搜索
+            doSearch(query);
+
+    }
+</code></pre><h4 id="查询语法"><a href="#查询语法" class="headerlink" title="查询语法"></a>查询语法</h4><pre><code>1、基础的查询语法，关键词查询：
+域名+“：”+搜索的关键字
+例如：content:java
+2、范围查询
+域名+“:”+[最小值 TO 最大值]
+例如：size:[1 TO 1000]
+注意：QueryParser不支持对数字范围的搜索，它支持字符串范围。数字范围搜索建议使用NumericRangeQuery。
+
+3、组合条件查询
+Occur.MUST     查询条件必须满足，  相当于and     +（加号）
+Occur.SHOULD   查询条件可选，     相当于or 空 （不用符号）
+Occur.MUST_NOT 查询条件不能满足，  相当于not非     -（减号）
+
+1）+条件1 +条件2：两个条件之间是并且的关系and
+例如：+filename:apache +content:apache
+2）+条件1 条件2：必须满足第一个条件，忽略第二个条件
+例如：+filename:apache content:apache
+3）条件1 条件2：两个条件满足其一即可。
+例如：filename:apache content:apache
+4）-条件1 条件2：必须不满足条件1，要满足条件2
+例如：-filename:apache content:apache
+
+第二种写法：
+条件1 AND 条件2
+条件1 OR 条件2
+条件1 NOT 条件2
+</code></pre><h3 id="MultiFieldQueryParser"><a href="#MultiFieldQueryParser" class="headerlink" title="MultiFieldQueryParser"></a>MultiFieldQueryParser</h3><p>通过MuliFieldQueryParse对多个域查询。</p>
+<pre><code>@Test
+public void testMultiFieldQueryParser() throws Exception {
+    // 可以指定默认搜索的域是多个
+        String[] fields = { &quot;name&quot;, &quot;description&quot; };
+    // 创建一个MulitFiledQueryParser对象
+        QueryParser parser = new MultiFieldQueryParser(fields, new IKAnalyzer());
+    // 指定查询语法 ，如果不指定域，就搜索默认的域
+        Query query = parser.parse(&quot;lucene&quot;);
+    // 2、 执行搜索
+        doSearch(query);
+}
+</code></pre><h2 id="TopDocs"><a href="#TopDocs" class="headerlink" title="TopDocs"></a>TopDocs</h2><p>Lucene搜索结果可通过TopDocs遍历，TopDocs类提供了少量的属性，如下：</p>
+<pre><code>方法或属性    说明
+totalHits    匹配搜索条件的总记录数
+scoreDocs    顶部匹配记录
+</code></pre><p>注意：</p>
+<pre><code>Search方法需要指定匹配记录数量n：indexSearcher.search(query, n)
+TopDocs.totalHits：是匹配索引库中所有记录的数量
+TopDocs.scoreDocs：匹配相关度高的前边记录数组，scoreDocs的长度小于等于search方法指定的参数n
+</code></pre><h1 id="相关度排序"><a href="#相关度排序" class="headerlink" title="相关度排序"></a>相关度排序</h1><h2 id="什么是相关度排序"><a href="#什么是相关度排序" class="headerlink" title="什么是相关度排序"></a>什么是相关度排序</h2><pre><code>相关度排序是查询结果按照与查询关键字的相关性进行排序，越相关的越靠前。
+比如搜索“Lucene”关键字，与该关键字最相关的文章应该排在前边。
+</code></pre><h2 id="相关度打分"><a href="#相关度打分" class="headerlink" title="相关度打分"></a>相关度打分</h2><pre><code>Lucene对查询关键字和索引文档的相关度进行打分，得分高的就排在前边。如何打分呢？Lucene是在用户进行检索时实时根据搜索的关键字计算出来的，分两步：
+1）计算出词（Term）的权重
+2）根据词的权重值，计算文档相关度得分。
+</code></pre><p>什么是词的权重？</p>
+<pre><code>通过索引部分的学习，明确索引的最小单位是一个Term(索引词典中的一个词)，
+搜索也是要从Term中搜索，再根据Term找到文档，Term对文档的重要性称为权重，
+影响Term权重有两个因素：
+
+Term Frequency (tf)：
+指此Term在此文档中出现了多少次。tf 越大说明越重要。 
+词(Term)在文档中出现的次数越多，说明此词(Term)对该文档越重要，
+如“Lucene”这个词，在文档中出现的次数很多，说明该文档主要就是讲Lucene技术的。
+
+Document Frequency (df)：
+指有多少文档包含次Term。df 越大说明越不重要。 
+比如，在一篇英语文档中，this出现的次数更多，就说明越重要吗？
+不是的，有越多的文档包含此词(Term), 说明此词(Term)太普通，
+不足以区分这些文档，因而重要性越低。
+</code></pre><h2 id="设置boost值影响相关度排序"><a href="#设置boost值影响相关度排序" class="headerlink" title="设置boost值影响相关度排序"></a>设置boost值影响相关度排序</h2><pre><code>boost是一个加权值（默认加权值为1.0f），它可以影响权重的计算。
+
+在索引时对某个文档中的field设置加权值高，在搜索时匹配到这个文档就可能排在前边。
+
+在搜索时对某个域进行加权，在进行组合域查询时，匹配到加权值高的域最后计算的相关度得分就高。
+
+设置boost是给域（field）或者Document设置的。
+</code></pre><h3 id="在创建索引时设置"><a href="#在创建索引时设置" class="headerlink" title="在创建索引时设置"></a>在创建索引时设置</h3><pre><code>如果希望某些文档更重要，当此文档中包含所要查询的词则应该得分较高，
+这样相关度排序可以排在前边，可以在创建索引时设定文档中某些域（Field）的boost值来实现，
+如果不进行设定，则Field Boost默认为1.0f。一旦设定，除非删除此文档，否则无法改变。
+</code></pre><h3 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h3><pre><code>@Test
+public void setBoost4createIndex() throws Exception {
+    // 创建分词器
+    Analyzer analyzer = new StandardAnalyzer();
+
+    IndexWriterConfig cfg = new IndexWriterConfig(Version.LUCENE_4_10_3,
+            analyzer);
+    Directory directory = FSDirectory.open(new File(&quot;F:\\index&quot;));
+    // 创建IndexWriter对象，通过它把分好的词写到索引库中
+    IndexWriter writer = new IndexWriter(directory, cfg);
+
+    Document doc = new Document();
+    Field id = new StringField(&quot;id&quot;, &quot;11&quot;, Store.YES);
+    Field description = new TextField(&quot;description&quot;, &quot;测试设置BOOST值 lucene&quot;,
+            Store.YES);
+    // 设置boost
+    description.setBoost(10.0f);
+    // 把域添加到文档中
+    doc.add(id);
+    doc.add(description);
+    writer.addDocument(doc);
+    // 关闭IndexWriter
+    writer.close();
+}
+</code></pre><h1 id="中文分词器"><a href="#中文分词器" class="headerlink" title="中文分词器"></a>中文分词器</h1><h2 id="什么是中文分词器"><a href="#什么是中文分词器" class="headerlink" title="什么是中文分词器"></a>什么是中文分词器</h2><pre><code>学过英文的都知道，英文是以单词为单位的，单词与单词之间以空格或者逗号句号隔开。
+而中文则以字为单位，字又组成词，字和词再组成句子。
+所以对于英文，我们可以简单以空格判断某个字符串是否为一个单词，
+比如I love China，love 和 China很容易被程序区分开来；
+但中文“我爱中国”就不一样了，电脑不知道“中国”是一个词语还是“爱中”是一个词语。
+把中文的句子切分成有意义的词，就是中文分词，也称切词。我爱中国，分词的结果是：我 爱 中国。
+</code></pre><h2 id="Lucene自带的中文分词器"><a href="#Lucene自带的中文分词器" class="headerlink" title="Lucene自带的中文分词器"></a>Lucene自带的中文分词器</h2><pre><code>StandardAnalyzer：
+单字分词：就是按照中文一个字一个字地进行分词。如：“我爱中国”，
+效果：“我”、“爱”、“中”、“国”。
+
+CJKAnalyzer
+二分法分词：按两个字进行切分。如：“我是中国人”，效果：“我是”、“是中”、“中国”“国人”。
+</code></pre><h2 id="使用中文分词器IKAnalyzer"><a href="#使用中文分词器IKAnalyzer" class="headerlink" title="使用中文分词器IKAnalyzer"></a>使用中文分词器IKAnalyzer</h2><pre><code>IKAnalyzer继承Lucene的Analyzer抽象类，
+使用IKAnalyzer和Lucene自带的分析器方法一样，将Analyzer测试代码改为IKAnalyzer测试中文分词效果。
+
+如果使用中文分词器ik-analyzer，就在索引和搜索程序中使用一致的分词器ik-analyzer。
+</code></pre><h3 id="添加jar包"><a href="#添加jar包" class="headerlink" title="添加jar包"></a>添加jar包</h3><pre><code>将 IKAnalyzer0212FF_u1.jar 导入工程
+</code></pre><h3 id="修改分词器代码"><a href="#修改分词器代码" class="headerlink" title="修改分词器代码"></a>修改分词器代码</h3><pre><code>// 创建中文分词器
+Analyzer analyzer = new IKAnalyzer();
+</code></pre><h2 id="扩展中文词库"><a href="#扩展中文词库" class="headerlink" title="扩展中文词库"></a>扩展中文词库</h2><p>从ikanalyzer包中拷贝配置文件到classpath下。</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE properties SYSTEM &quot;http://java.sun.com/dtd/properties.dtd&quot;&gt;  
+&lt;properties&gt;  
+
+    &lt;comment&gt;IK Analyzer 扩展配置&lt;/comment&gt;
+    &lt;!-- 用户可以在这里配置自己的扩展字典 --&gt;
+     &lt;entry key=&quot;ext_dict&quot;&gt;dicdata/mydict.dic&lt;/entry&gt; 
+     &lt;!-- 用户可以在这里配置自己的扩展停用词字典    --&gt;
+    &lt;entry key=&quot;ext_stopwords&quot;&gt;dicdata/ext_stopword.dic&lt;/entry&gt; 
+
+&lt;/properties&gt;
+</code></pre><p>如果想配置扩展词和停用词，就创建扩展词的文件和停用词的文件，文件的编码要是utf-8。</p>
+<p>注意：不要用记事本保存扩展词文件和停用词文件，那样的话，格式中是含有bom的。</p>
+<p>添加扩展词文件：ext.dic，在文件中添加关键字,如:</p>
+<pre><code>全文搜索
+路神
+等等
+</code></pre>
       
     </div>
 
@@ -470,7 +809,7 @@ Document只是Field的一个承载体，Field值即为要索引的内容，也�
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Field域"><span class="nav-number">1.</span> <span class="nav-text">Field域</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Field属性"><span class="nav-number">1.1.</span> <span class="nav-text">Field属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Field常用类型"><span class="nav-number">1.2.</span> <span class="nav-text">Field常用类型</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Field域"><span class="nav-number">1.</span> <span class="nav-text">Field域</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Field属性"><span class="nav-number">1.1.</span> <span class="nav-text">Field属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Field常用类型"><span class="nav-number">1.2.</span> <span class="nav-text">Field常用类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Field代码说明"><span class="nav-number">1.3.</span> <span class="nav-text">Field代码说明</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#索引维护"><span class="nav-number">2.</span> <span class="nav-text">索引维护</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#添加索引"><span class="nav-number">2.1.</span> <span class="nav-text">添加索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删除索引"><span class="nav-number">2.2.</span> <span class="nav-text">删除索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改索引"><span class="nav-number">2.3.</span> <span class="nav-text">修改索引</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#搜索"><span class="nav-number">3.</span> <span class="nav-text">搜索</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建查询的两种方法"><span class="nav-number">3.1.</span> <span class="nav-text">创建查询的两种方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通过Query子类搜索"><span class="nav-number">3.2.</span> <span class="nav-text">通过Query子类搜索</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TermQuery"><span class="nav-number">3.2.1.</span> <span class="nav-text">TermQuery</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NumbericRangeQuery"><span class="nav-number">3.2.2.</span> <span class="nav-text">NumbericRangeQuery</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BooleanQuery"><span class="nav-number">3.2.3.</span> <span class="nav-text">BooleanQuery</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通过QueryParser搜索"><span class="nav-number">3.3.</span> <span class="nav-text">通过QueryParser搜索</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#QueryParser"><span class="nav-number">3.3.1.</span> <span class="nav-text">QueryParser</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#代码实现"><span class="nav-number">3.3.1.1.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查询语法"><span class="nav-number">3.3.1.2.</span> <span class="nav-text">查询语法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MultiFieldQueryParser"><span class="nav-number">3.3.2.</span> <span class="nav-text">MultiFieldQueryParser</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TopDocs"><span class="nav-number">3.4.</span> <span class="nav-text">TopDocs</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#相关度排序"><span class="nav-number">4.</span> <span class="nav-text">相关度排序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是相关度排序"><span class="nav-number">4.1.</span> <span class="nav-text">什么是相关度排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关度打分"><span class="nav-number">4.2.</span> <span class="nav-text">相关度打分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置boost值影响相关度排序"><span class="nav-number">4.3.</span> <span class="nav-text">设置boost值影响相关度排序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#在创建索引时设置"><span class="nav-number">4.3.1.</span> <span class="nav-text">在创建索引时设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码实现-1"><span class="nav-number">4.3.2.</span> <span class="nav-text">代码实现</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#中文分词器"><span class="nav-number">5.</span> <span class="nav-text">中文分词器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是中文分词器"><span class="nav-number">5.1.</span> <span class="nav-text">什么是中文分词器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lucene自带的中文分词器"><span class="nav-number">5.2.</span> <span class="nav-text">Lucene自带的中文分词器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用中文分词器IKAnalyzer"><span class="nav-number">5.3.</span> <span class="nav-text">使用中文分词器IKAnalyzer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#添加jar包"><span class="nav-number">5.3.1.</span> <span class="nav-text">添加jar包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改分词器代码"><span class="nav-number">5.3.2.</span> <span class="nav-text">修改分词器代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#扩展中文词库"><span class="nav-number">5.4.</span> <span class="nav-text">扩展中文词库</span></a></li></ol></li></ol></div>
             
           </div>
         </section>
