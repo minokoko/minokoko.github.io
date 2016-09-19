@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="全文搜索,lucene," />
+  <meta name="keywords" content="lucene,全文搜索," />
 
 
 
@@ -84,36 +84,31 @@
 
 
 
-<meta name="description" content="全文搜索简介Lucene是apache下的开源的全文检索引擎工具包。
-
-Lucene不能独立运行提供服务，它只是让程序员使用它提供的类库进行全文检索功能的开发。
+<meta name="description" content="全文搜索简介全文检索首先将要查询的目标文档中的词提取出来，组成索引，通过查询索引达到搜索目标文档的目的。
+这种先建立索引，再对索引进行搜索的过程就叫全文检索（Full-text Search）。
 搜索引擎和站内搜索的区别搜索引擎搜索的内容是全互联网各种类型的数据。
 
 站内搜索搜索的内容只是本站内的信息，比如电商网站，搜索的功能，只会搜索本网站的商品信息。
-什么是全文检索全文检索是一种将文件中所有文本与检索项匹配的检索方法。它可以根">
+全文检索详解全文检索是一种将文件中所有文本">
 <meta property="og:type" content="article">
 <meta property="og:title" content="全文搜索引擎和lucene">
 <meta property="og:url" content="http://jessyon.com/2016/09/18/全文搜索引擎lucene/index.html">
 <meta property="og:site_name" content="OneStack">
-<meta property="og:description" content="全文搜索简介Lucene是apache下的开源的全文检索引擎工具包。
-
-Lucene不能独立运行提供服务，它只是让程序员使用它提供的类库进行全文检索功能的开发。
+<meta property="og:description" content="全文搜索简介全文检索首先将要查询的目标文档中的词提取出来，组成索引，通过查询索引达到搜索目标文档的目的。
+这种先建立索引，再对索引进行搜索的过程就叫全文检索（Full-text Search）。
 搜索引擎和站内搜索的区别搜索引擎搜索的内容是全互联网各种类型的数据。
 
 站内搜索搜索的内容只是本站内的信息，比如电商网站，搜索的功能，只会搜索本网站的商品信息。
-什么是全文检索全文检索是一种将文件中所有文本与检索项匹配的检索方法。它可以根">
-<meta property="og:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/lucene.jpg">
-<meta property="og:updated_time" content="2016-09-19T11:34:55.936Z">
+全文检索详解全文检索是一种将文件中所有文本">
+<meta property="og:updated_time" content="2016-09-19T11:46:54.869Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="全文搜索引擎和lucene">
-<meta name="twitter:description" content="全文搜索简介Lucene是apache下的开源的全文检索引擎工具包。
-
-Lucene不能独立运行提供服务，它只是让程序员使用它提供的类库进行全文检索功能的开发。
+<meta name="twitter:description" content="全文搜索简介全文检索首先将要查询的目标文档中的词提取出来，组成索引，通过查询索引达到搜索目标文档的目的。
+这种先建立索引，再对索引进行搜索的过程就叫全文检索（Full-text Search）。
 搜索引擎和站内搜索的区别搜索引擎搜索的内容是全互联网各种类型的数据。
 
 站内搜索搜索的内容只是本站内的信息，比如电商网站，搜索的功能，只会搜索本网站的商品信息。
-什么是全文检索全文检索是一种将文件中所有文本与检索项匹配的检索方法。它可以根">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/lucene.jpg">
+全文检索详解全文检索是一种将文件中所有文本">
 
 
 
@@ -303,13 +298,12 @@ Lucene不能独立运行提供服务，它只是让程序员使用它提供的�
       
 
       
-        <h1 id="全文搜索简介"><a href="#全文搜索简介" class="headerlink" title="全文搜索简介"></a>全文搜索简介</h1><pre><code>Lucene是apache下的开源的全文检索引擎工具包。
-
-Lucene不能独立运行提供服务，它只是让程序员使用它提供的类库进行全文检索功能的开发。
+        <h1 id="全文搜索简介"><a href="#全文搜索简介" class="headerlink" title="全文搜索简介"></a>全文搜索简介</h1><pre><code>全文检索首先将要查询的目标文档中的词提取出来，组成索引，通过查询索引达到搜索目标文档的目的。
+这种先建立索引，再对索引进行搜索的过程就叫全文检索（Full-text Search）。
 </code></pre><h1 id="搜索引擎和站内搜索的区别"><a href="#搜索引擎和站内搜索的区别" class="headerlink" title="搜索引擎和站内搜索的区别"></a>搜索引擎和站内搜索的区别</h1><pre><code>搜索引擎搜索的内容是全互联网各种类型的数据。
 
 站内搜索搜索的内容只是本站内的信息，比如电商网站，搜索的功能，只会搜索本网站的商品信息。
-</code></pre><h1 id="什么是全文检索"><a href="#什么是全文检索" class="headerlink" title="什么是全文检索"></a>什么是全文检索</h1><pre><code>全文检索是一种将文件中所有文本与检索项匹配的检索方法。它可以根据需要获得全文中有关章、节、段、句、词等信息。
+</code></pre><h1 id="全文检索详解"><a href="#全文检索详解" class="headerlink" title="全文检索详解"></a>全文检索详解</h1><pre><code>全文检索是一种将文件中所有文本与检索项匹配的检索方法。它可以根据需要获得全文中有关章、节、段、句、词等信息。
 计算机程序通过扫描文章中的每一个词，对每一个词建立一个索引，指明该词在文章中出现的次数和位置，
 当用户查询时根据建立的索引查找，类似于通过字典的检索字表查字的过程。 
 
@@ -357,24 +351,6 @@ windows的搜索也是顺序扫描，比如要找内容包含某一个字符串�
 比如学校的学生管理系统、企业人事管理系统等。
 </code></pre><h2 id="全文检索-1"><a href="#全文检索-1" class="headerlink" title="全文检索"></a>全文检索</h2><pre><code>对于数据量大、数据结构不固定的数据可采用全文检索方式搜索，
 比如百度、Google等搜索引擎、论坛站内搜索、电商网站站内搜索等。
-</code></pre><h1 id="什么是Lucene"><a href="#什么是Lucene" class="headerlink" title="什么是Lucene?"></a>什么是Lucene?</h1><pre><code>Lucene是apache下的一个开放源代码的全文检索引擎工具包。提供了完整的查询引擎和索引引擎，
-部分文本分析引擎。Lucene的目的是为软件开发人员提供一个简单易用的工具包，以方便的在目标系统中实现全文检索的功能。
-</code></pre><h1 id="Lucene与搜索引擎的区别"><a href="#Lucene与搜索引擎的区别" class="headerlink" title="Lucene与搜索引擎的区别"></a>Lucene与搜索引擎的区别</h1><pre><code>全文检索系统是按照全文检索理论建立起来的用于提供全文检索服务的软件系统。全文检索系统是一个可以运行的系统，
-包括建立索引、处理查询返回结果集、增加索引、优化索引结构等功能。例如：百度搜索、eclipse帮助搜索、淘宝网商品搜索。
-
-搜索引擎是全文检索技术最主要的一个应用，例如百度。搜索引擎起源于传统的信息全文检索理论，
-即计算机程序通过扫描每一篇文章中的每一个词，建立以词为单位的倒排文件，
-检索程序根据检索词在每一篇文章中出现的频率和每一个检索词在一篇文章中出现的概率，对包含这些检索词的文章进行排序，
-最后输出排序的结果。全文检索技术是搜索引擎的核心支撑技术。
-
-Lucene和搜索引擎不同，Lucene是一套用java写的全文检索的工具包，为应用程序提供了很多个api接口去调用，
-可以简单理解为是一套实现全文检索的类库，搜索引擎是一个全文检索系统，它是一个单独运行的软件。
-</code></pre><h1 id="Lucene实现全文检索的流程"><a href="#Lucene实现全文检索的流程" class="headerlink" title="Lucene实现全文检索的流程"></a>Lucene实现全文检索的流程</h1><p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/lucene.jpg" alt=""></p>
-<p>全文检索分为两大流程：索引流程、搜索流程</p>
-<pre><code>索引流程：采集数据 —&gt; 创建索引，将索引和文档保存到索引库中。
-搜索流程：创建查询对象 —&gt; 通过执行器执行查询并返回结果 —&gt; 对结果进行渲染响应给用户。
-
-Lucene不支持视图渲染。
 </code></pre>
       
     </div>
@@ -397,9 +373,9 @@ Lucene不支持视图渲染。
       
         <div class="post-tags">
           
-            <a href="/tags/全文搜索/" rel="tag">#全文搜索</a>
-          
             <a href="/tags/lucene/" rel="tag">#lucene</a>
+          
+            <a href="/tags/全文搜索/" rel="tag">#全文搜索</a>
           
         </div>
       
@@ -529,7 +505,7 @@ Lucene不支持视图渲染。
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#全文搜索简介"><span class="nav-number">1.</span> <span class="nav-text">全文搜索简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#搜索引擎和站内搜索的区别"><span class="nav-number">2.</span> <span class="nav-text">搜索引擎和站内搜索的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是全文检索"><span class="nav-number">3.</span> <span class="nav-text">什么是全文检索</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lucene和全文检索应用的区别"><span class="nav-number">4.</span> <span class="nav-text">Lucene和全文检索应用的区别:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#全文检索和数据库like查询的区别"><span class="nav-number">5.</span> <span class="nav-text">全文检索和数据库like查询的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据结构"><span class="nav-number">6.</span> <span class="nav-text">数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#结构化数据"><span class="nav-number">6.1.</span> <span class="nav-text">结构化数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#非结构化数据"><span class="nav-number">6.2.</span> <span class="nav-text">非结构化数据</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#搜索原理"><span class="nav-number">7.</span> <span class="nav-text">搜索原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#顺序扫描"><span class="nav-number">7.1.</span> <span class="nav-text">顺序扫描</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#全文检索"><span class="nav-number">7.2.</span> <span class="nav-text">全文检索</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#搜索效果"><span class="nav-number">8.</span> <span class="nav-text">搜索效果</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#匹配准确性"><span class="nav-number">8.1.</span> <span class="nav-text">匹配准确性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关度排序"><span class="nav-number">8.2.</span> <span class="nav-text">相关度排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搜索速度"><span class="nav-number">8.3.</span> <span class="nav-text">搜索速度</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#应用领域"><span class="nav-number">9.</span> <span class="nav-text">应用领域</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库like查询"><span class="nav-number">9.1.</span> <span class="nav-text">数据库like查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#全文检索-1"><span class="nav-number">9.2.</span> <span class="nav-text">全文检索</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是Lucene"><span class="nav-number">10.</span> <span class="nav-text">什么是Lucene?</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lucene与搜索引擎的区别"><span class="nav-number">11.</span> <span class="nav-text">Lucene与搜索引擎的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lucene实现全文检索的流程"><span class="nav-number">12.</span> <span class="nav-text">Lucene实现全文检索的流程</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#全文搜索简介"><span class="nav-number">1.</span> <span class="nav-text">全文搜索简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#搜索引擎和站内搜索的区别"><span class="nav-number">2.</span> <span class="nav-text">搜索引擎和站内搜索的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#全文检索详解"><span class="nav-number">3.</span> <span class="nav-text">全文检索详解</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lucene和全文检索应用的区别"><span class="nav-number">4.</span> <span class="nav-text">Lucene和全文检索应用的区别:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#全文检索和数据库like查询的区别"><span class="nav-number">5.</span> <span class="nav-text">全文检索和数据库like查询的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据结构"><span class="nav-number">6.</span> <span class="nav-text">数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#结构化数据"><span class="nav-number">6.1.</span> <span class="nav-text">结构化数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#非结构化数据"><span class="nav-number">6.2.</span> <span class="nav-text">非结构化数据</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#搜索原理"><span class="nav-number">7.</span> <span class="nav-text">搜索原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#顺序扫描"><span class="nav-number">7.1.</span> <span class="nav-text">顺序扫描</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#全文检索"><span class="nav-number">7.2.</span> <span class="nav-text">全文检索</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#搜索效果"><span class="nav-number">8.</span> <span class="nav-text">搜索效果</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#匹配准确性"><span class="nav-number">8.1.</span> <span class="nav-text">匹配准确性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关度排序"><span class="nav-number">8.2.</span> <span class="nav-text">相关度排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搜索速度"><span class="nav-number">8.3.</span> <span class="nav-text">搜索速度</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#应用领域"><span class="nav-number">9.</span> <span class="nav-text">应用领域</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库like查询"><span class="nav-number">9.1.</span> <span class="nav-text">数据库like查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#全文检索-1"><span class="nav-number">9.2.</span> <span class="nav-text">全文检索</span></a></li></ol></li></ol></div>
             
           </div>
         </section>

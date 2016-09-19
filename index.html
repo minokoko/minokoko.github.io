@@ -289,7 +289,75 @@
       
         
           
-            
+            <h1 id="什么是Lucene"><a href="#什么是Lucene" class="headerlink" title="什么是Lucene?"></a>什么是Lucene?</h1><pre><code>Lucene是apache下的一个开放源代码的全文检索引擎工具包。提供了完整的查询引擎和索引引擎，
+部分文本分析引擎。Lucene的目的是为软件开发人员提供一个简单易用的工具包，以方便的在目标系统中实现全文检索的功能。
+</code></pre><h1 id="Lucene与搜索引擎的区别"><a href="#Lucene与搜索引擎的区别" class="headerlink" title="Lucene与搜索引擎的区别"></a>Lucene与搜索引擎的区别</h1><pre><code>全文检索系统是按照全文检索理论建立起来的用于提供全文检索服务的软件系统。全文检索系统是一个可以运行的系统，
+包括建立索引、处理查询返回结果集、增加索引、优化索引结构等功能。例如：百度搜索、eclipse帮助搜索、淘宝网商品搜索。
+
+搜索引擎是全文检索技术最主要的一个应用，例如百度。搜索引擎起源于传统的信息全文检索理论，
+即计算机程序通过扫描每一篇文章中的每一个词，建立以词为单位的倒排文件，
+检索程序根据检索词在每一篇文章中出现的频率和每一个检索词在一篇文章中出现的概率，对包含这些检索词的文章进行排序，
+最后输出排序的结果。全文检索技术是搜索引擎的核心支撑技术。
+
+Lucene和搜索引擎不同，Lucene是一套用java写的全文检索的工具包，为应用程序提供了很多个api接口去调用，
+可以简单理解为是一套实现全文检索的类库，搜索引擎是一个全文检索系统，它是一个单独运行的软件。
+</code></pre><h1 id="Lucene实现全文检索的流程"><a href="#Lucene实现全文检索的流程" class="headerlink" title="Lucene实现全文检索的流程"></a>Lucene实现全文检索的流程</h1><p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/lucene.jpg" alt=""></p>
+<h2 id="全文检索的流程分为两大部分：索引流程、搜索流程。"><a href="#全文检索的流程分为两大部分：索引流程、搜索流程。" class="headerlink" title="全文检索的流程分为两大部分：索引流程、搜索流程。"></a>全文检索的流程分为两大部分：索引流程、搜索流程。</h2><pre><code>索引流程：即采集数据 -&gt; 构建文档对象  -&gt; 分析文档（分词 -&gt; 创建索引。
+搜索流程：即用户通过搜索界面 -&gt; 创建查询 -&gt; 执行搜索，搜索器从索引库搜索 -&gt; 渲染搜索结果。
+</code></pre><h1 id="入门程序"><a href="#入门程序" class="headerlink" title="入门程序"></a>入门程序</h1><p>使用Lucene实现电商项目中图书类商品的索引和搜索功能。</p>
+<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><pre><code>Jdk环境：1.7.0_72
+Ide环境：eclipse indigo
+数据库环境：mysql 5.1
+Lucene：4.10.3
+</code></pre><h2 id="Lucene下载安装"><a href="#Lucene下载安装" class="headerlink" title="Lucene下载安装"></a>Lucene下载安装</h2><p>Lucene是开发全文检索功能的工具包，使用时从官方网站下载，并解压。</p>
+<pre><code>官方网站：http://lucene.apache.org/ 
+目前最新版本：5.2.1
+
+下载地址：http://archive.apache.org/dist/lucene/java/
+
+下载版本：4.10.3
+JDK要求：1.7以上（从版本4.8开始，不支持1.7以下）
+</code></pre><h2 id="工程搭建"><a href="#工程搭建" class="headerlink" title="工程搭建"></a>工程搭建</h2><pre><code>1.创建java工程
+2.添加jar包,入门程序只需要添加以下jar包：
+
+    mysql5.1驱动包：mysql-connector-java-5.1.7-bin.jar
+    核心包：lucene-core-4.10.3.jar
+    分析器通用包：lucene-analyzers-common-4.10.3.jar
+    查询解析器包：lucene-queryparser-4.10.3.jar
+    junit包：junit-4.9.jar
+</code></pre><h1 id="索引流程"><a href="#索引流程" class="headerlink" title="索引流程"></a>索引流程</h1><p>对文档索引的过程，就是将用户要搜索的文档内容进行索引，然后把索引存储在索引库（index）中。</p>
+<h2 id="为什么要采集数据"><a href="#为什么要采集数据" class="headerlink" title="为什么要采集数据?"></a>为什么要采集数据?</h2><pre><code>全文检索要搜索的数据信息格式多种多样，拿搜索引擎（百度， google）来说，
+通过搜索引擎网站能搜索互联网站上的网页(html)、互联网上的音乐(mp3..)、视频(avi..)、pdf电子书等。
+全文检索搜索的这些数据称为非结构化数据。
+</code></pre><p>什么是非结构化数据？</p>
+<pre><code>结构化数据：指具有固定格式或有限长度的数据，如数据库，元数据等。
+非结构化数据：指不定长或无固定格式的数据，如邮件，word文档等。
+</code></pre><p>如何对结构化数据搜索？</p>
+<pre><code>由于结构化数据是固定格式，所以就可以针对固定格式的数据设计算法来搜索，
+比如数据库like查询，like查询采用顺序扫描法，使用关键字匹配内容，对于内容量大的like查询速度慢。
+</code></pre><p>如何对非结构化数据搜索？</p>
+<pre><code>需要将所有要搜索的非结构化数据通过技术手段采集到一个固定的地方，
+将这些非结构化的数据想办法组成结构化的数据，再以一定的算法去搜索。
+</code></pre><h2 id="如何采集数据"><a href="#如何采集数据" class="headerlink" title="如何采集数据?"></a>如何采集数据?</h2><pre><code>采集数据技术有哪些？
+1、对于互联网上网页采用http将网页抓取到本地生成html文件。 
+2、如果数据在数据库中就连接数据库读取表中的数据。
+3、如果数据是文件系统中的某个文件，就通过文件系统读取文件的内容。
+</code></pre><h3 id="网页采集-常用solr"><a href="#网页采集-常用solr" class="headerlink" title="网页采集(常用solr)"></a>网页采集(常用solr)</h3><pre><code>因为目前搜索引擎主要搜索数据的来源是互联网，搜索引擎使用一种爬虫程序抓取网页（ 通过http抓取html网页信息），
+以下是一些爬虫项目：
+
+Solr（http://lucene.apache.org/solr） ，solr是apache的一个子项目，支持从关系数据库、xml文档中提取原始数据。
+
+Nutch（http://lucene.apache.org/nutch）, Nutch是apache的一个子项目，
+包括大规模爬虫工具，能够抓取和分辨web网站数据。
+
+jsoup（http://jsoup.org/ ），jsoup 是一款Java 的HTML解析器，可直接解析某个URL地址、HTML文本内容。
+它提供了一套非常省力的API，可通过DOM，CSS以及类似于jQuery的操作方法来取出和操作数据。
+
+heritrix（http://sourceforge.net/projects/archive-crawler/files/），Heritrix 是一个由 java 开发的、开源的网络爬虫，
+用户可以使用它来从网上抓取想要的资源。其最出色之处在于它良好的可扩展性，方便用户实现自己的抓取逻辑。
+</code></pre><h3 id="数据库采集"><a href="#数据库采集" class="headerlink" title="数据库采集"></a>数据库采集</h3><p>针对电商站内搜索功能，全文检索的数据源在数据库中，需要通过jdbc访问数据库中book表的内容。</p>
+<p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/lucene_database.jpg" alt=""></p>
+
           
         
       
@@ -389,13 +457,12 @@
       
         
           
-            <h1 id="全文搜索简介"><a href="#全文搜索简介" class="headerlink" title="全文搜索简介"></a>全文搜索简介</h1><pre><code>Lucene是apache下的开源的全文检索引擎工具包。
-
-Lucene不能独立运行提供服务，它只是让程序员使用它提供的类库进行全文检索功能的开发。
+            <h1 id="全文搜索简介"><a href="#全文搜索简介" class="headerlink" title="全文搜索简介"></a>全文搜索简介</h1><pre><code>全文检索首先将要查询的目标文档中的词提取出来，组成索引，通过查询索引达到搜索目标文档的目的。
+这种先建立索引，再对索引进行搜索的过程就叫全文检索（Full-text Search）。
 </code></pre><h1 id="搜索引擎和站内搜索的区别"><a href="#搜索引擎和站内搜索的区别" class="headerlink" title="搜索引擎和站内搜索的区别"></a>搜索引擎和站内搜索的区别</h1><pre><code>搜索引擎搜索的内容是全互联网各种类型的数据。
 
 站内搜索搜索的内容只是本站内的信息，比如电商网站，搜索的功能，只会搜索本网站的商品信息。
-</code></pre><h1 id="什么是全文检索"><a href="#什么是全文检索" class="headerlink" title="什么是全文检索"></a>什么是全文检索</h1><pre><code>全文检索是一种将文件中所有文本与检索项匹配的检索方法。它可以根据需要获得全文中有关章、节、段、句、词等信息。
+</code></pre><h1 id="全文检索详解"><a href="#全文检索详解" class="headerlink" title="全文检索详解"></a>全文检索详解</h1><pre><code>全文检索是一种将文件中所有文本与检索项匹配的检索方法。它可以根据需要获得全文中有关章、节、段、句、词等信息。
 计算机程序通过扫描文章中的每一个词，对每一个词建立一个索引，指明该词在文章中出现的次数和位置，
 当用户查询时根据建立的索引查找，类似于通过字典的检索字表查字的过程。 
 
@@ -443,24 +510,6 @@ windows的搜索也是顺序扫描，比如要找内容包含某一个字符串�
 比如学校的学生管理系统、企业人事管理系统等。
 </code></pre><h2 id="全文检索-1"><a href="#全文检索-1" class="headerlink" title="全文检索"></a>全文检索</h2><pre><code>对于数据量大、数据结构不固定的数据可采用全文检索方式搜索，
 比如百度、Google等搜索引擎、论坛站内搜索、电商网站站内搜索等。
-</code></pre><h1 id="什么是Lucene"><a href="#什么是Lucene" class="headerlink" title="什么是Lucene?"></a>什么是Lucene?</h1><pre><code>Lucene是apache下的一个开放源代码的全文检索引擎工具包。提供了完整的查询引擎和索引引擎，
-部分文本分析引擎。Lucene的目的是为软件开发人员提供一个简单易用的工具包，以方便的在目标系统中实现全文检索的功能。
-</code></pre><h1 id="Lucene与搜索引擎的区别"><a href="#Lucene与搜索引擎的区别" class="headerlink" title="Lucene与搜索引擎的区别"></a>Lucene与搜索引擎的区别</h1><pre><code>全文检索系统是按照全文检索理论建立起来的用于提供全文检索服务的软件系统。全文检索系统是一个可以运行的系统，
-包括建立索引、处理查询返回结果集、增加索引、优化索引结构等功能。例如：百度搜索、eclipse帮助搜索、淘宝网商品搜索。
-
-搜索引擎是全文检索技术最主要的一个应用，例如百度。搜索引擎起源于传统的信息全文检索理论，
-即计算机程序通过扫描每一篇文章中的每一个词，建立以词为单位的倒排文件，
-检索程序根据检索词在每一篇文章中出现的频率和每一个检索词在一篇文章中出现的概率，对包含这些检索词的文章进行排序，
-最后输出排序的结果。全文检索技术是搜索引擎的核心支撑技术。
-
-Lucene和搜索引擎不同，Lucene是一套用java写的全文检索的工具包，为应用程序提供了很多个api接口去调用，
-可以简单理解为是一套实现全文检索的类库，搜索引擎是一个全文检索系统，它是一个单独运行的软件。
-</code></pre><h1 id="Lucene实现全文检索的流程"><a href="#Lucene实现全文检索的流程" class="headerlink" title="Lucene实现全文检索的流程"></a>Lucene实现全文检索的流程</h1><p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/lucene.jpg" alt=""></p>
-<p>全文检索分为两大流程：索引流程、搜索流程</p>
-<pre><code>索引流程：采集数据 —&gt; 创建索引，将索引和文档保存到索引库中。
-搜索流程：创建查询对象 —&gt; 通过执行器执行查询并返回结果 —&gt; 对结果进行渲染响应给用户。
-
-Lucene不支持视图渲染。
 </code></pre>
           
         
