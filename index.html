@@ -357,6 +357,75 @@ heritrix（http://sourceforge.net/projects/archive-crawler/files/），Heritrix 
 用户可以使用它来从网上抓取想要的资源。其最出色之处在于它良好的可扩展性，方便用户实现自己的抓取逻辑。
 </code></pre><h3 id="数据库采集"><a href="#数据库采集" class="headerlink" title="数据库采集"></a>数据库采集</h3><p>针对电商站内搜索功能，全文检索的数据源在数据库中，需要通过jdbc访问数据库中book表的内容。</p>
 <p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/lucene_database.jpg" alt=""></p>
+<h4 id="po"><a href="#po" class="headerlink" title="po"></a>po</h4><pre><code>    public class Book {
+    // 图书ID
+    private Integer id;
+    // 图书名称
+    private String name;
+    // 图书价格
+    private Float price;
+    // 图书图片
+    private String pic;
+    // 图书描述
+    private String description;
+}
+</code></pre><h4 id="Dao"><a href="#Dao" class="headerlink" title="Dao"></a>Dao</h4><pre><code>    public interface BookDao {
+        // 图书查询
+        public List&lt;Book&gt; queryBookList() throws Exception;
+        }
+
+
+    public class BookDaoImpl implements BookDao {
+
+    @Override
+    public List&lt;Book&gt; queryBookList() throws Exception {
+        // 数据库链接
+        Connection connection = null;
+
+        // 预编译statement
+        PreparedStatement preparedStatement = null;
+
+        // 结果集
+        ResultSet resultSet = null;
+
+        // 图书列表
+        List&lt;Book&gt; list = new ArrayList&lt;Book&gt;();
+
+        try {
+            // 加载数据库驱动
+            Class.forName(&quot;com.mysql.jdbc.Driver&quot;);
+            // 连接数据库
+            connection = DriverManager.getConnection(
+                    &quot;jdbc:mysql://localhost:3306/lucene&quot;, &quot;root&quot;, &quot;root&quot;);
+
+            // SQL语句
+            String sql = &quot;SELECT * FROM book&quot;;
+            // 创建preparedStatement
+            preparedStatement = connection.prepareStatement(sql);
+
+            // 获取结果集
+            resultSet = preparedStatement.executeQuery();
+
+            // 结果集解析
+            while (resultSet.next()) {
+                Book book = new Book();
+                book.setId(resultSet.getInt(&quot;id&quot;));
+                book.setName(resultSet.getString(&quot;name&quot;));
+                book.setPrice(resultSet.getFloat(&quot;price&quot;));
+                book.setPic(resultSet.getString(&quot;pic&quot;));
+                book.setDescription(resultSet.getString(&quot;description&quot;));
+                list.add(book);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+}
+</code></pre><h2 id="索引文件的逻辑结构"><a href="#索引文件的逻辑结构" class="headerlink" title="索引文件的逻辑结构"></a>索引文件的逻辑结构</h2><p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/lucene_index.jpg" alt=""></p>
 
           
         

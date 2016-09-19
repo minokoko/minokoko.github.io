@@ -98,7 +98,8 @@ Lucene与搜索引擎的区别全文检索系统是按照全文检索理论建�
 包括建立索引、处理查询返">
 <meta property="og:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/lucene.jpg">
 <meta property="og:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/lucene_database.jpg">
-<meta property="og:updated_time" content="2016-09-19T12:00:07.499Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/lucene_index.jpg">
+<meta property="og:updated_time" content="2016-09-19T12:09:09.522Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="lucene入门">
 <meta name="twitter:description" content="什么是Lucene?Lucene是apache下的一个开放源代码的全文检索引擎工具包。提供了完整的查询引擎和索引引擎，
@@ -363,6 +364,75 @@ heritrix（http://sourceforge.net/projects/archive-crawler/files/），Heritrix 
 用户可以使用它来从网上抓取想要的资源。其最出色之处在于它良好的可扩展性，方便用户实现自己的抓取逻辑。
 </code></pre><h3 id="数据库采集"><a href="#数据库采集" class="headerlink" title="数据库采集"></a>数据库采集</h3><p>针对电商站内搜索功能，全文检索的数据源在数据库中，需要通过jdbc访问数据库中book表的内容。</p>
 <p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/lucene_database.jpg" alt=""></p>
+<h4 id="po"><a href="#po" class="headerlink" title="po"></a>po</h4><pre><code>    public class Book {
+    // 图书ID
+    private Integer id;
+    // 图书名称
+    private String name;
+    // 图书价格
+    private Float price;
+    // 图书图片
+    private String pic;
+    // 图书描述
+    private String description;
+}
+</code></pre><h4 id="Dao"><a href="#Dao" class="headerlink" title="Dao"></a>Dao</h4><pre><code>    public interface BookDao {
+        // 图书查询
+        public List&lt;Book&gt; queryBookList() throws Exception;
+        }
+
+
+    public class BookDaoImpl implements BookDao {
+
+    @Override
+    public List&lt;Book&gt; queryBookList() throws Exception {
+        // 数据库链接
+        Connection connection = null;
+
+        // 预编译statement
+        PreparedStatement preparedStatement = null;
+
+        // 结果集
+        ResultSet resultSet = null;
+
+        // 图书列表
+        List&lt;Book&gt; list = new ArrayList&lt;Book&gt;();
+
+        try {
+            // 加载数据库驱动
+            Class.forName(&quot;com.mysql.jdbc.Driver&quot;);
+            // 连接数据库
+            connection = DriverManager.getConnection(
+                    &quot;jdbc:mysql://localhost:3306/lucene&quot;, &quot;root&quot;, &quot;root&quot;);
+
+            // SQL语句
+            String sql = &quot;SELECT * FROM book&quot;;
+            // 创建preparedStatement
+            preparedStatement = connection.prepareStatement(sql);
+
+            // 获取结果集
+            resultSet = preparedStatement.executeQuery();
+
+            // 结果集解析
+            while (resultSet.next()) {
+                Book book = new Book();
+                book.setId(resultSet.getInt(&quot;id&quot;));
+                book.setName(resultSet.getString(&quot;name&quot;));
+                book.setPrice(resultSet.getFloat(&quot;price&quot;));
+                book.setPic(resultSet.getString(&quot;pic&quot;));
+                book.setDescription(resultSet.getString(&quot;description&quot;));
+                list.add(book);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+}
+</code></pre><h2 id="索引文件的逻辑结构"><a href="#索引文件的逻辑结构" class="headerlink" title="索引文件的逻辑结构"></a>索引文件的逻辑结构</h2><p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/lucene_index.jpg" alt=""></p>
 
       
     </div>
@@ -513,7 +583,7 @@ heritrix（http://sourceforge.net/projects/archive-crawler/files/），Heritrix 
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是Lucene"><span class="nav-number">1.</span> <span class="nav-text">什么是Lucene?</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lucene与搜索引擎的区别"><span class="nav-number">2.</span> <span class="nav-text">Lucene与搜索引擎的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lucene实现全文检索的流程"><span class="nav-number">3.</span> <span class="nav-text">Lucene实现全文检索的流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#全文检索的流程分为两大部分：索引流程、搜索流程。"><span class="nav-number">3.1.</span> <span class="nav-text">全文检索的流程分为两大部分：索引流程、搜索流程。</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#入门程序"><span class="nav-number">4.</span> <span class="nav-text">入门程序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境准备"><span class="nav-number">4.1.</span> <span class="nav-text">环境准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lucene下载安装"><span class="nav-number">4.2.</span> <span class="nav-text">Lucene下载安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工程搭建"><span class="nav-number">4.3.</span> <span class="nav-text">工程搭建</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#索引流程"><span class="nav-number">5.</span> <span class="nav-text">索引流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要采集数据"><span class="nav-number">5.1.</span> <span class="nav-text">为什么要采集数据?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何采集数据"><span class="nav-number">5.2.</span> <span class="nav-text">如何采集数据?</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#网页采集-常用solr"><span class="nav-number">5.2.1.</span> <span class="nav-text">网页采集(常用solr)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库采集"><span class="nav-number">5.2.2.</span> <span class="nav-text">数据库采集</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是Lucene"><span class="nav-number">1.</span> <span class="nav-text">什么是Lucene?</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lucene与搜索引擎的区别"><span class="nav-number">2.</span> <span class="nav-text">Lucene与搜索引擎的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lucene实现全文检索的流程"><span class="nav-number">3.</span> <span class="nav-text">Lucene实现全文检索的流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#全文检索的流程分为两大部分：索引流程、搜索流程。"><span class="nav-number">3.1.</span> <span class="nav-text">全文检索的流程分为两大部分：索引流程、搜索流程。</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#入门程序"><span class="nav-number">4.</span> <span class="nav-text">入门程序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境准备"><span class="nav-number">4.1.</span> <span class="nav-text">环境准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lucene下载安装"><span class="nav-number">4.2.</span> <span class="nav-text">Lucene下载安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工程搭建"><span class="nav-number">4.3.</span> <span class="nav-text">工程搭建</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#索引流程"><span class="nav-number">5.</span> <span class="nav-text">索引流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要采集数据"><span class="nav-number">5.1.</span> <span class="nav-text">为什么要采集数据?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何采集数据"><span class="nav-number">5.2.</span> <span class="nav-text">如何采集数据?</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#网页采集-常用solr"><span class="nav-number">5.2.1.</span> <span class="nav-text">网页采集(常用solr)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库采集"><span class="nav-number">5.2.2.</span> <span class="nav-text">数据库采集</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#po"><span class="nav-number">5.2.2.1.</span> <span class="nav-text">po</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Dao"><span class="nav-number">5.2.2.2.</span> <span class="nav-text">Dao</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#索引文件的逻辑结构"><span class="nav-number">5.3.</span> <span class="nav-text">索引文件的逻辑结构</span></a></li></ol></li></ol></div>
             
           </div>
         </section>
