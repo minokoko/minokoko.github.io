@@ -238,8 +238,108 @@
             
               
                 
+                <a class="post-title-link" href="/2016/09/19/lucene入门/" itemprop="url">
+                  lucene入门
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-19T19:35:42+08:00" content="2016-09-19">
+              2016-09-19
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/19/lucene入门/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/19/lucene入门/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/09/18/全文搜索引擎lucene/" itemprop="url">
-                  全文搜索引擎lucene
+                  全文搜索引擎和lucene
                 </a>
               
             
@@ -1818,176 +1918,11 @@ NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为�
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/16/服务器搭建-三-fastDFS图片服务器/" itemprop="url">
-                  服务器搭建(三) fastDFS图片服务器
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-16T09:02:42+08:00" content="2016-09-16">
-              2016-09-16
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/09/16/服务器搭建-三-fastDFS图片服务器/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/16/服务器搭建-三-fastDFS图片服务器/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="fastDFS流程"><a href="#fastDFS流程" class="headerlink" title="fastDFS流程"></a>fastDFS流程</h2><p>可以使用一台虚拟机来模拟，只有一个Tracker、一个Storage服务。配置nginx访问图片。<br><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/fastDFS.jpg" alt=""></p>
-<h1 id="fastDFS搭建"><a href="#fastDFS搭建" class="headerlink" title="fastDFS搭建"></a><strong>fastDFS搭建</strong></h1><p>第一步：把fastDFS都上传到linux系统。</p>
-<p>第二步：安装FastDFS之前，先安装libevent工具包。</p>
-<pre><code>yum -y install libevent
-</code></pre><p>第三步：安装libfastcommonV1.0.7工具包。</p>
-<pre><code>1、解压缩
-2、./make.sh
-3、./make.sh install
-4、把/usr/lib64/libfastcommon.so文件向/usr/lib/下复制一份
-</code></pre><p>第四步：安装Tracker服务。</p>
-<pre><code>1、解压缩fastDFS,将文件移动到/usr/local下
-2、./make.sh
-3、./make.sh install
-安装后在/usr/bin/目录下有以fdfs开头的文件都是编译出来的。
-配置文件都放到/etc/fdfs文件夹
-4、把/usr/local/FastDFS/conf目录下的所有的配置文件都复制到/etc/fdfs下。
-   cp * /etc/fdfs/
-5、配置tracker服务。修改/usr/local/FastDFS/conf/tracker.conf文件。
-6、修改tracker.conf中22行,base_path=/home/fastdfs/tracker
-7、启动tracker。/usr/bin/fdfs_trackerd /etc/fdfs/tracker.conf
-重启使用命令：/usr/bin/fdfs_trackerd /etc/fdfs/tracker.conf restart
-</code></pre><p>第五步：安装storage服务。</p>
-<p>1、如果是在不同的服务器安装，第四步的1~4需要重新执行。<br>2、配置storage服务。修改/usr/local/FastDFS/conf/storage.conf文件</p>
-<pre><code>41行 base_path=/home/fastdfs/storage
-109行 store_path0=/home/fastdfs/storage
-118行 tracker_server=115.159.93.201:22122
-</code></pre><p>3、启动storage服务。</p>
-<pre><code>/usr/bin/fdfs_storaged /etc/fdfs/storage.conf restart    
-</code></pre><p>第六步：测试服务。</p>
-<p>1、修改配置文件/etc/fdfs/client.conf</p>
-<pre><code>10行 base_path=/home/fastdfs/client
-14行 tracker_server=115.159.93.201:22122
-</code></pre><p>2、测试 </p>
-<pre><code>/usr/bin/fdfs_test /etc/fdfs/client.conf upload anti-steal.jpg (在/etc/fdfs目录下)
-
-生成 http://115.159.93.201/group1/M00/00/00/CmkaiVfbXw-ABpAJAABdrZgsqUU916_big.jpg 为图片的地址
-</code></pre><p>第七步：搭建nginx提供http服务。</p>
-<p>可以使用官方提供的nginx插件。要使用nginx插件需要重新编译。<br>fastdfs-nginx-module_v1.16.tar.gz</p>
-<pre><code>1、解压插件压缩包,并移动到/usr/local
-2、修改/usr/local/fastdfs-nginx-module/src/config文件，把其中的local去掉。
-</code></pre><p>3、对nginx重新config</p>
-<pre><code>./configure \
---prefix=/usr/local/nginx \
---pid-path=/var/run/nginx/nginx.pid \
---lock-path=/var/lock/nginx.lock \
---error-log-path=/var/log/nginx/error.log \
---http-log-path=/var/log/nginx/access.log \
---with-http_gzip_static_module \
---http-client-body-temp-path=/var/temp/nginx/client \
---http-proxy-temp-path=/var/temp/nginx/proxy \
---http-fastcgi-temp-path=/var/temp/nginx/fastcgi \
---http-uwsgi-temp-path=/var/temp/nginx/uwsgi \
---http-scgi-temp-path=/var/temp/nginx/scgi \
---add-module=/usr/local/fastdfs-nginx-module/src
-</code></pre><p>4、make<br>5、make install<br>6、把/root/fastdfs-nginx-module/src/mod_fastdfs.conf文件复制到/etc/fdfs目录下。编辑：</p>
-<pre><code>40行 tracker_server=115.159.93.201:22122
-53行 url_have_group_name = true
-62行 store_path0=/home/fastdfs/storage
-</code></pre><p>7、nginx的配置<br>        在nginx的配置文件中添加一个Server：<br>        server {<br>                listen       80;<br>                server_name  115.159.93.201;</p>
-<pre><code>        location /group1/M00/{
-                #root /home/FastDFS/fdfs_storage/data;
-                ngx_fastdfs_module;
-        }
-}
-</code></pre><p>8、将libfdfsclient.so拷贝至/usr/lib下<br>cp /usr/lib64/libfdfsclient.so /usr/lib/<br>9、启动nginx</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2028,7 +1963,7 @@ NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为�
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">30</span>
+              <span class="site-state-item-count">31</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="redis,String," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -84,43 +84,15 @@
 
 
 
-<meta name="description" content="String类型SET key value 赋值
-127.0.0.1:6379&amp;gt; set test 123
-OK
-GET key  取值
-127.0.0.1:6379&amp;gt; get test
-&amp;quot;123“
-GETSET key value  取值并赋值
-127.0.0.1:6379&amp;gt; getset s2 222
-&amp;quot;111&amp;quot;
-127.0.0.1:6379&amp;g">
-<meta property="og:type" content="article">
-<meta property="og:title" content="redis数据类型String命令">
-<meta property="og:url" content="http://jessyon.com/2016/09/16/redis数据类型及string命令/index.html">
+<meta name="description">
+<meta property="og:type" content="website">
+<meta property="og:title" content="OneStack">
+<meta property="og:url" content="http://jessyon.com/page/4/index.html">
 <meta property="og:site_name" content="OneStack">
-<meta property="og:description" content="String类型SET key value 赋值
-127.0.0.1:6379&amp;gt; set test 123
-OK
-GET key  取值
-127.0.0.1:6379&amp;gt; get test
-&amp;quot;123“
-GETSET key value  取值并赋值
-127.0.0.1:6379&amp;gt; getset s2 222
-&amp;quot;111&amp;quot;
-127.0.0.1:6379&amp;g">
-<meta property="og:updated_time" content="2016-09-16T06:38:35.413Z">
+<meta property="og:description">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="redis数据类型String命令">
-<meta name="twitter:description" content="String类型SET key value 赋值
-127.0.0.1:6379&amp;gt; set test 123
-OK
-GET key  取值
-127.0.0.1:6379&amp;gt; get test
-&amp;quot;123“
-GETSET key value  取值并赋值
-127.0.0.1:6379&amp;gt; getset s2 222
-&amp;quot;111&amp;quot;
-127.0.0.1:6379&amp;g">
+<meta name="twitter:title" content="OneStack">
+<meta name="twitter:description">
 
 
 
@@ -141,9 +113,9 @@ GETSET key value  取值并赋值
 
 
 
-  <link rel="canonical" href="http://jessyon.com/2016/09/16/redis数据类型及string命令/"/>
+  <link rel="canonical" href="http://jessyon.com/page/4/"/>
 
-  <title> redis数据类型String命令 | OneStack </title>
+  <title> OneStack </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -164,7 +136,9 @@ GETSET key value  取值并赋值
     
   
 
-  <div class="container one-collumn sidebar-position-left page-post-detail ">
+  <div class="container one-collumn sidebar-position-left 
+   page-home 
+ ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -241,9 +215,9 @@ GETSET key value  取值并赋值
         <div class="content-wrap">
           <div id="content" class="content">
             
-
-  <div id="posts" class="posts-expand">
+  <section id="posts" class="posts-expand">
     
+      
 
   
   
@@ -263,7 +237,10 @@ GETSET key value  取值并赋值
             
             
               
-                redis数据类型String命令
+                
+                <a class="post-title-link" href="/2016/04/29/我是如何使用hexo搭建这个blog的/" itemprop="url">
+                  我是如何使用hexo搭建这个blog的
+                </a>
               
             
           </h1>
@@ -275,8 +252,8 @@ GETSET key value  取值并赋值
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-16T13:59:39+08:00" content="2016-09-16">
-              2016-09-16
+            <time itemprop="dateCreated" datetime="2016-04-29T10:56:41+08:00" content="2016-04-29">
+              2016-04-29
             </time>
           </span>
 
@@ -286,8 +263,8 @@ GETSET key value  取值并赋值
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/09/16/redis数据类型及string命令/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/16/redis数据类型及string命令/" itemprop="commentsCount"></span>
+                <a href="/2016/04/29/我是如何使用hexo搭建这个blog的/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/29/我是如何使用hexo搭建这个blog的/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -310,143 +287,81 @@ GETSET key value  取值并赋值
       
 
       
-        <h1 id="String类型"><a href="#String类型" class="headerlink" title="String类型"></a><strong>String类型</strong></h1><p>SET key value 赋值</p>
-<pre><code>127.0.0.1:6379&gt; set test 123
-OK
-</code></pre><p>GET key  取值</p>
-<pre><code>127.0.0.1:6379&gt; get test
-&quot;123“
-</code></pre><p>GETSET key value  取值并赋值</p>
-<pre><code>127.0.0.1:6379&gt; getset s2 222
-&quot;111&quot;
-127.0.0.1:6379&gt; get s2
-&quot;222&quot;
-</code></pre><p>DEL key 删除</p>
-<pre><code>127.0.0.1:6379&gt; del test
-(integer) 1
-</code></pre><p>incr key 递增数字 </p>
-<p>当存储的字符串是整数时，Redis提供了一个实用的命令INCR，其作用是让当前键值递增，并返回递增后的值。</p>
-<pre><code>127.0.0.1:6379&gt; incr num
-(integer) 1
-127.0.0.1:6379&gt; incr num
-(integer) 2
-127.0.0.1:6379&gt; incr num
-(integer) 3
-</code></pre><p>INCRBY key increment 增加指定的整数 </p>
-<pre><code>127.0.0.1:6379&gt; incrby num 2
-(integer) 5
-127.0.0.1:6379&gt; incrby num 2
-(integer) 7
-127.0.0.1:6379&gt; incrby num 2
-(integer) 9
-</code></pre><p>DECR key  递减数值</p>
-<pre><code>127.0.0.1:6379&gt; decr num
-(integer) 9
-127.0.0.1:6379&gt; decr num
-(integer) 8
-</code></pre><p>DECRBY key decrement      减少指定的整数 </p>
-<pre><code>127.0.0.1:6379&gt; decr num
-(integer) 6
-127.0.0.1:6379&gt; decr num
-(integer) 5
-127.0.0.1:6379&gt; decrby num 3
-(integer) 2
-127.0.0.1:6379&gt; decrby num 3
-(integer) -1
-</code></pre><p>APPEND key value      向尾部追加值 </p>
-<pre><code>127.0.0.1:6379&gt; set str hello
-OK
-127.0.0.1:6379&gt; append str &quot; world!&quot;
-(integer) 12
-127.0.0.1:6379&gt; get str 
-&quot;hello world!&quot;
-</code></pre><p>STRLEN key 获取字符串长度</p>
-<pre><code>127.0.0.1:6379&gt; strlen str 
-(integer) 0
-127.0.0.1:6379&gt; set str hello
-OK
-127.0.0.1:6379&gt; strlen str 
-(integer) 5
-</code></pre><p>MSET key value [key value …] 同时设置多个值</p>
-<pre><code>127.0.0.1:6379&gt; mset k1 v1 k2 v2 k3 v3
-OK
-</code></pre><p>MGET key [key …] 同时取多个值</p>
-<pre><code>127.0.0.1:6379&gt; get k1
-&quot;v1&quot;
-127.0.0.1:6379&gt; mget k1 k3
-1) &quot;v1&quot;
-2) &quot;v3&quot;
-</code></pre><h1 id="String应用"><a href="#String应用" class="headerlink" title="String应用"></a><strong>String应用</strong></h1><p>自增主键:  商品编号、订单号采用string的递增数字特性生成。</p>
-<pre><code>定义商品编号key：items:id
-192.168.101.3:7003&gt; INCR items:id
-(integer) 2
-192.168.101.3:7003&gt; INCR items:id
-(integer) 3
-</code></pre><h1 id="String存在的问题"><a href="#String存在的问题" class="headerlink" title="String存在的问题"></a><strong>String存在的问题</strong></h1><pre><code>假设有User对象以JSON序列化的形式存储到Redis中，User对象有id，username、password、age、name等属性，存储的过程如下： 
-保存、更新： 
-User对象  -&gt;  json(string)  -&gt;  redis 
-如果在业务上只是更新age属性，其他的属性并不做更新我应该怎么做呢？ 
-如果仍然采用上边的方法在传输、处理时会造成资源浪费，下边讲的hash可以很好的解决这个问题。
-</code></pre>
+        
+          
+            <h1 id="简介部分"><a href="#简介部分" class="headerlink" title="简介部分"></a>简介部分</h1><h2 id="工具简介"><a href="#工具简介" class="headerlink" title="工具简介"></a>工具简介</h2><ul>
+<li><a href="https://git-scm.com/download/" target="_blank" rel="external">Git</a>是一款基于命令行的版本控制软件。</li>
+<li><a href="https://github.com/" target="_blank" rel="external">GitHub</a>是Linus Torvalds为了在Linux操作系统上帮助程序员控制软件版本的一个开源网站。我们需要<a href="https://github.com/" target="_blank" rel="external">GitHub</a>来托管我们的代码、资源等静态资源。</li>
+<li><a href="https://pages.github.com/" target="_blank" rel="external">GitHub Pages</a>是GitHub提供的300MB免费Websites空间。</li>
+<li><a href="https://nodejs.org/en/" target="_blank" rel="external">Node.js</a>是一个基于谷歌V8引擎的JavaScript运行环境(runtime),用于方便地搭建速度快、易扩展的网络应用。</li>
+<li>hexo是一款基于Node.js的静态博客框架。<h1 id="搭建环境"><a href="#搭建环境" class="headerlink" title="搭建环境"></a>搭建环境</h1>1.到<a href="https://git-scm.com/download/" target="_blank" rel="external">Git</a>下载安装，一路下一步，直到完成。<br>2.安装<a href="https://nodejs.org/en/" target="_blank" rel="external">Node.js</a>,一路下一步，直到完成。安装完成之后，需要配置环境: 我的电脑–属性–高级系统设置–环境变量–Path下添加   ;C:\Program Files\nodejs\<br>3.安装hexo:右键桌面，点击Git Base Here并执行一下指令:<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install-g hexo</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>4.初始化hexo:在本地硬盘新建一个文件夹(名字自己取),右键点击空白处，点击 Git Base Here<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo init</span><br></pre></td></tr></table></figure></p>
+<p>5.生成静态页面<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate (或者 hexo g)</span><br></pre></td></tr></table></figure></p>
+<p>6.启动本地服务，进行测试<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure></p>
+<p>7.在浏览器输入<a href="http://localhost:4000" target="_blank" rel="external">http://localhost:4000</a><br>如果能打开网页就证明上述过程全部成功了。</p>
+<h1 id="创建自己的WebSite"><a href="#创建自己的WebSite" class="headerlink" title="创建自己的WebSite"></a>创建自己的WebSite</h1><h2 id="使用GitHub-Pages创建自己的WebSite"><a href="#使用GitHub-Pages创建自己的WebSite" class="headerlink" title="使用GitHub Pages创建自己的WebSite"></a>使用<a href="https://pages.github.com/" target="_blank" rel="external">GitHub Pages</a>创建自己的WebSite</h2><ul>
+<li>在自己的GitHub主页右上角点击+ ,然后点击New respository</li>
+<li>Repository name填写: [username].github.io(我的name是minokoko,所以我的repository name为minokoko.github.io)</li>
+<li>到本地硬盘，刚才搭建环境第4步新建的文件夹里面(比如我建的文件夹是blog),打开_config.yml,在文件底端添加以下代码:<br>deploy:<br>type: git<br>repo: <a href="https://github.com/minokoko/minokoko.github.io.git" target="_blank" rel="external">https://github.com/minokoko/minokoko.github.io.git</a> (将minokoko换成自己的用户名)<br>branch: master</li>
+<li>右键点击 Git Base Here,输入以下指令:<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>这样就创建一个一个public文件夹，里面包含了网页所有的静态资源。<br>每次部署到Github前都建议使用这个命令来保证修改的内容已经重新生成。</p>
+<ul>
+<li>然后执行以下指令:<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy(也可以 hexo d)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>部署到GitHub中.</p>
+<ul>
+<li>在浏览器中输入:<a href="http://minokoko.github.io" target="_blank" rel="external">http://minokoko.github.io</a> (minokoko换成自己的用户名)<br>如果能打开网页就证明上述过程全部成功了。</li>
+</ul>
+<h1 id="修改主题"><a href="#修改主题" class="headerlink" title="修改主题"></a>修改主题</h1><ul>
+<li>完成以上过程，登录自己的网站会发现是hexo默认的模版主题，那么如何修改为自己想要的漂亮的主题呢?<h2 id="下载主题"><a href="#下载主题" class="headerlink" title="下载主题"></a>下载主题</h2></li>
+<li><p>到<a href="https://github.com/" target="_blank" rel="external">GitHub</a>搜索hexo,便会出现很多带有thems标签的项目,fork一个自己喜欢。<br>比如我想下载的主题的是<a href="https://github.com/iissnan/hexo-theme-next.git" target="_blank" rel="external">next</a><br>然后在本地硬盘的blog/thems下(blog是我自己建的文件夹)，右键点击Git Base Here，输入以下指令:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> https://github.com/iissnan/hexo-theme-next.git</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>接下来到根目录下，打开_config.yml，做如下修改:<br>theme: next<br>返回根目录,执行以下命令:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo s --debug</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>好了，网站的主题就修改漂亮了。<br><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/img/next_theme.JPG" alt=""></p>
+
+          
+        
       
     </div>
 
     <div>
       
-        
-
-      
     </div>
 
     <div>
-      
-        
-
       
     </div>
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/redis/" rel="tag">#redis</a>
-          
-            <a href="/tags/String/" rel="tag">#String</a>
-          
-        </div>
+
       
 
       
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2016/09/16/服务器搭建-四-redis配置/" rel="next" title="服务器搭建-四-redis配置">
-                <i class="fa fa-chevron-left"></i> 服务器搭建-四-redis配置
-              </a>
-            
-          </div>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/09/16/redis数据类型Hash命令/" rel="prev" title="redis数据类型Hash命令">
-                redis数据类型Hash命令 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
       
-
-      
+        <div class="post-eof"></div>
       
     </footer>
   </article>
 
 
+    
+  </section>
 
-    <div class="post-spread">
-      
-    </div>
-  </div>
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
+  </nav>
+
 
 
           </div>
@@ -454,14 +369,6 @@ User对象  -&gt;  json(string)  -&gt;  redis
 
 
           
-  <div class="comments" id="comments">
-    
-      <div class="ds-thread" data-thread-key="2016/09/16/redis数据类型及string命令/"
-           data-title="redis数据类型String命令" data-url="http://jessyon.com/2016/09/16/redis数据类型及string命令/">
-      </div>
-    
-  </div>
-
 
         </div>
         
@@ -481,17 +388,8 @@ User对象  -&gt;  json(string)  -&gt;  redis
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview sidebar-panel ">
+      <section class="site-overview sidebar-panel  sidebar-panel-active ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.gif"
@@ -534,17 +432,6 @@ User对象  -&gt;  json(string)  -&gt;  redis
 
       </section>
 
-      
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-            
-              
-            
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#String类型"><span class="nav-number">1.</span> <span class="nav-text">String类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#String应用"><span class="nav-number">2.</span> <span class="nav-text">String应用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#String存在的问题"><span class="nav-number">3.</span> <span class="nav-text">String存在的问题</span></a></li></ol></div>
-            
-          </div>
-        </section>
       
 
     </div>
@@ -641,10 +528,6 @@ User对象  -&gt;  json(string)  -&gt;  redis
   
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
-
-
 
   
 
