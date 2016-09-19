@@ -426,6 +426,24 @@ heritrix（http://sourceforge.net/projects/archive-crawler/files/），Heritrix 
 
 }
 </code></pre><h2 id="索引文件的逻辑结构"><a href="#索引文件的逻辑结构" class="headerlink" title="索引文件的逻辑结构"></a>索引文件的逻辑结构</h2><p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/lucene_index.jpg" alt=""></p>
+<pre><code>文档域：
+对非结构化的数据统一格式为document文档格式，一个文档有多个field域，
+不同的文档其field的个数可以不同，建议相同类型的文档包括相同的field。 
+本例子一个document对应一 条 book表的记录。
+
+索引域：
+用于搜索，搜索程序将从索引域中搜索一个一个词，根据词找到对应的文档。
+将Document中的Field的内容进行分词，将分好的词创建索引，索引=Field域名:词
+
+倒排索引表
+
+传统方法是先找到文件。如何在文件中找内容，在文件内容中匹配搜索关键字，
+这种方法是顺序扫描方法，数据量大就搜索慢。
+
+倒排索引结构是根据内容（词语）找文档，倒排索引结构也叫反向索引结构，
+包括索引和文档两部分，索引即词汇表，它是在索引中匹配搜索关键字，
+由于索引内容量有限并且采用固定优化算法搜索速度很快，找到了索引中的词汇，词汇与文档关联，从而最终找到了文档。
+</code></pre><h2 id="创建索引"><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h2><p>创建索引流程：<br><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/lucene_create_index.jpg" alt=""></p>
 
           
         
