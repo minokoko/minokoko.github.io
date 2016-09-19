@@ -238,6 +238,106 @@
             
               
                 
+                <a class="post-title-link" href="/2016/09/19/lucene域、索引维护、搜索、中文分词/" itemprop="url">
+                  lucene域、索引维护、搜索、中文分词
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-19T20:50:29+08:00" content="2016-09-19">
+              2016-09-19
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/19/lucene域、索引维护、搜索、中文分词/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/19/lucene域、索引维护、搜索、中文分词/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/09/19/lucene入门/" itemprop="url">
                   lucene入门
                 </a>
@@ -539,6 +639,73 @@ lucene、java、full、text、search、engine
     //6.关闭IndexWriter
     writer.close();
 }
+</code></pre><h2 id="搜索流程"><a href="#搜索流程" class="headerlink" title="搜索流程"></a>搜索流程</h2><p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/lucene_IndexSearch.jpg" alt=""></p>
+<pre><code>1、用户定义查询语句，用户确定查询什么内容（输入什么关键字）,指定查询语法，相当于sql语句。
+2、IndexSearcher索引搜索对象，定义了很多搜索方法，程序员调用此方法搜索。
+3、IndexReader索引读取对象，它对应的索引维护对象IndexWriter，IndexSearcher通过IndexReader读取索引目录中的索引文件
+4、Directory索引流对象，IndexReader需要Directory读取索引库，使用FSDirectory文件系统流对象
+5、IndexSearcher搜索完成，返回一个TopDocs（匹配度高的前边的一些记录）
+</code></pre><h4 id="输入查询语句"><a href="#输入查询语句" class="headerlink" title="输入查询语句"></a>输入查询语句</h4><pre><code>同数据库的sql一样，lucene全文检索也有固定的语法：
+最基本的有比如：AND, OR, NOT 等
+
+用户想找一个description中包括java关键字和lucene关键字的文档。
+它对应的查询语句：description:java AND lucene
+</code></pre><h4 id="搜索分词"><a href="#搜索分词" class="headerlink" title="搜索分词"></a>搜索分词</h4><pre><code>和索引过程的分词一样，这里要对用户输入的关键字进行分词，一般情况索引和搜索使用的分词器一致。
+比如：输入搜索关键字“java培训”，分词后为java和培训两个词，与java和培训有关的内容都搜索出来了。
+</code></pre><h4 id="搜索索引"><a href="#搜索索引" class="headerlink" title="搜索索引"></a>搜索索引</h4><pre><code>根据关键字从索引中找到对应的索引信息，即词term。term与document相关联，
+找到了term就找到了关联的document，从document取出Field中的信息即是要搜索的信息。
+</code></pre><h4 id="代码实现-2"><a href="#代码实现-2" class="headerlink" title="代码实现"></a>代码实现</h4><pre><code>    private void doSearch(Query query) {
+
+    try {
+        // 2.创建搜索器IndexSearch
+        // 2.1创建IndexReader
+        Directory directory = FSDirectory.open(new File(&quot;F:\\index&quot;));
+        IndexReader reader = DirectoryReader.open(directory);
+        // 2.2创建Directroy
+
+        IndexSearcher searcher = new IndexSearcher(reader);
+
+        // 3.通过indexSearch来查询索引库
+        TopDocs topDocs;
+        topDocs = searcher.search(query, 10);
+        // 4.处理结果
+        // 根据匹配条件查询出来的数据总数
+        long count = topDocs.totalHits;
+        System.out.println(&quot;根据匹配条件查询出来的数据总数: &quot; + count);
+
+        ScoreDoc[] scoreDocs = topDocs.scoreDocs;
+        for (ScoreDoc scoreDoc : scoreDocs) {
+            int docId = scoreDoc.doc;
+            Document doc = searcher.doc(docId);
+            System.out.println(&quot;商品Id: &quot; + doc.get(&quot;id&quot;));
+            System.out.println(&quot;商品名称: &quot; + doc.get(&quot;name&quot;));
+            System.out.println(&quot;商品价格: &quot; + doc.get(&quot;price&quot;));
+            System.out.println(&quot;商品pic: &quot; + doc.get(&quot;pic&quot;));
+        }
+        // 5.关闭IndexReader
+        reader.close();
+    } catch (IOException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+    }
+
+}
+
+
+    @Test
+    public void search() throws ParseException, IOException {
+        // 1.创建查询对象
+        // 1.1创建QueryParser对象
+
+        Analyzer analyzer = new StandardAnalyzer();
+        // 默认搜索的域的域名
+        String field = &quot;name&quot;;
+        QueryParser parser = new QueryParser(field, analyzer);
+        Query query = parser.parse(&quot;name: 花&quot;);
+
+        doSearch(query);
+
+    }
 </code></pre>
           
         
@@ -2011,144 +2178,6 @@ User对象  -&gt;  json(string)  -&gt;  redis
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/16/服务器搭建-四-redis配置/" itemprop="url">
-                  服务器搭建-四-redis配置
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-16T11:55:31+08:00" content="2016-09-16">
-              2016-09-16
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/09/16/服务器搭建-四-redis配置/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/16/服务器搭建-四-redis配置/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="什么是NoSql"><a href="#什么是NoSql" class="headerlink" title="什么是NoSql"></a><strong>什么是NoSql</strong></h1><pre><code>为了解决高并发、高可扩展、高可用、大数据存储问题而产生的数据库解决方案，就是NoSql数据库。
-NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为关系型数据库的良好补充。
-</code></pre><h1 id="什么是Redis"><a href="#什么是Redis" class="headerlink" title="什么是Redis"></a><strong>什么是Redis</strong></h1><p>Redis是用C语言开发的一个开源的高性能键值对（key-value）数据库。它通过提供多种键值数据类型来适应不同场景下的存储需求，目前为止Redis支持的键值数据类型如<br>下：</p>
-<pre><code>字符串类型 
-散列类型 (Hash类型)
-列表类型 (List)
-集合类型 (Set)
-有序集合类型 (SortedSet)
-
-在redis中的命令语句中，命令是忽略大小写的，而key是不忽略大小写的。
-</code></pre><h1 id="redis的应用场景"><a href="#redis的应用场景" class="headerlink" title="redis的应用场景"></a><strong>redis的应用场景</strong></h1><pre><code>缓存（数据查询、短连接、新闻内容、商品内容等等）。（最多使用）
-分布式集群架构中的session分离。
-聊天室的在线好友列表。
-任务队列。（秒杀、抢购、12306等等）
-应用排行榜。
-网站访问统计。
-数据过期处理（可以精确到毫秒）
-</code></pre><h1 id="Redis安装"><a href="#Redis安装" class="headerlink" title="Redis安装"></a><strong>Redis安装</strong></h1><p>第一步.在Linux下安装gcc环境</p>
-<pre><code>yum install gcc-c++
-</code></pre><p>第二步. 安装redis</p>
-<pre><code>1.将下载的Redis源码包上传到Linux服务器中
-2.解压缩Redis源码包到/usr/local tar -zxf redis-3.0.0.tar.gz -C /usr/local
-3.进入/usr/local/redis-3.0.0目录 
-  编译redis源码 make
-  安装redis make install PREFIX=/usr/local/redis0707
-</code></pre><p>第三步. 后端启动redis</p>
-<pre><code>1.将redis源码包中的redis.conf配置文件复制到/usr/local/redis/bin/下
-  cp redis.conf /usr/local/redis0707/bin/
-2.修改redis.conf，将daemonize由no改为yes
-  37行 daemonize yes
-3.启动redis-server 
-  ./redis-server redis.conf
-4.关闭redis-server
-  ./redis-cli shutdown
-5.打开redis客户端 ./redis-cli -h 127.0.0.1 -p 6379
-</code></pre><h1 id="修改访问端口"><a href="#修改访问端口" class="headerlink" title="修改访问端口"></a><strong>修改访问端口</strong></h1><pre><code>1.通过notepad++ 打开/etc/sysconfig/iptables
-2.添加-A INPUT -m state --state NEW -m tcp -p tcp --dport 6379 -j ACCEPT
-3.重启防火墙  service iptables restart
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2194,7 +2223,7 @@ NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为�
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">31</span>
+              <span class="site-state-item-count">32</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -2204,7 +2233,7 @@ NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为�
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-count">33</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

@@ -101,7 +101,8 @@ Lucene与搜索引擎的区别全文检索系统是按照全文检索理论建�
 <meta property="og:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/lucene_index.jpg">
 <meta property="og:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/lucene_create_index.jpg">
 <meta property="og:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/lucene_tokenizer.jpg">
-<meta property="og:updated_time" content="2016-09-19T12:36:05.223Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/lucene_IndexSearch.jpg">
+<meta property="og:updated_time" content="2016-09-19T12:49:24.846Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="lucene入门">
 <meta name="twitter:description" content="什么是Lucene?Lucene是apache下的一个开放源代码的全文检索引擎工具包。提供了完整的查询引擎和索引引擎，
@@ -548,6 +549,73 @@ lucene、java、full、text、search、engine
     //6.关闭IndexWriter
     writer.close();
 }
+</code></pre><h2 id="搜索流程"><a href="#搜索流程" class="headerlink" title="搜索流程"></a>搜索流程</h2><p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/lucene_IndexSearch.jpg" alt=""></p>
+<pre><code>1、用户定义查询语句，用户确定查询什么内容（输入什么关键字）,指定查询语法，相当于sql语句。
+2、IndexSearcher索引搜索对象，定义了很多搜索方法，程序员调用此方法搜索。
+3、IndexReader索引读取对象，它对应的索引维护对象IndexWriter，IndexSearcher通过IndexReader读取索引目录中的索引文件
+4、Directory索引流对象，IndexReader需要Directory读取索引库，使用FSDirectory文件系统流对象
+5、IndexSearcher搜索完成，返回一个TopDocs（匹配度高的前边的一些记录）
+</code></pre><h4 id="输入查询语句"><a href="#输入查询语句" class="headerlink" title="输入查询语句"></a>输入查询语句</h4><pre><code>同数据库的sql一样，lucene全文检索也有固定的语法：
+最基本的有比如：AND, OR, NOT 等
+
+用户想找一个description中包括java关键字和lucene关键字的文档。
+它对应的查询语句：description:java AND lucene
+</code></pre><h4 id="搜索分词"><a href="#搜索分词" class="headerlink" title="搜索分词"></a>搜索分词</h4><pre><code>和索引过程的分词一样，这里要对用户输入的关键字进行分词，一般情况索引和搜索使用的分词器一致。
+比如：输入搜索关键字“java培训”，分词后为java和培训两个词，与java和培训有关的内容都搜索出来了。
+</code></pre><h4 id="搜索索引"><a href="#搜索索引" class="headerlink" title="搜索索引"></a>搜索索引</h4><pre><code>根据关键字从索引中找到对应的索引信息，即词term。term与document相关联，
+找到了term就找到了关联的document，从document取出Field中的信息即是要搜索的信息。
+</code></pre><h4 id="代码实现-2"><a href="#代码实现-2" class="headerlink" title="代码实现"></a>代码实现</h4><pre><code>    private void doSearch(Query query) {
+
+    try {
+        // 2.创建搜索器IndexSearch
+        // 2.1创建IndexReader
+        Directory directory = FSDirectory.open(new File(&quot;F:\\index&quot;));
+        IndexReader reader = DirectoryReader.open(directory);
+        // 2.2创建Directroy
+
+        IndexSearcher searcher = new IndexSearcher(reader);
+
+        // 3.通过indexSearch来查询索引库
+        TopDocs topDocs;
+        topDocs = searcher.search(query, 10);
+        // 4.处理结果
+        // 根据匹配条件查询出来的数据总数
+        long count = topDocs.totalHits;
+        System.out.println(&quot;根据匹配条件查询出来的数据总数: &quot; + count);
+
+        ScoreDoc[] scoreDocs = topDocs.scoreDocs;
+        for (ScoreDoc scoreDoc : scoreDocs) {
+            int docId = scoreDoc.doc;
+            Document doc = searcher.doc(docId);
+            System.out.println(&quot;商品Id: &quot; + doc.get(&quot;id&quot;));
+            System.out.println(&quot;商品名称: &quot; + doc.get(&quot;name&quot;));
+            System.out.println(&quot;商品价格: &quot; + doc.get(&quot;price&quot;));
+            System.out.println(&quot;商品pic: &quot; + doc.get(&quot;pic&quot;));
+        }
+        // 5.关闭IndexReader
+        reader.close();
+    } catch (IOException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+    }
+
+}
+
+
+    @Test
+    public void search() throws ParseException, IOException {
+        // 1.创建查询对象
+        // 1.1创建QueryParser对象
+
+        Analyzer analyzer = new StandardAnalyzer();
+        // 默认搜索的域的域名
+        String field = &quot;name&quot;;
+        QueryParser parser = new QueryParser(field, analyzer);
+        Query query = parser.parse(&quot;name: 花&quot;);
+
+        doSearch(query);
+
+    }
 </code></pre>
       
     </div>
@@ -588,6 +656,10 @@ lucene、java、full、text、search、engine
           </div>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/19/lucene域、索引维护、搜索、中文分词/" rel="prev" title="lucene域、索引维护、搜索、中文分词">
+                lucene域、索引维护、搜索、中文分词 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -659,7 +731,7 @@ lucene、java、full、text、search、engine
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">31</span>
+              <span class="site-state-item-count">32</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -669,7 +741,7 @@ lucene、java、full、text、search、engine
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-count">33</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -698,7 +770,7 @@ lucene、java、full、text、search、engine
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是Lucene"><span class="nav-number">1.</span> <span class="nav-text">什么是Lucene?</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lucene与搜索引擎的区别"><span class="nav-number">2.</span> <span class="nav-text">Lucene与搜索引擎的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lucene实现全文检索的流程"><span class="nav-number">3.</span> <span class="nav-text">Lucene实现全文检索的流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#全文检索的流程分为两大部分：索引流程、搜索流程。"><span class="nav-number">3.1.</span> <span class="nav-text">全文检索的流程分为两大部分：索引流程、搜索流程。</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#入门程序"><span class="nav-number">4.</span> <span class="nav-text">入门程序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境准备"><span class="nav-number">4.1.</span> <span class="nav-text">环境准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lucene下载安装"><span class="nav-number">4.2.</span> <span class="nav-text">Lucene下载安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工程搭建"><span class="nav-number">4.3.</span> <span class="nav-text">工程搭建</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#索引流程"><span class="nav-number">5.</span> <span class="nav-text">索引流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要采集数据"><span class="nav-number">5.1.</span> <span class="nav-text">为什么要采集数据?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何采集数据"><span class="nav-number">5.2.</span> <span class="nav-text">如何采集数据?</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#网页采集-常用solr"><span class="nav-number">5.2.1.</span> <span class="nav-text">网页采集(常用solr)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库采集"><span class="nav-number">5.2.2.</span> <span class="nav-text">数据库采集</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#po"><span class="nav-number">5.2.2.1.</span> <span class="nav-text">po</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Dao"><span class="nav-number">5.2.2.2.</span> <span class="nav-text">Dao</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#索引文件的逻辑结构"><span class="nav-number">5.3.</span> <span class="nav-text">索引文件的逻辑结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建索引"><span class="nav-number">5.4.</span> <span class="nav-text">创建索引</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建Document"><span class="nav-number">5.4.1.</span> <span class="nav-text">创建Document</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#代码实现"><span class="nav-number">5.4.1.1.</span> <span class="nav-text">代码实现</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分词"><span class="nav-number">5.4.2.</span> <span class="nav-text">分词</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#分词过程"><span class="nav-number">5.4.2.1.</span> <span class="nav-text">分词过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分词器"><span class="nav-number">5.4.2.2.</span> <span class="nav-text">分词器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#代码实现-1"><span class="nav-number">5.4.2.3.</span> <span class="nav-text">代码实现</span></a></li></ol></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是Lucene"><span class="nav-number">1.</span> <span class="nav-text">什么是Lucene?</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lucene与搜索引擎的区别"><span class="nav-number">2.</span> <span class="nav-text">Lucene与搜索引擎的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lucene实现全文检索的流程"><span class="nav-number">3.</span> <span class="nav-text">Lucene实现全文检索的流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#全文检索的流程分为两大部分：索引流程、搜索流程。"><span class="nav-number">3.1.</span> <span class="nav-text">全文检索的流程分为两大部分：索引流程、搜索流程。</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#入门程序"><span class="nav-number">4.</span> <span class="nav-text">入门程序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境准备"><span class="nav-number">4.1.</span> <span class="nav-text">环境准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lucene下载安装"><span class="nav-number">4.2.</span> <span class="nav-text">Lucene下载安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工程搭建"><span class="nav-number">4.3.</span> <span class="nav-text">工程搭建</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#索引流程"><span class="nav-number">5.</span> <span class="nav-text">索引流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要采集数据"><span class="nav-number">5.1.</span> <span class="nav-text">为什么要采集数据?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何采集数据"><span class="nav-number">5.2.</span> <span class="nav-text">如何采集数据?</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#网页采集-常用solr"><span class="nav-number">5.2.1.</span> <span class="nav-text">网页采集(常用solr)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库采集"><span class="nav-number">5.2.2.</span> <span class="nav-text">数据库采集</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#po"><span class="nav-number">5.2.2.1.</span> <span class="nav-text">po</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Dao"><span class="nav-number">5.2.2.2.</span> <span class="nav-text">Dao</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#索引文件的逻辑结构"><span class="nav-number">5.3.</span> <span class="nav-text">索引文件的逻辑结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建索引"><span class="nav-number">5.4.</span> <span class="nav-text">创建索引</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建Document"><span class="nav-number">5.4.1.</span> <span class="nav-text">创建Document</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#代码实现"><span class="nav-number">5.4.1.1.</span> <span class="nav-text">代码实现</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分词"><span class="nav-number">5.4.2.</span> <span class="nav-text">分词</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#分词过程"><span class="nav-number">5.4.2.1.</span> <span class="nav-text">分词过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分词器"><span class="nav-number">5.4.2.2.</span> <span class="nav-text">分词器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#代码实现-1"><span class="nav-number">5.4.2.3.</span> <span class="nav-text">代码实现</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搜索流程"><span class="nav-number">5.5.</span> <span class="nav-text">搜索流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#输入查询语句"><span class="nav-number">5.5.0.1.</span> <span class="nav-text">输入查询语句</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#搜索分词"><span class="nav-number">5.5.0.2.</span> <span class="nav-text">搜索分词</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#搜索索引"><span class="nav-number">5.5.0.3.</span> <span class="nav-text">搜索索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#代码实现-2"><span class="nav-number">5.5.0.4.</span> <span class="nav-text">代码实现</span></a></li></ol></li></ol></li></ol></li></ol></div>
             
           </div>
         </section>
