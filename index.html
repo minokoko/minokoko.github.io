@@ -238,6 +238,130 @@
             
               
                 
+                <a class="post-title-link" href="/2016/09/18/全文搜索引擎lucene/" itemprop="url">
+                  全文搜索引擎lucene
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-18T19:21:01+08:00" content="2016-09-18">
+              2016-09-18
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/18/全文搜索引擎lucene/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/18/全文搜索引擎lucene/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="全文搜索"><a href="#全文搜索" class="headerlink" title="全文搜索"></a>全文搜索</h1><pre><code>Lucene是apache下的开源的全文检索引擎工具包。
+
+Lucene不能独立运行提供服务，它只是让程序员使用它提供的类库进行全文检索功能的开发。
+</code></pre><h1 id="全文检索的应用场景"><a href="#全文检索的应用场景" class="headerlink" title="全文检索的应用场景"></a>全文检索的应用场景</h1><pre><code>搜索引擎
+
+站内搜索
+</code></pre><h1 id="搜索引擎和站内搜索的区别"><a href="#搜索引擎和站内搜索的区别" class="headerlink" title="搜索引擎和站内搜索的区别"></a>搜索引擎和站内搜索的区别</h1><pre><code>搜索引擎搜索的内容是全互联网各种类型的数据。
+
+站内搜索搜索的内容只是本站内的信息，比如电商网站，搜索的功能，只会搜索本网站的商品信息。
+</code></pre><h1 id="什么是全文检索"><a href="#什么是全文检索" class="headerlink" title="什么是全文检索"></a>什么是全文检索</h1><pre><code>全文检索就是先将要搜索的文档中的内容进行分词，然后索引，最终根据索引来查找要搜索的文档。
+这种先建立索引，再根据索引进行查询的过程，就是全文检索。
+
+类似于字典，比如，字典中的偏旁部首页，
+就相当于全文检索中的索引库
+字典中具体内容，相当于全文检索中的文档库。
+</code></pre><h1 id="Lucene和全文检索应用的区别"><a href="#Lucene和全文检索应用的区别" class="headerlink" title="Lucene和全文检索应用的区别:"></a>Lucene和全文检索应用的区别:</h1><pre><code>Lucene只是一个全文检索引擎工具包（jar包）
+全文检索应用是一个可以运行在web应用服务器中，并且可以独立对外提供搜索和索引服务
+</code></pre><h1 id="Lucene实现全文检索的流程"><a href="#Lucene实现全文检索的流程" class="headerlink" title="Lucene实现全文检索的流程"></a>Lucene实现全文检索的流程</h1><p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/lucene.jpg" alt=""></p>
+<pre><code>全文检索分为两大流程：索引流程、搜索流程
+
+索引流程：采集数据 —&gt; 创建索引，将索引和文档保存到索引库中。
+搜索流程：创建查询对象 —&gt; 通过执行器执行查询并返回结果 —&gt; 对结果进行渲染响应给用户。
+
+Lucene不支持视图渲染。
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/09/18/jedis连接集群/" itemprop="url">
                   jedis连接集群
                 </a>
@@ -1811,154 +1935,6 @@ NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为�
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/15/服务器搭建-二-Nginx和fastDFS配置/" itemprop="url">
-                  服务器搭建(二)Nginx和fastDFS配置
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-15T22:48:47+08:00" content="2016-09-15">
-              2016-09-15
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/09/15/服务器搭建-二-Nginx和fastDFS配置/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/15/服务器搭建-二-Nginx和fastDFS配置/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="Nginx反向代理"><a href="#Nginx反向代理" class="headerlink" title="Nginx反向代理"></a><strong>Nginx反向代理</strong></h1><p>Nginx的配置文件：</p>
-<pre><code>upstream tomcats{
-   server 192.168.25.148:8080;  //配置多个tomcat
-   server 192.168.25.148:8081;
-  }
-
-  server {
-       listen       80;
-       server_name  tomcat.taotao.com;
-
-       #charset koi8-r;
-
-       #access_log  logs/host.access.log  main;
-
-       location / {
-           proxy_pass   http://tomcats;  //设置代理
-           index  index.html index.htm;
-       }
-  }
-</code></pre><h1 id="Nginx负载均衡"><a href="#Nginx负载均衡" class="headerlink" title="Nginx负载均衡"></a><strong>Nginx负载均衡</strong></h1><p>只需要在upstream的server后面添加一个weight即可代表权重。权重越高，分配请求的数量(概率)就越多。默认权重是1</p>
-<pre><code>upstream tomcats{
-        server 192.168.25.148:8080 weight=2;  //设置权重为2
-        server 192.168.25.148:8081;
-       }
-
-       server {
-            listen       80;
-            server_name  tomcat.taotao.com;
-
-            #charset koi8-r;
-
-            #access_log  logs/host.access.log  main;
-
-            location / {
-                proxy_pass   http://tomcats;  //设置代理
-                index  index.html index.htm;
-            }
-       }
-</code></pre><h1 id="fastDFS"><a href="#fastDFS" class="headerlink" title="fastDFS"></a><strong>fastDFS</strong></h1><p>FastDFS是用c语言编写的一款开源的分布式文件系统。FastDFS为互联网量身定制，充分考虑了冗余备份、负载均衡、线性扩容等机制，并注重高可用、高性能等指标，使用FastDFS很容易搭建一套高性能的文件服务器集群提供文件上传、下载等服务。</p>
-<h2 id="fastDFS上传流程"><a href="#fastDFS上传流程" class="headerlink" title="fastDFS上传流程"></a>fastDFS上传流程</h2><p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/upload.jpg" alt=""></p>
-<h2 id="fastDFS下载流程"><a href="#fastDFS下载流程" class="headerlink" title="fastDFS下载流程"></a>fastDFS下载流程</h2><p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/download.jpg" alt=""></p>
-<p>客户端上传文件后存储服务器将文件ID返回给客户端，此文件ID用于以后访问该文件的索引信息。文件索引信息包括：组名，虚拟磁盘路径，数据两级目录，文件名。</p>
-<pre><code>http://192.168.233.128/group1/M00/00/00/wKjpgFfGRCqAHIo6AADW-NO57MA805.jpg
-
-组名：文件上传后所在的storage组名称，在文件上传成功后有storage服务器返回，需要客户端自行保存。 
-虚拟磁盘路径：storage配置的虚拟路径，与磁盘选项store_path*对应。如果配置了store_path0则是M00，如果配置了store_path1则是M01，以此类推。
-数据两级目录：storage服务器在每个虚拟磁盘路径下创建的两级目录，用于存储数据文件。
-文件名：与文件上传时不同。是由存储服务器根据特定信息生成，文件名包含：源存储服务器IP地址、文件创建时间戳、文件大小、随机数和文件拓展名等信息。
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2004,7 +1980,7 @@ NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为�
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">29</span>
+              <span class="site-state-item-count">30</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -2014,7 +1990,7 @@ NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为�
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">29</span>
+                <span class="site-state-item-count">31</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
