@@ -1,0 +1,657 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="全文搜索,solr," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="站内搜索技术选型在一些大型门户网站、电子商务网站等都需要站内搜索功能，
+使用传统的数据库查询方式实现搜索无法满足一些高级的搜索需求，
+比如：搜索速度要快、搜索结果按相关度排序、搜索内容格式不固定等，
+这里就需要使用全文检索技术实现搜索功能。
+单独使用Lucene实现单独使用Lucene实现站内搜索需要开发的工作量较大，
+主要表现在：索引维护、索引性能优化、搜索性能优化等，因此不建议采用。
+使用Go">
+<meta property="og:type" content="article">
+<meta property="og:title" content="solr全文搜索服务">
+<meta property="og:url" content="http://jessyon.com/2016/09/20/solr全文搜索服务/index.html">
+<meta property="og:site_name" content="OneStack">
+<meta property="og:description" content="站内搜索技术选型在一些大型门户网站、电子商务网站等都需要站内搜索功能，
+使用传统的数据库查询方式实现搜索无法满足一些高级的搜索需求，
+比如：搜索速度要快、搜索结果按相关度排序、搜索内容格式不固定等，
+这里就需要使用全文检索技术实现搜索功能。
+单独使用Lucene实现单独使用Lucene实现站内搜索需要开发的工作量较大，
+主要表现在：索引维护、索引性能优化、搜索性能优化等，因此不建议采用。
+使用Go">
+<meta property="og:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/solr_example.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/solr_collection1.jpg">
+<meta property="og:updated_time" content="2016-09-20T02:52:12.326Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="solr全文搜索服务">
+<meta name="twitter:description" content="站内搜索技术选型在一些大型门户网站、电子商务网站等都需要站内搜索功能，
+使用传统的数据库查询方式实现搜索无法满足一些高级的搜索需求，
+比如：搜索速度要快、搜索结果按相关度排序、搜索内容格式不固定等，
+这里就需要使用全文检索技术实现搜索功能。
+单独使用Lucene实现单独使用Lucene实现站内搜索需要开发的工作量较大，
+主要表现在：索引维护、索引性能优化、搜索性能优化等，因此不建议采用。
+使用Go">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/solr_example.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://jessyon.com/2016/09/20/solr全文搜索服务/"/>
+
+  <title> solr全文搜索服务 | OneStack </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">OneStack</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">The Blog Powered By jessyon</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                solr全文搜索服务
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-20T10:34:11+08:00" content="2016-09-20">
+              2016-09-20
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/20/solr全文搜索服务/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/20/solr全文搜索服务/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="站内搜索技术选型"><a href="#站内搜索技术选型" class="headerlink" title="站内搜索技术选型"></a>站内搜索技术选型</h1><pre><code>在一些大型门户网站、电子商务网站等都需要站内搜索功能，
+使用传统的数据库查询方式实现搜索无法满足一些高级的搜索需求，
+比如：搜索速度要快、搜索结果按相关度排序、搜索内容格式不固定等，
+这里就需要使用全文检索技术实现搜索功能。
+</code></pre><h2 id="单独使用Lucene实现"><a href="#单独使用Lucene实现" class="headerlink" title="单独使用Lucene实现"></a>单独使用Lucene实现</h2><pre><code>单独使用Lucene实现站内搜索需要开发的工作量较大，
+主要表现在：索引维护、索引性能优化、搜索性能优化等，因此不建议采用。
+</code></pre><h2 id="使用Google或Baidu接口"><a href="#使用Google或Baidu接口" class="headerlink" title="使用Google或Baidu接口"></a>使用Google或Baidu接口</h2><pre><code>通过第三方搜索引擎提供的接口实现站内搜索，这样和第三方引擎系统依赖紧密，不方便扩展，不建议采用。
+</code></pre><h2 id="使用Solr实现"><a href="#使用Solr实现" class="headerlink" title="使用Solr实现"></a>使用Solr实现</h2><pre><code>基于Solr实现站内搜索扩展性较好并且可以减少程序员的工作量，
+因为Solr提供了较为完备的搜索引擎解决方案，因此在门户、论坛等系统中常用此方案。
+</code></pre><h1 id="Solr介绍"><a href="#Solr介绍" class="headerlink" title="Solr介绍"></a>Solr介绍</h1><h2 id="什么是Solr"><a href="#什么是Solr" class="headerlink" title="什么是Solr"></a>什么是Solr</h2><pre><code>Solr 是Apache下的一个顶级开源项目，采用Java开发，它是基于Lucene的全文搜索服务器。
+Solr提供了比Lucene更为丰富的查询语言，同时实现了可配置、可扩展，并对索引、搜索性能进行了优化。 
+
+Solr可以独立运行，运行在Jetty、Tomcat等这些Servlet容器中，Solr 索引的实现方法很简单，
+用POST方法向 Solr 服务器发送一个描述 Field 及其内容的 XML 文档，Solr根据xml文档添加、删除、更新索引。
+Solr 搜索只需要发送 HTTP GET 请求，然后对 Solr 返回Xml、json等格式的查询结果进行解析，
+组织页面布局。Solr不提供构建UI的功能，Solr提供了一个管理界面，通过管理界面可以查询Solr的配置和运行情况。
+</code></pre><h2 id="Solr与Lucene的区别"><a href="#Solr与Lucene的区别" class="headerlink" title="Solr与Lucene的区别"></a>Solr与Lucene的区别</h2><pre><code>Lucene是一个开放源代码的全文检索引擎工具包，它不是一个完整的全文检索引擎，
+Lucene提供了完整的查询引擎和索引引擎，目的是为软件开发人员提供一个简单易用的工具包，
+以方便的在目标系统中实现全文检索的功能，或者以Lucene为基础构建全文检索引擎。
+
+ Solr的目标是打造一款企业级的搜索引擎系统，它是一个搜索引擎服务，可以独立运行，
+通过Solr可以非常快速的构建企业的搜索引擎，通过Solr也可以高效的完成站内搜索功能。
+</code></pre><h1 id="Solr安装配置"><a href="#Solr安装配置" class="headerlink" title="Solr安装配置"></a>Solr安装配置</h1><p><a href="http://lucene.apache.org/solr/" target="_blank" rel="external">http://lucene.apache.org/solr/</a></p>
+<p>下载lucene-4.10.3.zip 或 lucene-4.10.3.tgz 并解压:</p>
+<pre><code>bin：solr的运行脚本
+contrib：solr的一些贡献软件/插件，用于增强solr的功能。
+dist：该目录包含build过程中产生的war和jar文件，以及相关的依赖文件。
+docs：solr的API文档
+example：solr工程的例子目录：
+    example/solr：
+    该目录是一个包含了默认配置信息的Solr的Core目录。
+    example/multicore：
+    该目录包含了在Solr的multicore中设置的多个Core目录。 
+    example/webapps：
+    该目录中包括一个solr.war，该war可作为solr的运行实例工程。
+licenses：solr相关的一些许可信息
+</code></pre><h2 id="运行环境"><a href="#运行环境" class="headerlink" title="运行环境"></a>运行环境</h2><pre><code>solr 需要运行在一个Servlet容器中，Solr4.10.3要求jdk使用1.7以上，
+Solr默认提供Jetty（java写的Servlet容器）
+</code></pre><p>环境如下：</p>
+<pre><code>Solr：Solr4.10.3
+Jdk：jdk1.7.0_72
+Tomcat：apache-tomcat-7.0.53
+</code></pre><h2 id="Solr与Tomcat整合配置"><a href="#Solr与Tomcat整合配置" class="headerlink" title="Solr与Tomcat整合配置"></a>Solr与Tomcat整合配置</h2><h3 id="Solr-Home与SolrCore"><a href="#Solr-Home与SolrCore" class="headerlink" title="Solr Home与SolrCore"></a>Solr Home与SolrCore</h3><pre><code>创建一个Solr home目录，SolrHome是Solr运行的主目录，目录中包括了运行Solr实例所有的配置文件和数据文件，
+Solr实例就是SolrCore，一个SolrHome可以包括多个SolrCore（Solr实例），每个SolrCore提供单独的搜索和索引服务。
+</code></pre><h4 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h4><p>example\solr是一个solr home目录结构，如下：</p>
+<p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/solr_example.jpg" alt=""></p>
+<p>上图中“collection1”是一个SolrCore（Solr实例）目录 ，目录内容如下所示：</p>
+<p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/solr_collection1.jpg" alt=""></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/全文搜索/" rel="tag">#全文搜索</a>
+          
+            <a href="/tags/solr/" rel="tag">#solr</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/19/lucene域、索引维护、搜索、中文分词/" rel="next" title="lucene域、索引维护、搜索、中文分词">
+                <i class="fa fa-chevron-left"></i> lucene域、索引维护、搜索、中文分词
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/20/solr全文搜索服务/"
+           data-title="solr全文搜索服务" data-url="http://jessyon.com/2016/09/20/solr全文搜索服务/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Jessyon" />
+          <p class="site-author-name" itemprop="name">Jessyon</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">33</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#站内搜索技术选型"><span class="nav-number">1.</span> <span class="nav-text">站内搜索技术选型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#单独使用Lucene实现"><span class="nav-number">1.1.</span> <span class="nav-text">单独使用Lucene实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Google或Baidu接口"><span class="nav-number">1.2.</span> <span class="nav-text">使用Google或Baidu接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Solr实现"><span class="nav-number">1.3.</span> <span class="nav-text">使用Solr实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Solr介绍"><span class="nav-number">2.</span> <span class="nav-text">Solr介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是Solr"><span class="nav-number">2.1.</span> <span class="nav-text">什么是Solr</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Solr与Lucene的区别"><span class="nav-number">2.2.</span> <span class="nav-text">Solr与Lucene的区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Solr安装配置"><span class="nav-number">3.</span> <span class="nav-text">Solr安装配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#运行环境"><span class="nav-number">3.1.</span> <span class="nav-text">运行环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Solr与Tomcat整合配置"><span class="nav-number">3.2.</span> <span class="nav-text">Solr与Tomcat整合配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Solr-Home与SolrCore"><span class="nav-number">3.2.1.</span> <span class="nav-text">Solr Home与SolrCore</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#目录结构"><span class="nav-number">3.2.1.1.</span> <span class="nav-text">目录结构</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jessyon</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jessyon"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

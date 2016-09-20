@@ -238,6 +238,183 @@
             
               
                 
+                <a class="post-title-link" href="/2016/09/16/redis数据类型及string命令/" itemprop="url">
+                  redis数据类型String命令
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-16T13:59:39+08:00" content="2016-09-16">
+              2016-09-16
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/16/redis数据类型及string命令/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/16/redis数据类型及string命令/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="String类型"><a href="#String类型" class="headerlink" title="String类型"></a><strong>String类型</strong></h1><p>SET key value 赋值</p>
+<pre><code>127.0.0.1:6379&gt; set test 123
+OK
+</code></pre><p>GET key  取值</p>
+<pre><code>127.0.0.1:6379&gt; get test
+&quot;123“
+</code></pre><p>GETSET key value  取值并赋值</p>
+<pre><code>127.0.0.1:6379&gt; getset s2 222
+&quot;111&quot;
+127.0.0.1:6379&gt; get s2
+&quot;222&quot;
+</code></pre><p>DEL key 删除</p>
+<pre><code>127.0.0.1:6379&gt; del test
+(integer) 1
+</code></pre><p>incr key 递增数字 </p>
+<p>当存储的字符串是整数时，Redis提供了一个实用的命令INCR，其作用是让当前键值递增，并返回递增后的值。</p>
+<pre><code>127.0.0.1:6379&gt; incr num
+(integer) 1
+127.0.0.1:6379&gt; incr num
+(integer) 2
+127.0.0.1:6379&gt; incr num
+(integer) 3
+</code></pre><p>INCRBY key increment 增加指定的整数 </p>
+<pre><code>127.0.0.1:6379&gt; incrby num 2
+(integer) 5
+127.0.0.1:6379&gt; incrby num 2
+(integer) 7
+127.0.0.1:6379&gt; incrby num 2
+(integer) 9
+</code></pre><p>DECR key  递减数值</p>
+<pre><code>127.0.0.1:6379&gt; decr num
+(integer) 9
+127.0.0.1:6379&gt; decr num
+(integer) 8
+</code></pre><p>DECRBY key decrement      减少指定的整数 </p>
+<pre><code>127.0.0.1:6379&gt; decr num
+(integer) 6
+127.0.0.1:6379&gt; decr num
+(integer) 5
+127.0.0.1:6379&gt; decrby num 3
+(integer) 2
+127.0.0.1:6379&gt; decrby num 3
+(integer) -1
+</code></pre><p>APPEND key value      向尾部追加值 </p>
+<pre><code>127.0.0.1:6379&gt; set str hello
+OK
+127.0.0.1:6379&gt; append str &quot; world!&quot;
+(integer) 12
+127.0.0.1:6379&gt; get str 
+&quot;hello world!&quot;
+</code></pre><p>STRLEN key 获取字符串长度</p>
+<pre><code>127.0.0.1:6379&gt; strlen str 
+(integer) 0
+127.0.0.1:6379&gt; set str hello
+OK
+127.0.0.1:6379&gt; strlen str 
+(integer) 5
+</code></pre><p>MSET key value [key value …] 同时设置多个值</p>
+<pre><code>127.0.0.1:6379&gt; mset k1 v1 k2 v2 k3 v3
+OK
+</code></pre><p>MGET key [key …] 同时取多个值</p>
+<pre><code>127.0.0.1:6379&gt; get k1
+&quot;v1&quot;
+127.0.0.1:6379&gt; mget k1 k3
+1) &quot;v1&quot;
+2) &quot;v3&quot;
+</code></pre><h1 id="String应用"><a href="#String应用" class="headerlink" title="String应用"></a><strong>String应用</strong></h1><p>自增主键:  商品编号、订单号采用string的递增数字特性生成。</p>
+<pre><code>定义商品编号key：items:id
+192.168.101.3:7003&gt; INCR items:id
+(integer) 2
+192.168.101.3:7003&gt; INCR items:id
+(integer) 3
+</code></pre><h1 id="String存在的问题"><a href="#String存在的问题" class="headerlink" title="String存在的问题"></a><strong>String存在的问题</strong></h1><pre><code>假设有User对象以JSON序列化的形式存储到Redis中，User对象有id，username、password、age、name等属性，存储的过程如下： 
+保存、更新： 
+User对象  -&gt;  json(string)  -&gt;  redis 
+如果在业务上只是更新age属性，其他的属性并不做更新我应该怎么做呢？ 
+如果仍然采用上边的方法在传输、处理时会造成资源浪费，下边讲的hash可以很好的解决这个问题。
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/09/16/服务器搭建-四-redis配置/" itemprop="url">
                   服务器搭建-四-redis配置
                 </a>
@@ -1636,119 +1813,6 @@ struts&gt;
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/05/25/我是如何整合SSH的-二/" itemprop="url">
-                  我是如何整合SSH的(二)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-25T21:15:38+08:00" content="2016-05-25">
-              2016-05-25
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/05/25/我是如何整合SSH的-二/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/25/我是如何整合SSH的-二/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="前述"><a href="#前述" class="headerlink" title="前述"></a>前述</h1><p>这个周在初步了解SSH整合流程，同时以项目为驱动继续学习SSH。在网上找了一个CRM系统来临摹，同时辅助学习SVN版本控制器。因为之前并没有很多版本控制的概念，所以在接触SVN的时候，遇到了很多问题。CRM系统目前已经完成了登录功能，之后会通过CRM再熟悉SSH的CRUD。</p>
-<h1 id="新知识点"><a href="#新知识点" class="headerlink" title="新知识点"></a>新知识点</h1><ul>
-<li>spring配置中，可以在applicationContext.xml中通过<import resource="applicationContext-user.xml">来引入applicationContext-user.xml配置文件。</import></li>
-<li>struts2配置中，指定package的name=”common”,其他struts2配置文件可以通过<package extends="common">继承包名为common下的所有内容。</package></li>
-<li>struts2配置中，可以通过<include file="struts/struts-staff.xml"></include>来引入struts包下的struts-staff.xml配置文件中的所有内容。</li>
-<li>MD5加密，可以通过MessageDigest messageDigest=MessageDigest.getInstance(“MD5”)初始化消息摘要算法<br>通过byte[] md5value = messageDigest.digest(value.getBytes());对String类型的字符串进行加密。<br>得到内容是10进制的，通过BigInteger bigInteger = new BigInteger(1,md5value); bigInteger.toString(16);转换成16进制。</li>
-<li>SVN开启服务，打开命令行，输入svnserve -d -r f:\svn开启服务(f:\svn为仓库目录)。</li>
-<li>在svnserve.conf文件的20、27、36行，将注释打开，开启svn权限配置。<br>auth-access = write<br>password-db = passwd<br>authz-db = authz 这三行前面不能有任何空格。</li>
-<li>在passwd文件下添加用户 user1 = 1234 user1为用户名，1234为密码。</li>
-<li>在authz文件下配置权限<br>[crm:/]       配置crm文件夹的访问权限<br>jessyon = rw  用户jessyon有读写权限<br>*=r         其他所有用户为只读权限</li>
-<li>check out到本地文件，在文件夹中右键SVN checkout弹出窗口，输入svn://localhost:3690/crm便可以将服务器上的内容checkout下来。<br><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/img/checkout.jpg" alt=""></li>
-</ul>
-<h2 id="特别注意"><a href="#特别注意" class="headerlink" title="特别注意"></a>特别注意</h2><p>在eclipse中，新建的web项目并没有jstl.jar和standard.jar这两个包，如果是myeclipse中的项目导入到eclipse中并且用到了jstl，那么需要额外导入这两个jar包。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1794,7 +1858,7 @@ struts&gt;
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">32</span>
+              <span class="site-state-item-count">33</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1804,7 +1868,7 @@ struts&gt;
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-count">34</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
