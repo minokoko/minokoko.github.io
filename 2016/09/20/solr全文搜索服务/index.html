@@ -105,7 +105,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/solr_example.jpg">
 <meta property="og:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/solr_collection1.jpg">
 <meta property="og:image" content="https://github.com/minokoko/minokoko.github.io/blob/master/images/solr_index.JPG">
-<meta property="og:updated_time" content="2016-09-20T07:26:58.063Z">
+<meta property="og:updated_time" content="2016-09-20T12:31:19.334Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="solr全文搜索服务">
 <meta name="twitter:description" content="站内搜索技术选型在一些大型门户网站、电子商务网站等都需要站内搜索功能，
@@ -418,7 +418,137 @@ conf是SolrCore的配置文件目录 。
     复制Solr目录下example\resources\log4j.properties至Tomcat下webapps\solr\WEB-INF\classes目录 
 </code></pre><h2 id="启动Tomcat"><a href="#启动Tomcat" class="headerlink" title="启动Tomcat"></a>启动Tomcat</h2><p>启动tomcat服务器,在浏览器输入: localhost/solr</p>
 <p><img src="https://github.com/minokoko/minokoko.github.io/blob/master/images/solr_index.JPG" alt=""></p>
+<h3 id="Dashboard"><a href="#Dashboard" class="headerlink" title="Dashboard"></a>Dashboard</h3><pre><code>仪表盘，显示了该Solr实例开始启动运行的时间、版本、系统资源、jvm等信息。
+</code></pre><h3 id="Logging"><a href="#Logging" class="headerlink" title="Logging"></a>Logging</h3><pre><code>Solr运行日志信息
+</code></pre><h3 id="Cloud"><a href="#Cloud" class="headerlink" title="Cloud"></a>Cloud</h3><pre><code>Cloud即SolrCloud，即Solr云（集群），当使用Solr Cloud模式运行时会显示此菜单
+</code></pre><h3 id="Core-Admin"><a href="#Core-Admin" class="headerlink" title="Core Admin"></a>Core Admin</h3><pre><code>Solr Core的管理界面。Solr Core 是Solr的一个独立运行实例单位，它可以对外提供索引和搜索服务，
+一个Solr工程可以运行多个SolrCore（Solr实例），一个Core对应一个索引目录。
+</code></pre><h3 id="java-properties"><a href="#java-properties" class="headerlink" title="java properties"></a>java properties</h3><pre><code>Solr在JVM 运行环境中的属性信息，包括类路径、文件编码、jvm内存设置等信息。
+</code></pre><h3 id="Tread-Dump"><a href="#Tread-Dump" class="headerlink" title="Tread Dump"></a>Tread Dump</h3><pre><code>显示Solr Server中当前活跃线程信息，同时也可以跟踪线程运行栈信息。
+</code></pre><h3 id="Analysis"><a href="#Analysis" class="headerlink" title="Analysis"></a>Analysis</h3><pre><code>通过此界面可以测试索引分析器和搜索分析器的执行情况。
+</code></pre><h3 id="dataimport"><a href="#dataimport" class="headerlink" title="dataimport"></a>dataimport</h3><pre><code>可以定义数据导入处理器，从关系数据库将数据导入 到Solr索引库中。
+</code></pre><h3 id="Document"><a href="#Document" class="headerlink" title="Document"></a>Document</h3><pre><code>通过此菜单可以创建索引、更新索引、删除索引等操作
+/update表示更新索引，solr默认根据id（唯一约束）域来更新Document的内容，
+如果根据id值搜索不到id域则会执行添加操作，如果找到则更新。
+</code></pre><h3 id="query"><a href="#query" class="headerlink" title="query"></a>query</h3><pre><code>通过/select执行搜索索引，必须指定“q”查询条件方可搜索。
+</code></pre><h2 id="多core配置"><a href="#多core配置" class="headerlink" title="多core配置"></a>多core配置</h2><pre><code>复制原来的core目录为collection2
+修改collection2下的core.properties:
+name=collection2
+</code></pre><h1 id="Solr索引"><a href="#Solr索引" class="headerlink" title="Solr索引"></a>Solr索引</h1><h2 id="scheam-xml"><a href="#scheam-xml" class="headerlink" title="scheam.xml"></a>scheam.xml</h2><pre><code>schema.xml，在SolrCore的conf目录下，它是Solr数据表配置文件，它定义了加入索引的数据的数据类型的。
+主要包括FieldTypes、Fields和其他的一些缺省设置。
+</code></pre><h3 id="FieldType域类型定义"><a href="#FieldType域类型定义" class="headerlink" title="FieldType域类型定义"></a>FieldType域类型定义</h3><p>下边“text_general”是Solr默认提供的FieldType，通过它说明FieldType定义的内容：</p>
+<pre><code> &lt;fieldType name=&quot;text_general&quot; class=&quot;solr.TextField&quot; positionIncrementGap=&quot;100&quot;&gt;
+  &lt;analyzer type=&quot;index&quot;&gt;
+    &lt;tokenizer class=&quot;solr.StandardTokenizerFactory&quot;/&gt;
+    &lt;filter class=&quot;solr.StopFilterFactory&quot; ignoreCase=&quot;true&quot; words=&quot;stopwords.txt&quot; /&gt;
+    &lt;!-- in this example, we will only use synonyms at query time
+    &lt;filter class=&quot;solr.SynonymFilterFactory&quot; synonyms=&quot;index_synonyms.txt&quot; ignoreCase=&quot;true&quot; expand=&quot;false&quot;/&gt;
+    --&gt;
+    &lt;filter class=&quot;solr.LowerCaseFilterFactory&quot;/&gt;
+  &lt;/analyzer&gt;
+  &lt;analyzer type=&quot;query&quot;&gt;
+    &lt;tokenizer class=&quot;solr.StandardTokenizerFactory&quot;/&gt;
+    &lt;filter class=&quot;solr.StopFilterFactory&quot; ignoreCase=&quot;true&quot; words=&quot;stopwords.txt&quot; /&gt;
+    &lt;filter class=&quot;solr.SynonymFilterFactory&quot; synonyms=&quot;synonyms.txt&quot; ignoreCase=&quot;true&quot; expand=&quot;true&quot;/&gt;
+    &lt;filter class=&quot;solr.LowerCaseFilterFactory&quot;/&gt;
+  &lt;/analyzer&gt;
+&lt;/fieldType&gt;
+</code></pre><p>FieldType子结点包括：name,class,positionIncrementGap等一些参数：</p>
+<pre><code>name：是这个FieldType的名称
 
+class：是Solr提供的包solr.TextField，solr.TextField 允许用户通过分析器来定制索引和查询，
+分析器包括一个分词器（tokenizer）和多个过滤器（filter）
+
+positionIncrementGap：可选属性，定义在同一个文档中此类型数据的空白间隔，
+避免短语匹配错误，此值相当于Lucene的短语查询设置slop值，根据经验设置为100。
+
+在FieldType定义的时候最重要的就是,
+定义这个类型的数据在建立索引和进行查询的时候要使用的分析器analyzer,包括分词和过滤
+
+索引分析器中：使用solr.StandardTokenizerFactory标准分词器，
+solr.StopFilterFactory停用词过滤器，
+solr.LowerCaseFilterFactory小写过滤器。
+
+搜索分析器中：使用solr.StandardTokenizerFactory标准分词器，
+solr.StopFilterFactory停用词过滤器，这里还用到了solr.SynonymFilterFactory同义词过滤器。
+</code></pre><h3 id="Field定义"><a href="#Field定义" class="headerlink" title="Field定义"></a>Field定义</h3><pre><code>在solr中，Field要先定义后使用。
+在fields结点内定义具体的Field，filed定义包括name,
+type（为之前定义过的各种FieldType）,indexed（是否被索引）,stored（是否被储存），multiValued（是否存储多个值,比如多个商品图片）等属性。
+</code></pre><p>如下：</p>
+<pre><code>&lt;field name=&quot;name&quot; type=&quot;text_general&quot; indexed=&quot;true&quot; stored=&quot;true&quot;/&gt;
+&lt;field name=&quot;features&quot; type=&quot;text_general&quot; indexed=&quot;true&quot; stored=&quot;true&quot; multiValued=&quot;true&quot;/&gt;
+
+multiValued：该Field如果要存储多个值时设置为true，solr允许一个Field存储多个值，比如存储一个用户的好友id（多个），
+商品的图片（多个，大图和小图），通过使用solr查询要看出返回给客户端是数组。
+</code></pre><h3 id="uniqueKey"><a href="#uniqueKey" class="headerlink" title="uniqueKey"></a>uniqueKey</h3><pre><code>Solr中默认定义唯一主键key为id域，如下：
+
+&lt;uniqueKey&gt;id&lt;/uniqueKey&gt;
+
+Solr在删除、更新索引时使用id域进行判断，也可以自定义唯一主键。
+</code></pre><h3 id="copyField复制域"><a href="#copyField复制域" class="headerlink" title="copyField复制域"></a>copyField复制域</h3><p>copyField复制域，可以将多个Field复制到一个Field中，以便进行统一的检索：<br>比如，输入关键字搜索title标题内容content，</p>
+<pre><code>定义title、content、text的域：
+
+&lt;field name=&quot;title&quot; type=&quot;text_general&quot; indexed=&quot;true&quot; stored=&quot;true&quot; multiValued=&quot;true&quot;/&gt;
+&lt;field name=&quot;subject&quot; type=&quot;text_general&quot; indexed=&quot;true&quot; stored=&quot;true&quot;/&gt;
+&lt;field name=&quot;description&quot; type=&quot;text_general&quot; indexed=&quot;true&quot; stored=&quot;true&quot;/&gt;
+</code></pre><p>根据关键字只搜索text域的内容就相当于搜索title和content，将title和content复制到text中，如下：</p>
+<pre><code>&lt;copyField source=&quot;cat&quot; dest=&quot;text&quot;/&gt;
+&lt;copyField source=&quot;name&quot; dest=&quot;text&quot;/&gt;
+&lt;copyField source=&quot;manu&quot; dest=&quot;text&quot;/&gt;
+&lt;copyField source=&quot;features&quot; dest=&quot;text&quot;/&gt;
+&lt;copyField source=&quot;includes&quot; dest=&quot;text&quot;/&gt;
+&lt;copyField source=&quot;manu&quot; dest=&quot;manu_exact&quot;/&gt;
+</code></pre><h3 id="dynamicField（动态字段）"><a href="#dynamicField（动态字段）" class="headerlink" title="dynamicField（动态字段）"></a>dynamicField（动态字段）</h3><pre><code>动态字段就是不用指定具体的名称，只要定义字段名称的规则，
+例如定义一个 dynamicField，name 为*_i，定义它的type为text，
+那么在使用这个字段的时候，任何以_i结尾的字段都被认为是符合这个定义的，
+例如：name_i，gender_i，school_i等。
+
+自定义Field名为：product_title_t，“product_title_t”和scheam.xml中的dynamicField规则匹配成功，如下：
+
+&lt;dynamicField name=&quot;*_i&quot;  type=&quot;int&quot;  indexed=&quot;true&quot; stored=&quot;true&quot;/&gt;
+
+“product_title_t”是以“_t”结尾。
+</code></pre><h2 id="Analyzer"><a href="#Analyzer" class="headerlink" title="Analyzer"></a>Analyzer</h2><h3 id="安装中文分词器"><a href="#安装中文分词器" class="headerlink" title="安装中文分词器"></a>安装中文分词器</h3><h4 id="IKAnalyzer部署"><a href="#IKAnalyzer部署" class="headerlink" title="IKAnalyzer部署"></a>IKAnalyzer部署</h4><pre><code>拷贝IKAnalyzer的文件到Tomcat下Solr目录 中
+
+将IKAnalyzer2012FF_u1.jar拷贝到 Tomcat的webapps/solr/WEB-INF/lib 下。
+在Tomcat的webapps/solr/WEB-INF/下创建classes目录
+将IKAnalyzer.cfg.xml、ext_stopword.dic  mydict.dic  copy到 Tomcat的
+webapps/solr/WEB-INF/classes
+
+注意：ext_stopword.dic 和mydict.dic必须保存成无BOM的utf-8类型。
+</code></pre><h4 id="修改schema-xml文件"><a href="#修改schema-xml文件" class="headerlink" title="修改schema.xml文件"></a>修改schema.xml文件</h4><pre><code>1.    FieldType
+
+首先需要在types结点内定义一个FieldType子结点，包括name,class,等参数，
+name就是这个FieldType的名称，
+class指向org.apache.solr.analysis包里面对应的class名称，用来定义这个类型的行为。
+在FieldType定义的时候最重要的就是定义这个类型的数据在建立索引和进行查询的时候要使用的分析器analyzer,包括分词和过滤
+</code></pre><p>修改Solr的schema.xml文件，添加FieldType：</p>
+<pre><code>&lt;!-- IKAnalyzer--&gt;
+     &lt;fieldType name=&quot;text_ik&quot; class=&quot;solr.TextField&quot;&gt;
+        &lt;analyzer type=&quot;index&quot; isMaxWordLength=&quot;false&quot; class=&quot;org.wltea.analyzer.lucene.IKAnalyzer&quot;/&gt;
+        &lt;analyzer type=&quot;query&quot; isMaxWordLength=&quot;true&quot; class=&quot;org.wltea.analyzer.lucene.IKAnalyzer&quot;/&gt;
+     &lt;/fieldType&gt;
+</code></pre><p>其中查询采用IK自己的最大分词法,索引则采用它的细粒度分词法.所以各自配置了isMaxWordLength属性.</p>
+<pre><code>2.    Field：
+
+FieldType定义好后就可以在fields结点内定义具体的field，filed定义包括:
+name,type（即FieldType）,indexed（是否被索引）,stored（是否被储存），multiValued（是否有多个值）等
+
+&lt;!--IKAnalyzer Field--&gt;
+   &lt;field name=&quot;title_ik&quot; type=&quot;text_ik&quot; indexed=&quot;true&quot; stored=&quot;true&quot; /&gt;
+   &lt;field name=&quot;content_ik&quot; type=&quot;text_ik&quot; indexed=&quot;true&quot; stored=&quot;false&quot; multiValued=&quot;true&quot;/&gt;
+</code></pre><h2 id="设置业务系统Field"><a href="#设置业务系统Field" class="headerlink" title="设置业务系统Field"></a>设置业务系统Field</h2><p>如果不使用Solr提供的Field可以针对具体的业务需要自定义一套Field，如下是商品信息Field：</p>
+<pre><code> &lt;!--product--&gt;
+&lt;field name=&quot;product_name&quot; type=&quot;text_ik&quot; indexed=&quot;true&quot; stored=&quot;true&quot;/&gt;
+&lt;field name=&quot;product_price&quot;  type=&quot;float&quot; indexed=&quot;true&quot; stored=&quot;true&quot;/&gt;
+&lt;field name=&quot;product_description&quot; type=&quot;text_ik&quot; indexed=&quot;true&quot; stored=&quot;false&quot; /&gt;
+&lt;field name=&quot;product_picture&quot; type=&quot;string&quot; indexed=&quot;false&quot; stored=&quot;true&quot; /&gt;
+&lt;field name=&quot;product_catalog_name&quot; type=&quot;string&quot; indexed=&quot;true&quot; stored=&quot;true&quot; /&gt;
+
+&lt;field name=&quot;product_keywords&quot; type=&quot;text_ik&quot; indexed=&quot;true&quot; stored=&quot;false&quot; multiValued=&quot;true&quot;/&gt;
+&lt;copyField source=&quot;product_name&quot; dest=&quot;product_keywords&quot;/&gt;
+&lt;copyField source=&quot;product_description&quot; dest=&quot;product_keywords&quot;/&gt;
+</code></pre><h2 id="索引维护"><a href="#索引维护" class="headerlink" title="索引维护"></a>索引维护</h2>
       
     </div>
 
@@ -568,7 +698,7 @@ conf是SolrCore的配置文件目录 。
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#站内搜索技术选型"><span class="nav-number">1.</span> <span class="nav-text">站内搜索技术选型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#单独使用Lucene实现"><span class="nav-number">1.1.</span> <span class="nav-text">单独使用Lucene实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Google或Baidu接口"><span class="nav-number">1.2.</span> <span class="nav-text">使用Google或Baidu接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Solr实现"><span class="nav-number">1.3.</span> <span class="nav-text">使用Solr实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Solr介绍"><span class="nav-number">2.</span> <span class="nav-text">Solr介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是Solr"><span class="nav-number">2.1.</span> <span class="nav-text">什么是Solr</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Solr与Lucene的区别"><span class="nav-number">2.2.</span> <span class="nav-text">Solr与Lucene的区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Solr安装配置"><span class="nav-number">3.</span> <span class="nav-text">Solr安装配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#运行环境"><span class="nav-number">3.1.</span> <span class="nav-text">运行环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Solr与Tomcat整合配置"><span class="nav-number">3.2.</span> <span class="nav-text">Solr与Tomcat整合配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Solr-Home与SolrCore"><span class="nav-number">3.2.1.</span> <span class="nav-text">Solr Home与SolrCore</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#目录结构"><span class="nav-number">3.2.1.1.</span> <span class="nav-text">目录结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置"><span class="nav-number">3.2.1.2.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#solrconfig-xml"><span class="nav-number">3.2.1.3.</span> <span class="nav-text">solrconfig.xml</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#加载jar包"><span class="nav-number">3.2.1.3.1.</span> <span class="nav-text">加载jar包</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#dataDir"><span class="nav-number">3.2.1.3.2.</span> <span class="nav-text">dataDir</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#requestHandler"><span class="nav-number">3.2.1.3.3.</span> <span class="nav-text">requestHandler</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Solr工程部署"><span class="nav-number">3.3.</span> <span class="nav-text">Solr工程部署</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动Tomcat"><span class="nav-number">3.4.</span> <span class="nav-text">启动Tomcat</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#站内搜索技术选型"><span class="nav-number">1.</span> <span class="nav-text">站内搜索技术选型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#单独使用Lucene实现"><span class="nav-number">1.1.</span> <span class="nav-text">单独使用Lucene实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Google或Baidu接口"><span class="nav-number">1.2.</span> <span class="nav-text">使用Google或Baidu接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Solr实现"><span class="nav-number">1.3.</span> <span class="nav-text">使用Solr实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Solr介绍"><span class="nav-number">2.</span> <span class="nav-text">Solr介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是Solr"><span class="nav-number">2.1.</span> <span class="nav-text">什么是Solr</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Solr与Lucene的区别"><span class="nav-number">2.2.</span> <span class="nav-text">Solr与Lucene的区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Solr安装配置"><span class="nav-number">3.</span> <span class="nav-text">Solr安装配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#运行环境"><span class="nav-number">3.1.</span> <span class="nav-text">运行环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Solr与Tomcat整合配置"><span class="nav-number">3.2.</span> <span class="nav-text">Solr与Tomcat整合配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Solr-Home与SolrCore"><span class="nav-number">3.2.1.</span> <span class="nav-text">Solr Home与SolrCore</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#目录结构"><span class="nav-number">3.2.1.1.</span> <span class="nav-text">目录结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置"><span class="nav-number">3.2.1.2.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#solrconfig-xml"><span class="nav-number">3.2.1.3.</span> <span class="nav-text">solrconfig.xml</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#加载jar包"><span class="nav-number">3.2.1.3.1.</span> <span class="nav-text">加载jar包</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#dataDir"><span class="nav-number">3.2.1.3.2.</span> <span class="nav-text">dataDir</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#requestHandler"><span class="nav-number">3.2.1.3.3.</span> <span class="nav-text">requestHandler</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Solr工程部署"><span class="nav-number">3.3.</span> <span class="nav-text">Solr工程部署</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动Tomcat"><span class="nav-number">3.4.</span> <span class="nav-text">启动Tomcat</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Dashboard"><span class="nav-number">3.4.1.</span> <span class="nav-text">Dashboard</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Logging"><span class="nav-number">3.4.2.</span> <span class="nav-text">Logging</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cloud"><span class="nav-number">3.4.3.</span> <span class="nav-text">Cloud</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Core-Admin"><span class="nav-number">3.4.4.</span> <span class="nav-text">Core Admin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java-properties"><span class="nav-number">3.4.5.</span> <span class="nav-text">java properties</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tread-Dump"><span class="nav-number">3.4.6.</span> <span class="nav-text">Tread Dump</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Analysis"><span class="nav-number">3.4.7.</span> <span class="nav-text">Analysis</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dataimport"><span class="nav-number">3.4.8.</span> <span class="nav-text">dataimport</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Document"><span class="nav-number">3.4.9.</span> <span class="nav-text">Document</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#query"><span class="nav-number">3.4.10.</span> <span class="nav-text">query</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多core配置"><span class="nav-number">3.5.</span> <span class="nav-text">多core配置</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Solr索引"><span class="nav-number">4.</span> <span class="nav-text">Solr索引</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#scheam-xml"><span class="nav-number">4.1.</span> <span class="nav-text">scheam.xml</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#FieldType域类型定义"><span class="nav-number">4.1.1.</span> <span class="nav-text">FieldType域类型定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Field定义"><span class="nav-number">4.1.2.</span> <span class="nav-text">Field定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#uniqueKey"><span class="nav-number">4.1.3.</span> <span class="nav-text">uniqueKey</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#copyField复制域"><span class="nav-number">4.1.4.</span> <span class="nav-text">copyField复制域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dynamicField（动态字段）"><span class="nav-number">4.1.5.</span> <span class="nav-text">dynamicField（动态字段）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Analyzer"><span class="nav-number">4.2.</span> <span class="nav-text">Analyzer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装中文分词器"><span class="nav-number">4.2.1.</span> <span class="nav-text">安装中文分词器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IKAnalyzer部署"><span class="nav-number">4.2.1.1.</span> <span class="nav-text">IKAnalyzer部署</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改schema-xml文件"><span class="nav-number">4.2.1.2.</span> <span class="nav-text">修改schema.xml文件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置业务系统Field"><span class="nav-number">4.3.</span> <span class="nav-text">设置业务系统Field</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#索引维护"><span class="nav-number">4.4.</span> <span class="nav-text">索引维护</span></a></li></ol></li></ol></div>
             
           </div>
         </section>
