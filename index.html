@@ -337,7 +337,33 @@ Solr实例就是SolrCore，一个SolrHome可以包括多个SolrCore（Solr实例
 <p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/solr_example.jpg" alt=""></p>
 <p>上图中“collection1”是一个SolrCore（Solr实例）目录 ，目录内容如下所示：</p>
 <p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/solr_collection1.jpg" alt=""></p>
+<p>说明：</p>
+<pre><code>collection1：叫做一个Solr运行实例SolrCore，SolrCore名称不固定，
+一个solr运行实例对外单独提供索引和搜索接口。
 
+solrHome中可以创建多个solr运行实例SolrCore。
+
+一个solr的运行实例对应一个索引目录。
+
+conf是SolrCore的配置文件目录 。
+</code></pre><h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><pre><code>创建目录 F:\develop\solr 
+
+将example\solr目录 拷贝至 F:\develop\solr目录下并改名为solrhome
+</code></pre><h4 id="solrconfig-xml"><a href="#solrconfig-xml" class="headerlink" title="solrconfig.xml"></a>solrconfig.xml</h4><pre><code>solrconfig.xml，在SolrCore的conf目录下，它是SolrCore运行的配置文件。
+</code></pre><h5 id="加载jar包"><a href="#加载jar包" class="headerlink" title="加载jar包"></a>加载jar包</h5><pre><code>将contrib和dist两个目录拷贝到F:\develop\solr下，此时，solrhome,dist,contrib三个目录在同一层级
+</code></pre><p>修改solrconfig.xml文件：</p>
+<pre><code>&lt;lib dir=&quot;${solr.install.dir:../..}/contrib/extraction/lib&quot; regex=&quot;.*\.jar&quot; /&gt;
+&lt;lib dir=&quot;${solr.install.dir:../..}/dist/&quot; regex=&quot;solr-cell-\d.*\.jar&quot; /&gt;
+
+&lt;lib dir=&quot;${solr.install.dir:../..}/contrib/clustering/lib/&quot; regex=&quot;.*\.jar&quot; /&gt;
+&lt;lib dir=&quot;${solr.install.dir:../..}/dist/&quot; regex=&quot;solr-clustering-\d.*\.jar&quot; /&gt;
+
+&lt;lib dir=&quot;${solr.install.dir:../..}/contrib/langid/lib/&quot; regex=&quot;.*\.jar&quot; /&gt;
+&lt;lib dir=&quot;${solr.install.dir:../..}/dist/&quot; regex=&quot;solr-langid-\d.*\.jar&quot; /&gt;
+
+&lt;lib dir=&quot;${solr.install.dir:../..}/contrib/velocity/lib&quot; regex=&quot;.*\.jar&quot; /&gt;
+&lt;lib dir=&quot;${solr.install.dir:../..}/dist/&quot; regex=&quot;solr-velocity-\d.*\.jar&quot; /&gt;
+</code></pre>
           
         
       
