@@ -363,7 +363,46 @@ conf是SolrCore的配置文件目录 。
 
 &lt;lib dir=&quot;${solr.install.dir:../..}/contrib/velocity/lib&quot; regex=&quot;.*\.jar&quot; /&gt;
 &lt;lib dir=&quot;${solr.install.dir:../..}/dist/&quot; regex=&quot;solr-velocity-\d.*\.jar&quot; /&gt;
-</code></pre>
+</code></pre><h5 id="dataDir"><a href="#dataDir" class="headerlink" title="dataDir"></a>dataDir</h5><pre><code>置SolrCore的数据目录，数据目录下包括了index索引目录 和tlog日志文件目录，
+数据目录默认在solrCore下的data目录 ，也可以更改目录地址 ，如下：
+
+  &lt;dataDir&gt;${solr.data.dir:F:/develop/solr/collection1/data}&lt;/dataDir&gt;
+</code></pre><h5 id="requestHandler"><a href="#requestHandler" class="headerlink" title="requestHandler"></a>requestHandler</h5><pre><code>requestHandler请求处理器，定义了索引和搜索的访问方式。
+
+通过/update维护索引，可以完成索引的添加、修改、删除操作。
+通过/select搜索索引。
+设置搜索参数完成搜索，搜索参数也可以设置一些默认值，如下：
+
+&lt;requestHandler name=&quot;/select&quot; class=&quot;solr.SearchHandler&quot;&gt;
+&lt;!-- 设置默认的参数值，可以在请求地址中修改这些参数--&gt;
+&lt;lst name=&quot;defaults&quot;&gt;
+    &lt;str name=&quot;echoParams&quot;&gt;explicit&lt;/str&gt;
+    &lt;int name=&quot;rows&quot;&gt;10&lt;/int&gt;&lt;!--显示数量--&gt;
+    &lt;str name=&quot;wt&quot;&gt;json&lt;/str&gt;&lt;!--显示格式--&gt;
+    &lt;str name=&quot;df&quot;&gt;text&lt;/str&gt;&lt;!--默认搜索字段--&gt;
+&lt;/lst&gt;
+&lt;/requestHandler&gt;
+</code></pre><h2 id="Solr工程部署"><a href="#Solr工程部署" class="headerlink" title="Solr工程部署"></a>Solr工程部署</h2><pre><code>1.    将dist\solr-4.10.3.war拷贝到Tomcat的webapp目录下改名为solr.war
+
+2.    启动tomcat后，solr.war自动解压，将原来的solr.war删除。
+
+3.    拷贝example\lib\ext 目录下所有jar包到Tomcat的webapp\solr\WEB-INF\lib目录下
+4.    修改Tomcat目录 下webapp\solr\WEB-INF\web.xml文件，如下所示：
+    设置Solr home
+
+    &lt;env-entry&gt;
+    &lt;env-entry-name&gt;solr/home&lt;/env-entry-name&gt;
+    &lt;env-entry-value&gt;f:/develop/solr/solrhome&lt;/env-entry-value&gt;
+    &lt;env-entry-type&gt;java.lang.String&lt;/env-entry-type&gt;
+    &lt;/env-entry&gt;
+
+5.    拷贝log4j.properties文件
+
+    在 Tomcat下webapps\solr\WEB-INF目录中创建文件 classes文件夹，
+    复制Solr目录下example\resources\log4j.properties至Tomcat下webapps\solr\WEB-INF\classes目录 
+</code></pre><h2 id="启动Tomcat"><a href="#启动Tomcat" class="headerlink" title="启动Tomcat"></a>启动Tomcat</h2><p>启动tomcat服务器,在浏览器输入: localhost/solr</p>
+<p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/solr_index.jpg" alt=""></p>
+
           
         
       
