@@ -532,7 +532,11 @@ name,type（即FieldType）,indexed（是否被索引）,stored（是否被储�
 &lt;field name=&quot;product_keywords&quot; type=&quot;text_ik&quot; indexed=&quot;true&quot; stored=&quot;false&quot; multiValued=&quot;true&quot;/&gt;
 &lt;copyField source=&quot;product_name&quot; dest=&quot;product_keywords&quot;/&gt;
 &lt;copyField source=&quot;product_description&quot; dest=&quot;product_keywords&quot;/&gt;
-</code></pre><h2 id="索引维护"><a href="#索引维护" class="headerlink" title="索引维护"></a>索引维护</h2>
+</code></pre><h2 id="SolrJ完成索引维护"><a href="#SolrJ完成索引维护" class="headerlink" title="SolrJ完成索引维护"></a>SolrJ完成索引维护</h2><h3 id="什么是SolrJ"><a href="#什么是SolrJ" class="headerlink" title="什么是SolrJ"></a>什么是SolrJ</h3><pre><code>solrj是访问Solr服务的java客户端，提供索引和搜索的请求方法，
+SolrJ通常在嵌入在业务系统中，通过SolrJ的API接口操作Solr服务。
+</code></pre><p>如下图：</p>
+<p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/solrJ.jpg" alt=""></p>
+
           
         
       
