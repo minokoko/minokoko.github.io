@@ -106,7 +106,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/solr_collection1.jpg">
 <meta property="og:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/solr_index.JPG">
 <meta property="og:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/solrJ.jpg">
-<meta property="og:updated_time" content="2016-09-21T10:47:45.563Z">
+<meta property="og:updated_time" content="2016-09-21T11:03:00.913Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="solr全文搜索服务">
 <meta name="twitter:description" content="站内搜索技术选型在一些大型门户网站、电子商务网站等都需要站内搜索功能，
@@ -549,11 +549,159 @@ name,type（即FieldType）,indexed（是否被索引）,stored（是否被储�
 &lt;field name=&quot;product_keywords&quot; type=&quot;text_ik&quot; indexed=&quot;true&quot; stored=&quot;false&quot; multiValued=&quot;true&quot;/&gt;
 &lt;copyField source=&quot;product_name&quot; dest=&quot;product_keywords&quot;/&gt;
 &lt;copyField source=&quot;product_description&quot; dest=&quot;product_keywords&quot;/&gt;
+</code></pre><h2 id="dataimport-handler"><a href="#dataimport-handler" class="headerlink" title="dataimport-handler"></a>dataimport-handler</h2><p>安装dataimport-Handler从关系数据库将数据导入到索引库。</p>
+<pre><code>第一步：向SolrCore中加入jar包
+在SolrCore目录中创建lib目录，将dataimportHandler和mysql数据库驱动的jar拷贝至lib下：
+dataimportHandler在solr安装目录的dist下。
+复制到D:\apache-solr-home\contrib\dataimporthandler\lib
+mysql驱动复制到D:\apache-solr-home\contrib\db\lib
+
+第二步 : 修改solrconfig.xml文件，添加requestHandler
+
+     &lt;requestHandler name=&quot;/dataimport&quot; class=&quot;org.apache.solr.handler.dataimport.DataImportHandler&quot;&gt;
+     &lt;lst name=&quot;defaults&quot;&gt;
+       &lt;str name=&quot;config&quot;&gt;data-config.xml&lt;/str&gt;
+     &lt;/lst&gt;
+      &lt;/requestHandler&gt;
+
+第三步：编辑data-config.xml文件，存放在SolrCore的conf目录 
+
+    &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;  
+    &lt;dataConfig&gt;   
+    &lt;dataSource type=&quot;JdbcDataSource&quot;   
+              driver=&quot;com.mysql.jdbc.Driver&quot;   
+              url=&quot;jdbc:mysql://localhost:3306/lucene&quot;   
+              user=&quot;w6233834&quot;   
+              password=&quot;6233834&quot;/&gt;   
+        &lt;document&gt;   
+            &lt;entity name=&quot;product&quot; query=&quot;SELECT id,name,catalog_name,price,description,pic FROM products &quot;&gt;
+                 &lt;field column=&quot;id&quot; name=&quot;id&quot;/&gt; 
+                 &lt;field column=&quot;name&quot; name=&quot;product_name&quot;/&gt; 
+                 &lt;field column=&quot;catalog_name&quot; name=&quot;product_catalog_name&quot;/&gt; 
+                 &lt;field column=&quot;price&quot; name=&quot;product_price&quot;/&gt; 
+                 &lt;field column=&quot;description&quot; name=&quot;product_description&quot;/&gt; 
+                 &lt;field column=&quot;pic&quot; name=&quot;product_picture&quot;/&gt; 
+            &lt;/entity&gt;   
+        &lt;/document&gt;   
+    &lt;/dataConfig&gt;
+
+    &lt;field column=&quot;id&quot; name=&quot;id&quot;/&gt;必须有一个id域，这里使用Solr默认的id域，域值是从关系数据库查询的id列值。
+    下边以“product_”开头的Field都是在schema.xml中自定义的商品信息Field。
+
+第四步：重启Tomcat，进入管理界面 -&gt; SolrCore -&gt; dataimport下执行导入
 </code></pre><h2 id="SolrJ完成索引维护"><a href="#SolrJ完成索引维护" class="headerlink" title="SolrJ完成索引维护"></a>SolrJ完成索引维护</h2><h3 id="什么是SolrJ"><a href="#什么是SolrJ" class="headerlink" title="什么是SolrJ"></a>什么是SolrJ</h3><pre><code>solrj是访问Solr服务的java客户端，提供索引和搜索的请求方法，
 SolrJ通常在嵌入在业务系统中，通过SolrJ的API接口操作Solr服务。
 </code></pre><p>如下图：</p>
 <p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/solrJ.jpg" alt=""></p>
+<h4 id="创建索引"><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h4><p>使用SolrJ创建索引，通过调用SolrJ提供的API请求Solr服务，Document通过SolrInputDocument进行构建。</p>
+<pre><code>@Test
+public void createIndex() throws SolrServerException, IOException{
 
+    //创建HttpSolrServer
+    //参数：表示solr服务的访问基础url
+    HttpSolrServer server = new HttpSolrServer(&quot;http://localhost/solr&quot;);
+    //通过server添加SolrInputDocument
+    SolrInputDocument doc = new SolrInputDocument();
+    doc.addField(&quot;id&quot;, &quot;X001&quot;);
+    doc.addField(&quot;content_ik&quot;, &quot;我爱中国&quot;);
+
+    server.add(doc);
+    //提交操作
+    server.commit();
+}
+</code></pre><p>说明：根据id（唯一约束）域来更新Document的内容，如果根据id值搜索不到id域则会执行添加操作，如果找到则更新。</p>
+<h4 id="删除索引"><a href="#删除索引" class="headerlink" title="删除索引"></a>删除索引</h4><pre><code>@Test
+public void deleteIndex() throws SolrServerException, IOException{
+    //创建HttpSolrServer
+    //参数：表示solr服务的访问基础url
+    HttpSolrServer server = new HttpSolrServer(&quot;http://localhost/solr&quot;);
+
+    server.deleteById(&quot;CX001&quot;);
+
+    server.commit();
+}    
+
+
+@Test
+public void deleteIndexByQuery() throws SolrServerException, IOException{
+    //创建HttpSolrServer
+    //参数：表示solr服务的访问基础url
+    HttpSolrServer server = new HttpSolrServer(&quot;http://localhost/solr&quot;);
+
+    //根据条件删除
+    server.deleteByQuery(&quot;id:cx001&quot;);
+
+    //批量删除
+    server.deleteByQuery(&quot;content_ik:我爱中国&quot;);
+
+    server.commit();
+}
+</code></pre><h4 id="复杂查询"><a href="#复杂查询" class="headerlink" title="复杂查询"></a>复杂查询</h4><pre><code>@Test
+public void searchIndex02() throws SolrServerException{
+    //创建HttpSolrServer
+    //参数：表示solr服务的访问基础url
+    HttpSolrServer server = new HttpSolrServer(&quot;http://localhost/solr&quot;);
+
+    //创建查询对象
+    SolrQuery query = new SolrQuery();
+
+    //设置查询条件
+    query.setQuery(&quot;小黄人&quot;);
+
+    //设置过滤条件
+    query.addFilterQuery(&quot;product_catalog_name:幽默杂货&quot;);
+    query.addFilterQuery(&quot;product_price:[5 TO 20]&quot;);
+
+    //设置排序
+    query.setSort(&quot;product_price&quot;, ORDER.desc);
+
+    //设置分页信息
+    query.setStart(0);
+    query.setRows(10);
+
+    //设置需要显示的域列表
+    query.setFields(&quot;id,product_name,product_price,product_catalog_name,product_picture&quot;);
+
+    //设置默认搜索域
+    query.set(&quot;df&quot;, &quot;product_keywords&quot;);
+
+    //设置高亮
+    query.setHighlight(true);
+    query.addHighlightField(&quot;product_name&quot;);
+    query.setHighlightSimplePre(&quot;&lt;font style=\&quot;color:red\&quot;&gt;&quot;);
+    query.setHighlightSimplePost(&quot;&lt;/font&gt;&quot;);
+
+    QueryResponse response = server.query(query);
+
+    //获取查询结果
+    SolrDocumentList results = response.getResults();
+
+    //匹配出的所有商品记录条数
+    long numFound = results.getNumFound();
+
+    System.out.println(&quot;匹配出的所有商品记录条数: &quot;+numFound);
+
+    //获取高亮信息
+    Map&lt;String, Map&lt;String, List&lt;String&gt;&gt;&gt; highlighting = response.getHighlighting();
+
+    for (SolrDocument solrDocument : results) {
+
+        System.out.println(&quot;商品id: &quot;+solrDocument.get(&quot;id&quot;));
+        System.out.println(&quot;商品name: &quot;+solrDocument.get(&quot;product_name&quot;));
+        System.out.println(&quot;商品price: &quot;+solrDocument.get(&quot;product_price&quot;));
+        System.out.println(&quot;商品分类名称: &quot;+solrDocument.get(&quot;product_catalog_name&quot;));
+        System.out.println(&quot;商品图片: &quot;+solrDocument.get(&quot;product_picture&quot;));
+
+        List&lt;String&gt; list = highlighting.get(solrDocument.get(&quot;id&quot;)).get(&quot;product_name&quot;);
+
+        if(list!= null) System.out.println(&quot;显示高亮信息: &quot;+list.get(0));
+
+        System.out.println(&quot;====================================================&quot;);
+
+    }
+
+}
+</code></pre>
       
     </div>
 
@@ -703,7 +851,7 @@ SolrJ通常在嵌入在业务系统中，通过SolrJ的API接口操作Solr服务
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#站内搜索技术选型"><span class="nav-number">1.</span> <span class="nav-text">站内搜索技术选型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#单独使用Lucene实现"><span class="nav-number">1.1.</span> <span class="nav-text">单独使用Lucene实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Google或Baidu接口"><span class="nav-number">1.2.</span> <span class="nav-text">使用Google或Baidu接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Solr实现"><span class="nav-number">1.3.</span> <span class="nav-text">使用Solr实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Solr介绍"><span class="nav-number">2.</span> <span class="nav-text">Solr介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是Solr"><span class="nav-number">2.1.</span> <span class="nav-text">什么是Solr</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Solr与Lucene的区别"><span class="nav-number">2.2.</span> <span class="nav-text">Solr与Lucene的区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Solr安装配置"><span class="nav-number">3.</span> <span class="nav-text">Solr安装配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#运行环境"><span class="nav-number">3.1.</span> <span class="nav-text">运行环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Solr与Tomcat整合配置"><span class="nav-number">3.2.</span> <span class="nav-text">Solr与Tomcat整合配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Solr-Home与SolrCore"><span class="nav-number">3.2.1.</span> <span class="nav-text">Solr Home与SolrCore</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#目录结构"><span class="nav-number">3.2.1.1.</span> <span class="nav-text">目录结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置"><span class="nav-number">3.2.1.2.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#solrconfig-xml"><span class="nav-number">3.2.1.3.</span> <span class="nav-text">solrconfig.xml</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#加载jar包"><span class="nav-number">3.2.1.3.1.</span> <span class="nav-text">加载jar包</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#dataDir"><span class="nav-number">3.2.1.3.2.</span> <span class="nav-text">dataDir</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#requestHandler"><span class="nav-number">3.2.1.3.3.</span> <span class="nav-text">requestHandler</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Solr工程部署"><span class="nav-number">3.3.</span> <span class="nav-text">Solr工程部署</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动Tomcat"><span class="nav-number">3.4.</span> <span class="nav-text">启动Tomcat</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Dashboard"><span class="nav-number">3.4.1.</span> <span class="nav-text">Dashboard</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Logging"><span class="nav-number">3.4.2.</span> <span class="nav-text">Logging</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cloud"><span class="nav-number">3.4.3.</span> <span class="nav-text">Cloud</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Core-Admin"><span class="nav-number">3.4.4.</span> <span class="nav-text">Core Admin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java-properties"><span class="nav-number">3.4.5.</span> <span class="nav-text">java properties</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tread-Dump"><span class="nav-number">3.4.6.</span> <span class="nav-text">Tread Dump</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Analysis"><span class="nav-number">3.4.7.</span> <span class="nav-text">Analysis</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dataimport"><span class="nav-number">3.4.8.</span> <span class="nav-text">dataimport</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Document"><span class="nav-number">3.4.9.</span> <span class="nav-text">Document</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#query"><span class="nav-number">3.4.10.</span> <span class="nav-text">query</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多core配置"><span class="nav-number">3.5.</span> <span class="nav-text">多core配置</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Solr索引"><span class="nav-number">4.</span> <span class="nav-text">Solr索引</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#scheam-xml"><span class="nav-number">4.1.</span> <span class="nav-text">scheam.xml</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#FieldType域类型定义"><span class="nav-number">4.1.1.</span> <span class="nav-text">FieldType域类型定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Field定义"><span class="nav-number">4.1.2.</span> <span class="nav-text">Field定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#uniqueKey"><span class="nav-number">4.1.3.</span> <span class="nav-text">uniqueKey</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#copyField复制域"><span class="nav-number">4.1.4.</span> <span class="nav-text">copyField复制域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dynamicField（动态字段）"><span class="nav-number">4.1.5.</span> <span class="nav-text">dynamicField（动态字段）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Analyzer"><span class="nav-number">4.2.</span> <span class="nav-text">Analyzer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装中文分词器"><span class="nav-number">4.2.1.</span> <span class="nav-text">安装中文分词器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IKAnalyzer部署"><span class="nav-number">4.2.1.1.</span> <span class="nav-text">IKAnalyzer部署</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改schema-xml文件"><span class="nav-number">4.2.1.2.</span> <span class="nav-text">修改schema.xml文件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置业务系统Field"><span class="nav-number">4.3.</span> <span class="nav-text">设置业务系统Field</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SolrJ完成索引维护"><span class="nav-number">4.4.</span> <span class="nav-text">SolrJ完成索引维护</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是SolrJ"><span class="nav-number">4.4.1.</span> <span class="nav-text">什么是SolrJ</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#站内搜索技术选型"><span class="nav-number">1.</span> <span class="nav-text">站内搜索技术选型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#单独使用Lucene实现"><span class="nav-number">1.1.</span> <span class="nav-text">单独使用Lucene实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Google或Baidu接口"><span class="nav-number">1.2.</span> <span class="nav-text">使用Google或Baidu接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Solr实现"><span class="nav-number">1.3.</span> <span class="nav-text">使用Solr实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Solr介绍"><span class="nav-number">2.</span> <span class="nav-text">Solr介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是Solr"><span class="nav-number">2.1.</span> <span class="nav-text">什么是Solr</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Solr与Lucene的区别"><span class="nav-number">2.2.</span> <span class="nav-text">Solr与Lucene的区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Solr安装配置"><span class="nav-number">3.</span> <span class="nav-text">Solr安装配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#运行环境"><span class="nav-number">3.1.</span> <span class="nav-text">运行环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Solr与Tomcat整合配置"><span class="nav-number">3.2.</span> <span class="nav-text">Solr与Tomcat整合配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Solr-Home与SolrCore"><span class="nav-number">3.2.1.</span> <span class="nav-text">Solr Home与SolrCore</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#目录结构"><span class="nav-number">3.2.1.1.</span> <span class="nav-text">目录结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置"><span class="nav-number">3.2.1.2.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#solrconfig-xml"><span class="nav-number">3.2.1.3.</span> <span class="nav-text">solrconfig.xml</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#加载jar包"><span class="nav-number">3.2.1.3.1.</span> <span class="nav-text">加载jar包</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#dataDir"><span class="nav-number">3.2.1.3.2.</span> <span class="nav-text">dataDir</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#requestHandler"><span class="nav-number">3.2.1.3.3.</span> <span class="nav-text">requestHandler</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Solr工程部署"><span class="nav-number">3.3.</span> <span class="nav-text">Solr工程部署</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动Tomcat"><span class="nav-number">3.4.</span> <span class="nav-text">启动Tomcat</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Dashboard"><span class="nav-number">3.4.1.</span> <span class="nav-text">Dashboard</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Logging"><span class="nav-number">3.4.2.</span> <span class="nav-text">Logging</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cloud"><span class="nav-number">3.4.3.</span> <span class="nav-text">Cloud</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Core-Admin"><span class="nav-number">3.4.4.</span> <span class="nav-text">Core Admin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java-properties"><span class="nav-number">3.4.5.</span> <span class="nav-text">java properties</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tread-Dump"><span class="nav-number">3.4.6.</span> <span class="nav-text">Tread Dump</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Analysis"><span class="nav-number">3.4.7.</span> <span class="nav-text">Analysis</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dataimport"><span class="nav-number">3.4.8.</span> <span class="nav-text">dataimport</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Document"><span class="nav-number">3.4.9.</span> <span class="nav-text">Document</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#query"><span class="nav-number">3.4.10.</span> <span class="nav-text">query</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多core配置"><span class="nav-number">3.5.</span> <span class="nav-text">多core配置</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Solr索引"><span class="nav-number">4.</span> <span class="nav-text">Solr索引</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#scheam-xml"><span class="nav-number">4.1.</span> <span class="nav-text">scheam.xml</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#FieldType域类型定义"><span class="nav-number">4.1.1.</span> <span class="nav-text">FieldType域类型定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Field定义"><span class="nav-number">4.1.2.</span> <span class="nav-text">Field定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#uniqueKey"><span class="nav-number">4.1.3.</span> <span class="nav-text">uniqueKey</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#copyField复制域"><span class="nav-number">4.1.4.</span> <span class="nav-text">copyField复制域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dynamicField（动态字段）"><span class="nav-number">4.1.5.</span> <span class="nav-text">dynamicField（动态字段）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Analyzer"><span class="nav-number">4.2.</span> <span class="nav-text">Analyzer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装中文分词器"><span class="nav-number">4.2.1.</span> <span class="nav-text">安装中文分词器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IKAnalyzer部署"><span class="nav-number">4.2.1.1.</span> <span class="nav-text">IKAnalyzer部署</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改schema-xml文件"><span class="nav-number">4.2.1.2.</span> <span class="nav-text">修改schema.xml文件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置业务系统Field"><span class="nav-number">4.3.</span> <span class="nav-text">设置业务系统Field</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dataimport-handler"><span class="nav-number">4.4.</span> <span class="nav-text">dataimport-handler</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SolrJ完成索引维护"><span class="nav-number">4.5.</span> <span class="nav-text">SolrJ完成索引维护</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是SolrJ"><span class="nav-number">4.5.1.</span> <span class="nav-text">什么是SolrJ</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建索引"><span class="nav-number">4.5.1.1.</span> <span class="nav-text">创建索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#删除索引"><span class="nav-number">4.5.1.2.</span> <span class="nav-text">删除索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#复杂查询"><span class="nav-number">4.5.1.3.</span> <span class="nav-text">复杂查询</span></a></li></ol></li></ol></li></ol></li></ol></div>
             
           </div>
         </section>
