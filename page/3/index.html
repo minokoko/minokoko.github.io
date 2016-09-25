@@ -248,6 +248,320 @@
             
               
                 
+                <a class="post-title-link" href="/2016/06/01/我是如何整合SSH的-三-CRM总结/" itemprop="url">
+                  我是如何整合SSH的(三)CRM总结
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-01T21:18:29+08:00" content="2016-06-01">
+              2016-06-01
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/06/01/我是如何整合SSH的-三-CRM总结/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/01/我是如何整合SSH的-三-CRM总结/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="前述"><a href="#前述" class="headerlink" title="前述"></a>前述</h1><p>这个周一直在逐步地完成临摹一个CRM系统的工作，并且每一小版本的工作都通过SVN记录下来。这个周初步了解学习了linux系统，选用的版本是Centos6.5，并且学会了搭建JavaEE所需要的环境，包括Tomcat7、jdk1.7、eclise，svn等基本环境。还学会了如何通过SSH远程登录服务器，如何在windows和linux之间交换数据。</p>
+<h1 id="小项目-CRM"><a href="#小项目-CRM" class="headerlink" title="小项目:CRM"></a>小项目:CRM</h1><h2 id="练习步骤"><a href="#练习步骤" class="headerlink" title="练习步骤"></a>练习步骤</h2><p>1.确定需求<br>1.1登录 （基本流程、登录拦截器、校验）<br>1.2员工管理</p>
+<ul>
+<li>查询所有</li>
+<li>添加（ajax级联）</li>
+<li>更新（标签回显）</li>
+<li>条件查询<br>1.3课程类别</li>
+<li>查询所有（条件 + 分页）</li>
+<li>添加或更新<br><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/img/CRM.jpg" alt=""></li>
+</ul>
+<p>2.根据需求创建ER图，并在数据库中添加数据<br><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/img/CRM-ER.jpg" alt=""></p>
+<p>3.在Eclips中创建CRM项目，并且将项目添加SVN版本控制器。<br><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/img/CRM-SVN.JPG" alt=""></p>
+<p>4.添加Spring、Hibernate、struts2等相关的jar包</p>
+<p>5.对应ER图，创建相应的JavaBean，并且为相应的Bean添加hibernate配置文件。</p>
+<pre><code>&lt;hibernate-mapping&gt;
+&lt;class name=&quot;com.jessyon.crm.classes.domain.CrmClass&quot; table=&quot;crm_class&quot;&gt;
+    &lt;id name=&quot;classId&quot;&gt;
+        &lt;generator class=&quot;uuid&quot;&gt;&lt;/generator&gt;
+    &lt;/id&gt;
+
+    &lt;property name=&quot;name&quot;&gt;&lt;/property&gt;
+    &lt;property name=&quot;beginTime&quot;&gt;
+        &lt;column name=&quot;beginTime&quot; sql-type=&quot;datetime&quot;&gt;&lt;/column&gt;
+    &lt;/property&gt;
+    &lt;property name=&quot;endTime&quot;&gt;
+        &lt;column name=&quot;endTime&quot; sql-type=&quot;datetime&quot;&gt;&lt;/column&gt;
+    &lt;/property&gt;
+
+    &lt;property name=&quot;status&quot;&gt;&lt;/property&gt;
+    &lt;property name=&quot;totalCount&quot;&gt;&lt;/property&gt;
+    &lt;property name=&quot;upgradeCount&quot;&gt;&lt;/property&gt;
+    &lt;property name=&quot;changeCount&quot;&gt;&lt;/property&gt;
+
+    &lt;property name=&quot;runoffCount&quot;&gt;&lt;/property&gt;
+    &lt;property name=&quot;remark&quot;&gt;&lt;/property&gt;
+    &lt;property name=&quot;uploadTime&quot;&gt;
+        &lt;column name=&quot;uploadTime&quot; sql-type=&quot;datetime&quot;&gt;&lt;/column&gt;
+    &lt;/property&gt;
+
+    &lt;property name=&quot;uploadPath&quot;&gt;&lt;/property&gt;
+    &lt;property name=&quot;uploadFilename&quot;&gt;&lt;/property&gt;
+
+    &lt;many-to-one name=&quot;courseType&quot; class=&quot;com.jessyon.crm.coursetype.domain.CrmCourseType&quot; column=&quot;courseTypeId&quot;&gt;&lt;/many-to-one&gt;
+&lt;/class&gt;
+&lt;/hibernate-mapping&gt;
+</code></pre><p>6.配置spring</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+   xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+   xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot;
+   xmlns:tx=&quot;http://www.springframework.org/schema/tx&quot;
+   xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+   xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans 
+                          http://www.springframework.org/schema/beans/spring-beans.xsd
+                          http://www.springframework.org/schema/tx 
+                          http://www.springframework.org/schema/tx/spring-tx.xsd
+                          http://www.springframework.org/schema/aop 
+                          http://www.springframework.org/schema/aop/spring-aop.xsd
+                          http://www.springframework.org/schema/context 
+                          http://www.springframework.org/schema/context/spring-context.xsd&quot;&gt;
+
+&lt;!-- 配置公共项 --&gt;
+&lt;!-- 1 加载properties文件 --&gt;
+&lt;context:property-placeholder location=&quot;classpath:jdbcInfo.properties&quot;/&gt;
+
+&lt;!-- 2 配置数据源 --&gt;
+&lt;bean id=&quot;dataSource&quot; class=&quot;com.mchange.v2.c3p0.ComboPooledDataSource&quot;&gt;
+    &lt;property name=&quot;driverClass&quot; value=&quot;${jdbc.driverClass}&quot;&gt;&lt;/property&gt;
+    &lt;property name=&quot;jdbcUrl&quot; value=&quot;${jdbc.jdbcUrl}&quot;&gt;&lt;/property&gt;
+    &lt;property name=&quot;user&quot; value=&quot;${jdbc.user}&quot;&gt;&lt;/property&gt;
+    &lt;property name=&quot;password&quot; value=&quot;${jdbc.password}&quot;&gt;&lt;/property&gt;
+&lt;/bean&gt;
+
+&lt;!-- 3 session工厂 --&gt;
+&lt;bean id=&quot;sessionFactory&quot; class=&quot;org.springframework.orm.hibernate3.LocalSessionFactoryBean&quot;&gt;
+    &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot;&gt;&lt;/property&gt;
+    &lt;property name=&quot;hibernateProperties&quot;&gt;
+        &lt;props&gt;
+            &lt;prop key=&quot;hibernate.dialect&quot;&gt;org.hibernate.dialect.MySQL5Dialect&lt;/prop&gt;
+            &lt;prop key=&quot;hibernate.show_sql&quot;&gt;true&lt;/prop&gt;
+            &lt;prop key=&quot;hibernate.format_sql&quot;&gt;true&lt;/prop&gt;
+            &lt;prop key=&quot;hibernate.current_session_context_class&quot;&gt;thread&lt;/prop&gt;
+            &lt;prop key=&quot;javax.persistence.validation.mode&quot;&gt;none&lt;/prop&gt;
+        &lt;/props&gt;
+    &lt;/property&gt;
+    &lt;property name=&quot;mappingLocations&quot; value=&quot;classpath:com/jessyon/crm/*/domain/*.hbx.xml&quot;&gt;&lt;/property&gt;
+</code></pre><p>   </p>
+<pre><code>&lt;!-- 4 事务管理 --&gt;
+&lt;!-- 4.1 事务管理器 --&gt;
+&lt;bean id=&quot;txManager&quot; class=&quot;org.springframework.orm.hibernate3.HibernateTransactionManager&quot;&gt;
+    &lt;property name=&quot;sessionFactory&quot; ref=&quot;sessionFactory&quot;&gt;&lt;/property&gt;
+&lt;/bean&gt;
+&lt;!-- 4.2 事务详情  --&gt;
+&lt;tx:advice id=&quot;txAdvice&quot; transaction-manager=&quot;txManager&quot;&gt;
+    &lt;tx:attributes&gt;
+        &lt;tx:method name=&quot;add*&quot;/&gt;
+        &lt;tx:method name=&quot;save*&quot;/&gt;
+        &lt;tx:method name=&quot;update*&quot;/&gt;
+        &lt;tx:method name=&quot;delete*&quot;/&gt;
+        &lt;tx:method name=&quot;find*&quot; read-only=&quot;true&quot;/&gt;
+        &lt;tx:method name=&quot;*&quot; read-only=&quot;true&quot;/&gt;
+    &lt;/tx:attributes&gt;
+&lt;/tx:advice&gt;
+&lt;!-- 4.3 aop编程  
+--&gt;
+&lt;aop:config proxy-target-class=&quot;true&quot;&gt;
+    &lt;aop:advisor advice-ref=&quot;txAdvice&quot; pointcut=&quot;execution(* com.jessyon.crm.*.service..*.*(..))&quot;/&gt;
+&lt;/aop:config&gt;
+
+
+&lt;!-- 包含其他子模块 --&gt;
+&lt;!-- 员工 ,部门, 职务--&gt;
+&lt;!-- &lt;import resource=&quot;applicationContext-staff.xml&quot;/&gt;
+&lt;import resource=&quot;applicationContext-department.xml&quot;/&gt;
+&lt;import resource=&quot;applicationContext-post.xml&quot;/&gt;
+&lt;import resource=&quot;applicationContext-coursetype.xml&quot;/&gt; --&gt;
+&lt;/beans&gt;
+</code></pre><p><strong> applicationContext-courseType.xml<br>其他的相关的配置文件，比如department、post、staff的配置文件都是以下格式</strong></p>
+<pre><code>    &lt;bean id=&quot;courseTypeDao&quot; class=&quot;com.jessyon.crm.coursetype.dao.impl.CourseTypeDaoImpl&quot;&gt;
+    &lt;property name=&quot;sessionFactory&quot; ref=&quot;sessionFactory&quot;&gt;&lt;/property&gt;
+&lt;/bean&gt;
+&lt;!-- service --&gt;
+&lt;bean id=&quot;courseTypeService&quot; class=&quot;com.jessyon.crm.coursetype.service.impl.CourseTypeServiceImpl&quot;&gt;
+    &lt;property name=&quot;courseTypeDao&quot; ref=&quot;courseTypeDao&quot;&gt;&lt;/property&gt;
+&lt;/bean&gt;
+</code></pre><p>7.配置struts2</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE struts PUBLIC
+&quot;-//Apache Software Foundation//DTD Struts Configuration 2.3//EN&quot;
+&quot;http://struts.apache.org/dtds/struts-2.3.dtd&quot;&gt;
+&lt;struts&gt;
+&lt;!-- 常量 --&gt;
+&lt;constant name=&quot;struts.devMode&quot; value=&quot;true&quot;&gt;&lt;/constant&gt;
+&lt;constant name=&quot;struts.ui.theme&quot; value=&quot;simple&quot;&gt;&lt;/constant&gt;
+
+&lt;!-- 公共项 其他子模块都会继承common --&gt;
+&lt;package name=&quot;common&quot; namespace=&quot;/&quot; extends=&quot;struts-default&quot;&gt;
+    &lt;!-- 配置拦截器 --&gt;
+    &lt;interceptors&gt;
+        &lt;interceptor name=&quot;loginInterceptor&quot; class=&quot;com.jessyon.crm.web.interceptor.LoginInterceptor&quot;&gt;&lt;/interceptor&gt;
+        &lt;interceptor-stack name=&quot;loginStack&quot;&gt;
+            &lt;interceptor-ref name=&quot;defaultStack&quot;&gt;&lt;/interceptor-ref&gt;
+            &lt;interceptor-ref name=&quot;loginInterceptor&quot;&gt;
+                &lt;!-- 不需要拦截的方法,多个方法逗号隔开 --&gt;
+                &lt;param name=&quot;excludeMethods&quot;&gt;login&lt;/param&gt;
+            &lt;/interceptor-ref&gt;
+        &lt;/interceptor-stack&gt;
+    &lt;/interceptors&gt;
+    &lt;!-- &lt;default-interceptor-ref name=&quot;loginStack&quot;&gt;&lt;/default-interceptor-ref&gt; --&gt;
+    &lt;global-results&gt;
+        &lt;result name=&quot;login&quot;&gt;/WEB-INF/pages/login.jsp&lt;/result&gt;
+    &lt;/global-results&gt;
+    &lt;action name=&quot;uiAction_*_*&quot;&gt;
+
+            &lt;result&gt;/WEB-INF/pages/{1}/{2}.jsp&lt;/result&gt;
+    &lt;/action&gt;
+&lt;/package&gt;
+
+&lt;!-- 包含其他子模块 --&gt;
+&lt;include file=&quot;struts/struts-staff.xml&quot;&gt;&lt;/include&gt;
+&lt;include file=&quot;struts/struts-post.xml&quot;&gt;&lt;/include&gt;
+&lt;include file=&quot;struts/struts-department.xml&quot;&gt;&lt;/include&gt;
+&lt;include file=&quot;struts/struts-coursetype.xml&quot;&gt;&lt;/include&gt;
+&lt;/struts&gt;
+</code></pre><p><strong> struts2-courseType.xml<br>其他的相关的配置文件，比如department、post、staff的配置文件都是以下格式</strong></p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE struts PUBLIC
+&quot;-//Apache Software Foundation//DTD Struts Configuration 2.3//EN&quot;
+&quot;http://struts.apache.org/dtds/struts-2.3.dtd&quot;&gt;
+struts&gt;
+&lt;package name=&quot;coursetype&quot; namespace=&quot;/&quot; extends=&quot;common&quot;&gt;
+    &lt;action name=&quot;courseTypeAction_*&quot; class=&quot;com.jessyon.crm.coursetype.web.action.CourseTypeAction&quot; method=&quot;{1}&quot;&gt;
+        &lt;result name=&quot;findAll&quot;&gt;/WEB-INF/pages/coursetype/listCourse.jsp&lt;/result&gt;
+        &lt;result name=&quot;saveOrUpdateUI&quot;&gt;/WEB-INF/pages/coursetype/addOrEditCourse.jsp&lt;/result&gt;
+        &lt;result name=&quot;saveOrUpdate&quot; type=&quot;redirectAction&quot;&gt;
+            &lt;param name=&quot;namespace&quot;&gt;/&lt;/param&gt;
+            &lt;param name=&quot;actionName&quot;&gt;courseTypeAction_findAll&lt;/param&gt;
+        &lt;/result&gt;
+    &lt;/action&gt;
+&lt;/package&gt;
+&lt;/struts&gt;
+</code></pre><p>8.配置web.xml</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;web-app xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns=&quot;http://java.sun.com/xml/ns/javaee&quot; xmlns:web=&quot;http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd&quot; xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd&quot; id=&quot;WebApp_ID&quot; version=&quot;2.5&quot;&gt;
+  &lt;display-name&gt;Mycrm&lt;/display-name&gt;
+  &lt;filter&gt;
+      &lt;filter-name&gt;openSession&lt;/filter-name&gt;
+      &lt;filter-class&gt;org.springframework.orm.hibernate3.support.OpenSessionInViewFilter&lt;/filter-class&gt;
+  &lt;/filter&gt;
+
+  &lt;filter-mapping&gt;
+      &lt;filter-name&gt;openSession&lt;/filter-name&gt;
+      &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
+  &lt;/filter-mapping&gt;
+
+  &lt;context-param&gt;
+      &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
+      &lt;param-value&gt;classpath:spring/applicationContext*.xml&lt;/param-value&gt;
+  &lt;/context-param&gt;
+
+  &lt;listener&gt;
+      &lt;listener-class&gt;org.springframework.web.context.ContextLoaderListener&lt;/listener-class&gt;
+  &lt;/listener&gt;
+
+  &lt;filter&gt;
+          &lt;filter-name&gt;struts2&lt;/filter-name&gt;
+          &lt;filter-class&gt;org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter&lt;/filter-class&gt;
+  &lt;/filter&gt;
+
+  &lt;filter-mapping&gt;
+          &lt;filter-name&gt;struts2&lt;/filter-name&gt;
+          &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
+  &lt;/filter-mapping&gt;
+&lt;/web-app&gt;
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/05/25/我是如何整合SSH的-二/" itemprop="url">
                   我是如何整合SSH的(二)
                 </a>
@@ -1376,153 +1690,6 @@ for (Order order : orderSet) {
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/05/01/我是如何学习Hibernate的-二/" itemprop="url">
-                  我是如何学习Hibernate的(二)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-01T09:38:24+08:00" content="2016-05-01">
-              2016-05-01
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/05/01/我是如何学习Hibernate的-二/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/01/我是如何学习Hibernate的-二/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="前述"><a href="#前述" class="headerlink" title="前述"></a><strong>前述</strong></h1><p>  在前一篇博客中，我记录了Hibernate的环境的搭建，并且熟悉了一次Hibernate执行的过程。我在后面的博客中，会记录更多关于hibernate中的知识点。总共会有以下所有内容:</p>
-<ul>
-<li>整合log4j</li>
-<li>配置文件</li>
-<li>API</li>
-<li>Hibernate CRUD操作</li>
-<li>PO对象的操作</li>
-<li>一级缓存</li>
-<li>二级缓存</li>
-<li>关联关系</li>
-<li>抓取策略</li>
-<li>HQL</li>
-<li>事务隔离</li>
-</ul>
-<h2 id="一-整合log4j"><a href="#一-整合log4j" class="headerlink" title="一.整合log4j"></a><strong>一.整合log4j</strong></h2><p>log4j是Apache组织的一个开源项目，用于将日志信息输送到控制台、文件、GUI组件，甚至是套接口服务器、NT的事件记录器。我们可以控制每一条日志的输出格式，还可以通过定义日志信息的级别，而这一切操作，都可以通过配置文件来完成。</p>
-<ul>
-<li>引入jar包：到<a href="http://logging.apache.org/log4j/2.x/download.html" target="_blank" rel="external">log4j</a>官网就可以下载到。</li>
-<li>配置文件log4j.properties <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#The five logging levels used by Log are (in order):  </span></span><br><span class="line"><span class="comment">#   </span></span><br><span class="line"><span class="comment">#1. DEBUG (the least serious)  </span></span><br><span class="line"><span class="comment">#2. INFO  </span></span><br><span class="line"><span class="comment">#3. WARN  </span></span><br><span class="line"><span class="comment">#4. ERROR  </span></span><br><span class="line"><span class="comment">#5. FATAL (the most serious)  </span></span><br><span class="line">   </span><br><span class="line"><span class="comment">#Set root logger level to INFO and append to stdout  </span></span><br><span class="line"><span class="built_in">log</span>4j.rootLogger=INFO,stdout,file</span><br><span class="line"><span class="comment">#设置log的级别为INFO意味着INFO级别以下如DEBUG的信息不会输出</span></span><br><span class="line"><span class="comment">#其中，Log4j提供的appender有以下几种：</span></span><br><span class="line"><span class="comment">#org.apache.log4j.ConsoleAppender（控制台），</span></span><br><span class="line"><span class="comment">#org.apache.log4j.FileAppender（文件），</span></span><br><span class="line"><span class="comment">#org.apache.log4j.DailyRollingFileAppender（每天产生一个日志文件），</span></span><br><span class="line"><span class="comment">#org.apache.log4j.RollingFileAppender（文件大小到达指定尺寸的时候产生一个新的文件），</span></span><br><span class="line"><span class="comment">#org.apache.log4j.WriterAppender（将日志信息以流格式发送到任意指定的地方）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#其中，Log4j提供的layout有以几种：</span></span><br><span class="line"><span class="comment">#org.apache.log4j.HTMLLayout（以HTML表格形式布局），</span></span><br><span class="line"><span class="comment">#org.apache.log4j.PatternLayout（可以灵活地指定布局模式），</span></span><br><span class="line"><span class="comment">#org.apache.log4j.SimpleLayout（包含日志信息的级别和信息字符串），</span></span><br><span class="line"><span class="comment">#org.apache.log4j.TTCCLayout（包含日志产生的时间、线程、类别等等信息）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#Log4J采用类似C语言中的printf函数的打印格式格式化日志信息，打印参数如下： </span></span><br><span class="line"><span class="comment">#%m 输出代码中指定的消息</span></span><br><span class="line"><span class="comment">#%p 输出优先级，即DEBUG，INFO，WARN，ERROR，FATAL</span></span><br><span class="line"><span class="comment">#%r 输出自应用启动到输出该log信息耗费的毫秒数</span></span><br><span class="line"><span class="comment">#%c 输出所属的类目，通常就是所在类的全名</span></span><br><span class="line"><span class="comment">#%t 输出产生该日志事件的线程名</span></span><br><span class="line"><span class="comment">#%n 输出一个回车换行符，Windows平台为“rn”，Unix平台为“n”</span></span><br><span class="line"><span class="comment">#%d 输出日志时间点的日期或时间，默认格式为ISO8601，也可以在其后指定格式，比如：%d&#123;yyy MMM dd HH:mm:ss,SSS&#125;，输出类似：2016年5月1日 22：10：28，921</span></span><br><span class="line"><span class="comment">#%l 输出日志事件的发生位置，包括类目名、发生的线程，以及在代码中的行数。举例：Testlog4.main(TestLog4.java:10)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#stdout</span></span><br><span class="line"><span class="built_in">log</span>4j.appender.stdout=org.apache.log4j.ConsoleAppender  </span><br><span class="line"><span class="built_in">log</span>4j.appender.stdout.layout=org.apache.log4j.PatternLayout    </span><br><span class="line"><span class="built_in">log</span>4j.appender.stdout.layout.ConversionPattern=[%p]%<span class="_">-d</span>&#123;yyyy-MM-dd HH\:mm\:ss&#125;[%c\:%L] %m%n  </span><br><span class="line"></span><br><span class="line"><span class="comment">#file</span></span><br><span class="line"><span class="built_in">log</span>4j.appender.file=org.apache.log4j.DailyRollingFileAppender  </span><br><span class="line"><span class="built_in">log</span>4j.appender.file.File=/output.log</span><br><span class="line"><span class="built_in">log</span>4j.appender.file.DatePattern=<span class="string">'.'</span>yyyy-MM-dd  </span><br><span class="line"><span class="built_in">log</span>4j.appender.file.layout=org.apache.log4j.PatternLayout  </span><br><span class="line"><span class="built_in">log</span>4j.appender.file.layout.ConversionPattern=[%p]%<span class="_">-d</span>&#123;yyyy-MM-dd HH\:mm\:ss&#125;[%c\:%L] %m%n</span><br><span class="line"><span class="comment">#log4j.appender.file=org.apache.log4j.DailyRollingFileAppender  </span></span><br><span class="line"><span class="comment">#log4j.appender.file.File=/output.html</span></span><br><span class="line"><span class="comment">#log4j.appender.file.DatePattern='.'yyyy-MM-dd  </span></span><br><span class="line"><span class="comment">#log4j.appender.file.layout=org.apache.log4j.HTMLLayout </span></span><br><span class="line"><span class="comment">#log4j.appender.file.layout.ConversionPattern=[%p]%-d&#123;yyyy-MM-dd HH\:mm\:ss&#125;[%c\:%L] %m%n</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#Print only messages of level ERROR or above in the package noModule.  </span></span><br><span class="line"><span class="built_in">log</span>4j.logger.noModule=INFO</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="二-核心配置文件hibernate-cfg-xml"><a href="#二-核心配置文件hibernate-cfg-xml" class="headerlink" title="二.核心配置文件hibernate.cfg.xml"></a><strong>二.核心配置文件hibernate.cfg.xml</strong></h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&lt;hibernate-configuration&gt;</span><br><span class="line">&lt;session-factory&gt;</span><br><span class="line">&lt;!-- 配置Hibernate基本信息 --&gt;</span><br><span class="line"></span><br><span class="line">   &lt;property name=<span class="string">"connection.driver_class"</span>&gt;com.mysql.jdbc.Driver&lt;/property&gt;</span><br><span class="line">   &lt;property name=<span class="string">"connection.url"</span>&gt;jdbc:mysql://localhost/hibernate001&lt;/property&gt;</span><br><span class="line">   &lt;property name=<span class="string">"connection.username"</span>&gt;root&lt;/property&gt;</span><br><span class="line">   &lt;property name=<span class="string">"connection.password"</span>&gt;jessyon6233834&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- 配置Hibernate方言 --&gt;</span><br><span class="line">&lt;property name=<span class="string">"hibernate.dialect "</span>&gt;</span><br><span class="line">	org.hibernate.dialect.MySQLDialect</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">   &lt;property name=<span class="string">"hibernate.hbm2ddl.auto"</span>&gt;update&lt;/property&gt;</span><br><span class="line">&lt;!-- 可选属性 --&gt;</span><br><span class="line">&lt;property name=<span class="string">"hibernate.show_sql"</span>&gt;<span class="literal">true</span>&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- 格式化sql --&gt;</span><br><span class="line">&lt;property name=<span class="string">"hibernate.format_sql"</span>&gt;<span class="literal">true</span>&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- 通知Hibernate加载哪些配置--&gt;</span><br><span class="line">&lt;mapping resource=<span class="string">"com/hibernate3/Customer.hbm.xml"</span> /&gt; </span><br><span class="line">&lt;mapping resource=<span class="string">"com/hibernate3/Order.hbm.xml"</span>/&gt;</span><br><span class="line"></span><br><span class="line">&lt;/session-factory&gt;</span><br><span class="line">&lt;/hibernate-configuration&gt;</span><br></pre></td></tr></table></figure>
-<h2 id="Hibernate映射配置文件"><a href="#Hibernate映射配置文件" class="headerlink" title="Hibernate映射配置文件"></a><strong>Hibernate映射配置文件</strong></h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;hibernate-mapping&gt;</span><br><span class="line">&lt;class name=<span class="string">"com.hibernate3.Customer"</span> table=<span class="string">"customer"</span>&gt; </span><br><span class="line">&lt;id name=<span class="string">"id"</span> column=<span class="string">"id"</span> &gt;</span><br><span class="line">      &lt;generator class=<span class="string">"native"</span> /&gt;</span><br><span class="line">  &lt;/id&gt;</span><br><span class="line">   </span><br><span class="line">&lt;property name=<span class="string">"name"</span> column=<span class="string">"name"</span> <span class="built_in">type</span>=<span class="string">"string"</span> length=<span class="string">"20"</span>/&gt;</span><br><span class="line">&lt;property name=<span class="string">"age"</span> column=<span class="string">"age"</span>&gt;&lt;/property&gt;</span><br><span class="line">&lt;/class&gt;</span><br><span class="line">&lt;/hibernate-mapping&gt;</span><br></pre></td></tr></table></figure>
-<h2 id="三-常用API"><a href="#三-常用API" class="headerlink" title="三.常用API"></a><strong>三.常用API</strong></h2><ol>
-<li>读取并解析配置文件 Configuration conf = new Configuration().configure();</li>
-<li>读取并解析映射信息，创建SessionFactory SessionFactory sf = conf.buildSessionFactory();</li>
-<li>打开Session Session session = sf.openSession();</li>
-<li>开始一个事务（增删改操作必须，查询操作可选） Transaction tx = session.beginTransaction();</li>
-<li>数据库操作 session.save(user);//或其它操作</li>
-<li>提交事务(回滚事务) tx.commit();(tx.rollback();)</li>
-<li>关闭session session.close();</li>
-</ol>
-<ul>
-<li><p>Configuration是默认加载hibernate.cfg.xml这个文件的，但也提供了重载的方法<br>public Configuration configure(String resource)<br>public Configuration configure(URL url)<br>public Configuration configure(File configFile)</p>
-</li>
-<li><p>SessionFactiory：Configuration的实例会根据当前的配置信息，构造SessionFactory实例。SessionFactory是线程安全的，一般情况下一个应用中一个数据库共享一个SessionFactory实例。</p>
-</li>
-<li><p>Hibernate的SessionFactory接口提供Session类的实例，Session类用于完成对数据库的操作。由于SessionFactory实例是线程安全的（而Session实例不是线程安全的），所以每个操作都可以共用同一个SessionFactory来获取Session。<br>从XML文件读取配置信息构建SessionFactory<br>Configuration config = new Configuration().configure();<br>SessionFactory sessionFactory = config.buildSessionFactory();</p>
-</li>
-<li><p>Session：一般的持久化方法(CRUD)都是通过Session来调用的,Session是非线程安全的。<br>Session的创建与关闭 ：Session是一个轻量级对象，通常将每个Session实例和一个数据库事务绑定，也就是每执行一个数据库事务，都应该先创建一个新的Session实例，在使用Session后，还需要关闭Session。<br>Session的创建<br>创建SessionFactory后，就可以通过SessionFactory创建Session实例，通过SessionFactory创建Session实例的代码如下。<br>Session session=sessionFactory.openSession();<br>创建Session后，就可以通过创建的Session进行持久化操作了。<br>Session的关闭<br>在创建Session实例后，不论是否执行事务，最后都需要关闭Session实例，释放Session实例占用的资源。<br>关闭Session实例的代码如下：<br>session.close();<br>下面来看一下：getCurrentSession 与 openSession() 的区别<br>1.getCurrentSession创建的session会和绑定到当前线程,而openSession不会。<br>2 getCurrentSession创建的线程会在事务回滚或事物提交后自动关闭,而openSession必须手动关闭<br>3.getCurrentSession () 使用当前的session，openSession() 重新建立一个新的session<br>这里getCurrentSession本地事务(本地事务:jdbc)时 要在配置文件里进行如下设置<br>如果使用的是本地事务（jdbc事务）</p>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;property name=<span class="string">"hibernate.current_session_context_class"</span>&gt;thread&lt;/property&gt;</span><br></pre></td></tr></table></figure>
-<p>如果使用的是全局事务（jta事务）<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;property name=<span class="string">"hibernate.current_session_context_class"</span>&gt;jta&lt;/property&gt;</span><br></pre></td></tr></table></figure></p>
-<p>openSession() 与 getCurrentSession() 有何不同和关联呢？<br>在SessionFactory启动的时候Hibernate会根据配置创建相应的CurrentSessionContext,在getCurrentSession()被调用的时候，实际被执行的方法是CurrentSessionContext.currentSession()。在currentSession()执行时，如果当前Session为空,currentSession会调用SessionFactory的openSession所以getCurrentSession()对于avaEE来说是更好的获取Session的方法。</p>
-<ul>
-<li>Transaction: hibernate把AutoCommit关掉了，所以如果想要进行数据操作，又不开启事务的话，数据库就不会有任何改变。</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1568,7 +1735,7 @@ for (Order order : orderSet) {
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">33</span>
+              <span class="site-state-item-count">34</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

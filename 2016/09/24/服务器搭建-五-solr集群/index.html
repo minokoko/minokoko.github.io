@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="淘淘商城,SSM,maven," />
+  <meta name="keywords" content="集群,solr," />
 
 
 
@@ -84,16 +84,33 @@
 
 
 
-<meta name="description" content="前述  学习javaEE已经有半年多了吧，但是还没有正式用所学的内容开发一个比较完整的项目。所以就照着网上的视频边学边做这个淘淘商城这个网站，这次的目标是熟悉JavaWeb开发的全流程，包括代码，项目架构，代码托管等。  第一天熟悉了项目的技术架构，功能架构，完成了基础功能模块的搭建，并且掌握了将代码托管到github，总之这是一件很令人兴奋的事情。因为之前很久我都不太熟悉github，不知道怎么">
+<meta name="description" content="搜索系统搭建搜索功能需要发布服务共pc端、移动端使用。根据关键词搜索，得到json格式的搜索结果。
+创建一个搜索系统，发布搜索服务。
+
+Solr服务的搭建第一步：安装jdk、安装tomcat,复制一份tomcat到/usr/local/solr/目录下
+cp -r apache-tomcat-7.0.47 /usr/local/solr
+mv apache-tomcat-7.0.47 tomcat">
 <meta property="og:type" content="article">
-<meta property="og:title" content="淘淘商城开发记录(一)">
-<meta property="og:url" content="http://jessyon.com/2016/08/18/淘淘商城开发记录-一/index.html">
+<meta property="og:title" content="服务器搭建(五)solr集群">
+<meta property="og:url" content="http://jessyon.com/2016/09/24/服务器搭建-五-solr集群/index.html">
 <meta property="og:site_name" content="OneStack">
-<meta property="og:description" content="前述  学习javaEE已经有半年多了吧，但是还没有正式用所学的内容开发一个比较完整的项目。所以就照着网上的视频边学边做这个淘淘商城这个网站，这次的目标是熟悉JavaWeb开发的全流程，包括代码，项目架构，代码托管等。  第一天熟悉了项目的技术架构，功能架构，完成了基础功能模块的搭建，并且掌握了将代码托管到github，总之这是一件很令人兴奋的事情。因为之前很久我都不太熟悉github，不知道怎么">
-<meta property="og:updated_time" content="2016-08-18T11:39:31.752Z">
+<meta property="og:description" content="搜索系统搭建搜索功能需要发布服务共pc端、移动端使用。根据关键词搜索，得到json格式的搜索结果。
+创建一个搜索系统，发布搜索服务。
+
+Solr服务的搭建第一步：安装jdk、安装tomcat,复制一份tomcat到/usr/local/solr/目录下
+cp -r apache-tomcat-7.0.47 /usr/local/solr
+mv apache-tomcat-7.0.47 tomcat">
+<meta property="og:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/solr_infrastructure.jpg">
+<meta property="og:updated_time" content="2016-09-24T04:01:06.318Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="淘淘商城开发记录(一)">
-<meta name="twitter:description" content="前述  学习javaEE已经有半年多了吧，但是还没有正式用所学的内容开发一个比较完整的项目。所以就照着网上的视频边学边做这个淘淘商城这个网站，这次的目标是熟悉JavaWeb开发的全流程，包括代码，项目架构，代码托管等。  第一天熟悉了项目的技术架构，功能架构，完成了基础功能模块的搭建，并且掌握了将代码托管到github，总之这是一件很令人兴奋的事情。因为之前很久我都不太熟悉github，不知道怎么">
+<meta name="twitter:title" content="服务器搭建(五)solr集群">
+<meta name="twitter:description" content="搜索系统搭建搜索功能需要发布服务共pc端、移动端使用。根据关键词搜索，得到json格式的搜索结果。
+创建一个搜索系统，发布搜索服务。
+
+Solr服务的搭建第一步：安装jdk、安装tomcat,复制一份tomcat到/usr/local/solr/目录下
+cp -r apache-tomcat-7.0.47 /usr/local/solr
+mv apache-tomcat-7.0.47 tomcat">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/solr_infrastructure.jpg">
 
 
 
@@ -114,9 +131,9 @@
 
 
 
-  <link rel="canonical" href="http://jessyon.com/2016/08/18/淘淘商城开发记录-一/"/>
+  <link rel="canonical" href="http://jessyon.com/2016/09/24/服务器搭建-五-solr集群/"/>
 
-  <title> 淘淘商城开发记录(一) | OneStack </title>
+  <title> 服务器搭建(五)solr集群 | OneStack </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -246,7 +263,7 @@
             
             
               
-                淘淘商城开发记录(一)
+                服务器搭建(五)solr集群
               
             
           </h1>
@@ -258,8 +275,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-08-18T19:25:03+08:00" content="2016-08-18">
-              2016-08-18
+            <time itemprop="dateCreated" datetime="2016-09-24T11:35:52+08:00" content="2016-09-24">
+              2016-09-24
             </time>
           </span>
 
@@ -269,8 +286,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/08/18/淘淘商城开发记录-一/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/18/淘淘商城开发记录-一/" itemprop="commentsCount"></span>
+                <a href="/2016/09/24/服务器搭建-五-solr集群/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/24/服务器搭建-五-solr集群/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -293,9 +310,36 @@
       
 
       
-        <h1 id="前述"><a href="#前述" class="headerlink" title="前述"></a><strong>前述</strong></h1><p>  学习javaEE已经有半年多了吧，但是还没有正式用所学的内容开发一个比较完整的项目。所以就照着网上的视频边学边做这个淘淘商城这个网站，这次的目标是熟悉JavaWeb开发的全流程，包括代码，项目架构，代码托管等。<br>  第一天熟悉了项目的技术架构，功能架构，完成了基础功能模块的搭建，并且掌握了将代码托管到github，总之这是一件很令人兴奋的事情。因为之前很久我都不太熟悉github，不知道怎么用，更不知道为何要用。在使用过SVN后，才知道版本控制，之后才知道github的强大并喜欢上了他。</p>
-<h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a><strong>环境搭建</strong></h1><p>我是在eclipse下开发的淘淘商城，我之前使用的eclipse版本没有自带maven，所以刚开始找插件就令我非常头痛，因为插件的site很早就没有更新了。后来索性下载了最新版的eclipse，果然有惊喜，原来eclipse mars就已经自带了maven，非常棒。<br>我建立了一个聚合工程，在这个聚合工程中，我又分别创建了dao层，service层，web层。这样的分层结构让我的开发很有节奏感，知道到了哪一步该做什么，有条不紊。所以上手搭建SSM框架也是很快速的事情，而且很快就跑通了第一个测试，nice。</p>
+        <h1 id="搜索系统搭建"><a href="#搜索系统搭建" class="headerlink" title="搜索系统搭建"></a>搜索系统搭建</h1><pre><code>搜索功能需要发布服务共pc端、移动端使用。根据关键词搜索，得到json格式的搜索结果。
+创建一个搜索系统，发布搜索服务。
+</code></pre><p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/solr_infrastructure.jpg" alt=""></p>
+<h2 id="Solr服务的搭建"><a href="#Solr服务的搭建" class="headerlink" title="Solr服务的搭建"></a>Solr服务的搭建</h2><pre><code>第一步：安装jdk、安装tomcat,复制一份tomcat到/usr/local/solr/目录下
+cp -r apache-tomcat-7.0.47 /usr/local/solr
+mv apache-tomcat-7.0.47 tomcat
 
+第二步：解压solr压缩包。
+tar -zxf solr-4.10.3.tgz.tgz
+mv solr-4.10.3 /usr/local
+
+第三步：把dist/solr-4.10.3.war部署到tomcat
+
+第四步：解压缩war包。启动tomcat解压。
+
+第五步：需要把/usr/local/solr-4.10.3/example/lib/ext目录下的所有的jar包添加到solr工程中。
+
+第六步：创建solrhome。先在/usr/local下创建一个solr目录,
+cd /usr/local -&gt;  mkdir solr
+然后把/usr/local/solr-4.10.3/example/solr文件夹复制一份作为solrhome。
+cp -r /usr/local/solr-4.10.3/example/solr /usr/local/solr/home
+
+第七步：告诉solr服务solrhome的位置。需要修改web.xml
+修改/usr/local/solr/tomcat/webapps/solr/WEB-INF/web.xml中的:
+&lt;env-entry&gt;
+   &lt;env-entry-name&gt;solr/home&lt;/env-entry-name&gt;
+   &lt;env-entry-value&gt;/usr/local/solr/solrhome&lt;/env-entry-value&gt;
+   &lt;env-entry-type&gt;java.lang.String&lt;/env-entry-type&gt;
+&lt;/env-entry&gt;
+</code></pre>
       
     </div>
 
@@ -317,11 +361,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/淘淘商城/" rel="tag">#淘淘商城</a>
+            <a href="/tags/集群/" rel="tag">#集群</a>
           
-            <a href="/tags/SSM/" rel="tag">#SSM</a>
-          
-            <a href="/tags/maven/" rel="tag">#maven</a>
+            <a href="/tags/solr/" rel="tag">#solr</a>
           
         </div>
       
@@ -330,17 +372,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/08/16/AccountManage开发记录/" rel="next" title="AccountManage开发记录">
-                <i class="fa fa-chevron-left"></i> AccountManage开发记录
+              <a href="/2016/09/20/solr全文搜索服务/" rel="next" title="solr全文搜索服务">
+                <i class="fa fa-chevron-left"></i> solr全文搜索服务
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/08/19/淘淘商城开发记录-二/" rel="prev" title="淘淘商城开发记录(二)">
-                淘淘商城开发记录(二) <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -366,8 +404,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/08/18/淘淘商城开发记录-一/"
-           data-title="淘淘商城开发记录(一)" data-url="http://jessyon.com/2016/08/18/淘淘商城开发记录-一/">
+      <div class="ds-thread" data-thread-key="2016/09/24/服务器搭建-五-solr集群/"
+           data-title="服务器搭建(五)solr集群" data-url="http://jessyon.com/2016/09/24/服务器搭建-五-solr集群/">
       </div>
     
   </div>
@@ -451,7 +489,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前述"><span class="nav-number">1.</span> <span class="nav-text">前述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#环境搭建"><span class="nav-number">2.</span> <span class="nav-text">环境搭建</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#搜索系统搭建"><span class="nav-number">1.</span> <span class="nav-text">搜索系统搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Solr服务的搭建"><span class="nav-number">1.1.</span> <span class="nav-text">Solr服务的搭建</span></a></li></ol></li></ol></div>
             
           </div>
         </section>

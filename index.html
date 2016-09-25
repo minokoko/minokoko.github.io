@@ -248,6 +248,135 @@
             
               
                 
+                <a class="post-title-link" href="/2016/09/24/服务器搭建-五-solr集群/" itemprop="url">
+                  服务器搭建(五)solr集群
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-24T11:35:52+08:00" content="2016-09-24">
+              2016-09-24
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/24/服务器搭建-五-solr集群/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/24/服务器搭建-五-solr集群/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="搜索系统搭建"><a href="#搜索系统搭建" class="headerlink" title="搜索系统搭建"></a>搜索系统搭建</h1><pre><code>搜索功能需要发布服务共pc端、移动端使用。根据关键词搜索，得到json格式的搜索结果。
+创建一个搜索系统，发布搜索服务。
+</code></pre><p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/solr_infrastructure.jpg" alt=""></p>
+<h2 id="Solr服务的搭建"><a href="#Solr服务的搭建" class="headerlink" title="Solr服务的搭建"></a>Solr服务的搭建</h2><pre><code>第一步：安装jdk、安装tomcat,复制一份tomcat到/usr/local/solr/目录下
+cp -r apache-tomcat-7.0.47 /usr/local/solr
+mv apache-tomcat-7.0.47 tomcat
+
+第二步：解压solr压缩包。
+tar -zxf solr-4.10.3.tgz.tgz
+mv solr-4.10.3 /usr/local
+
+第三步：把dist/solr-4.10.3.war部署到tomcat
+
+第四步：解压缩war包。启动tomcat解压。
+
+第五步：需要把/usr/local/solr-4.10.3/example/lib/ext目录下的所有的jar包添加到solr工程中。
+
+第六步：创建solrhome。先在/usr/local下创建一个solr目录,
+cd /usr/local -&gt;  mkdir solr
+然后把/usr/local/solr-4.10.3/example/solr文件夹复制一份作为solrhome。
+cp -r /usr/local/solr-4.10.3/example/solr /usr/local/solr/home
+
+第七步：告诉solr服务solrhome的位置。需要修改web.xml
+修改/usr/local/solr/tomcat/webapps/solr/WEB-INF/web.xml中的:
+&lt;env-entry&gt;
+   &lt;env-entry-name&gt;solr/home&lt;/env-entry-name&gt;
+   &lt;env-entry-value&gt;/usr/local/solr/solrhome&lt;/env-entry-value&gt;
+   &lt;env-entry-type&gt;java.lang.String&lt;/env-entry-type&gt;
+&lt;/env-entry&gt;
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/09/20/solr全文搜索服务/" itemprop="url">
                   solr全文搜索服务
                 </a>
@@ -2691,181 +2820,6 @@ OK
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/16/redis数据类型Hash命令/" itemprop="url">
-                  redis数据类型Hash命令
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-16T14:36:40+08:00" content="2016-09-16">
-              2016-09-16
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/09/16/redis数据类型Hash命令/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/16/redis数据类型Hash命令/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="Hash类型"><a href="#Hash类型" class="headerlink" title="Hash类型"></a><strong>Hash类型</strong></h1><p>hash叫散列类型，它提供了字段和字段值的映射。字段值只能是字符串类型，不支持散列类型、集合类型等其它类型。如下：<br><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/redis_hash.jpg" alt=""></p>
-<h1 id="Hash命令"><a href="#Hash命令" class="headerlink" title="Hash命令"></a><strong>Hash命令</strong></h1><p>HSET key field value  赋值</p>
-<pre><code>HSET命令不区分插入和更新操作，当执行插入操作时HSET命令返回1，当执行更新操作时返回0。
-
-127.0.0.1:6379&gt; hset user username zhangsan 
-(integer) 1
-</code></pre><p>HMSET key field value [field value …]      一次可以设置多个字段值</p>
-<pre><code>127.0.0.1:6379&gt; hmset user age 20 username lisi 
-OK
-</code></pre><p>HSETNX key field value  当字段不存在时赋值</p>
-<pre><code>当字段不存在时赋值，类似HSET，区别在于如果字段存在，该命令不执行任何操作
-
-127.0.0.1:6379&gt; hsetnx user age 30    
-如果user中没有age字段则设置age值为30，否则不做任何操作
-(integer) 0
-</code></pre><p>HGET key field  一次只能获取一个字段值</p>
-<pre><code>127.0.0.1:6379&gt; hget user username
-&quot;zhangsan“
-</code></pre><p>HMGET key field [field …]    一次可以获取多个字段值</p>
-<pre><code>127.0.0.1:6379&gt; hmget user age username
-1) &quot;20&quot;
-2) &quot;lisi&quot;
-</code></pre><p>HGETALL key     获取所有字段值</p>
-<pre><code>127.0.0.1:6379&gt; hgetall user
-1) &quot;age&quot;
-2) &quot;20&quot;
-3) &quot;username&quot;
-4) &quot;lisi&quot;
-</code></pre><p>HDEL key field [field …]  可以删除一个或多个字段，返回值是被删除的字段个数 </p>
-<pre><code>127.0.0.1:6379&gt; hdel user age
-(integer) 1
-127.0.0.1:6379&gt; hdel user age name
-(integer) 0
-127.0.0.1:6379&gt; hdel user age username
-(integer) 1 
-</code></pre><p>HINCRBY key field increment     增加值</p>
-<pre><code>127.0.0.1:6379&gt; hincrby user age 2    将用户的年龄加2
-(integer) 22
-127.0.0.1:6379&gt; hget user age        获取用户的年龄
-&quot;22“
-</code></pre><p>HEXISTS key field     判断字段是否存在</p>
-<pre><code>127.0.0.1:6379&gt; hexists user age        查看user中是否有age字段
-(integer) 1
-127.0.0.1:6379&gt; hexists user name    查看user中是否有name字段
-(integer) 0
-</code></pre><p>HKEYS key      只获取字段名</p>
-<p>HVALS key   只获取字段值</p>
-<pre><code>127.0.0.1:6379&gt; hmset user age 20 name lisi 
-OK
-127.0.0.1:6379&gt; hkeys user
-1) &quot;age&quot;
-2) &quot;name&quot;
-127.0.0.1:6379&gt; hvals user
-1) &quot;20&quot;
-2) &quot;lisi&quot;
-</code></pre><p>HLEN key 获取字段长度</p>
-<pre><code>127.0.0.1:6379&gt; hlen user    
-(integer) 2
-</code></pre><h1 id="Hash应用"><a href="#Hash应用" class="headerlink" title="Hash应用"></a><strong>Hash应用</strong></h1><h1 id="存储商品信息"><a href="#存储商品信息" class="headerlink" title="存储商品信息:"></a>存储商品信息:</h1><p>商品字段</p>
-<pre><code>【商品id、商品名称、商品描述、商品库存、商品好评】
-</code></pre><p>定义商品信息的key</p>
-<pre><code>商品1001的信息在 Redis中的key为：[items:1001]
-</code></pre><p>储商品信息</p>
-<pre><code>192.168.101.3:7003&gt; HMSET items:1001 id 3 name apple price 999.9
-OK
-</code></pre><p>获取商品信息</p>
-<pre><code>192.168.101.3:7003&gt; HGET items:1001 id
-&quot;3&quot;
-192.168.101.3:7003&gt; HGETALL items:1001
-1) &quot;id&quot;
-2) &quot;3&quot;
-3) &quot;name&quot;
-4) &quot;apple&quot;
-5) &quot;price&quot;
-6) &quot;999.9&quot;
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2911,7 +2865,7 @@ OK
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">33</span>
+              <span class="site-state-item-count">34</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

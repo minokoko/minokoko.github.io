@@ -248,6 +248,181 @@
             
               
                 
+                <a class="post-title-link" href="/2016/09/16/redis数据类型Hash命令/" itemprop="url">
+                  redis数据类型Hash命令
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-16T14:36:40+08:00" content="2016-09-16">
+              2016-09-16
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/16/redis数据类型Hash命令/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/16/redis数据类型Hash命令/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Hash类型"><a href="#Hash类型" class="headerlink" title="Hash类型"></a><strong>Hash类型</strong></h1><p>hash叫散列类型，它提供了字段和字段值的映射。字段值只能是字符串类型，不支持散列类型、集合类型等其它类型。如下：<br><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/redis_hash.jpg" alt=""></p>
+<h1 id="Hash命令"><a href="#Hash命令" class="headerlink" title="Hash命令"></a><strong>Hash命令</strong></h1><p>HSET key field value  赋值</p>
+<pre><code>HSET命令不区分插入和更新操作，当执行插入操作时HSET命令返回1，当执行更新操作时返回0。
+
+127.0.0.1:6379&gt; hset user username zhangsan 
+(integer) 1
+</code></pre><p>HMSET key field value [field value …]      一次可以设置多个字段值</p>
+<pre><code>127.0.0.1:6379&gt; hmset user age 20 username lisi 
+OK
+</code></pre><p>HSETNX key field value  当字段不存在时赋值</p>
+<pre><code>当字段不存在时赋值，类似HSET，区别在于如果字段存在，该命令不执行任何操作
+
+127.0.0.1:6379&gt; hsetnx user age 30    
+如果user中没有age字段则设置age值为30，否则不做任何操作
+(integer) 0
+</code></pre><p>HGET key field  一次只能获取一个字段值</p>
+<pre><code>127.0.0.1:6379&gt; hget user username
+&quot;zhangsan“
+</code></pre><p>HMGET key field [field …]    一次可以获取多个字段值</p>
+<pre><code>127.0.0.1:6379&gt; hmget user age username
+1) &quot;20&quot;
+2) &quot;lisi&quot;
+</code></pre><p>HGETALL key     获取所有字段值</p>
+<pre><code>127.0.0.1:6379&gt; hgetall user
+1) &quot;age&quot;
+2) &quot;20&quot;
+3) &quot;username&quot;
+4) &quot;lisi&quot;
+</code></pre><p>HDEL key field [field …]  可以删除一个或多个字段，返回值是被删除的字段个数 </p>
+<pre><code>127.0.0.1:6379&gt; hdel user age
+(integer) 1
+127.0.0.1:6379&gt; hdel user age name
+(integer) 0
+127.0.0.1:6379&gt; hdel user age username
+(integer) 1 
+</code></pre><p>HINCRBY key field increment     增加值</p>
+<pre><code>127.0.0.1:6379&gt; hincrby user age 2    将用户的年龄加2
+(integer) 22
+127.0.0.1:6379&gt; hget user age        获取用户的年龄
+&quot;22“
+</code></pre><p>HEXISTS key field     判断字段是否存在</p>
+<pre><code>127.0.0.1:6379&gt; hexists user age        查看user中是否有age字段
+(integer) 1
+127.0.0.1:6379&gt; hexists user name    查看user中是否有name字段
+(integer) 0
+</code></pre><p>HKEYS key      只获取字段名</p>
+<p>HVALS key   只获取字段值</p>
+<pre><code>127.0.0.1:6379&gt; hmset user age 20 name lisi 
+OK
+127.0.0.1:6379&gt; hkeys user
+1) &quot;age&quot;
+2) &quot;name&quot;
+127.0.0.1:6379&gt; hvals user
+1) &quot;20&quot;
+2) &quot;lisi&quot;
+</code></pre><p>HLEN key 获取字段长度</p>
+<pre><code>127.0.0.1:6379&gt; hlen user    
+(integer) 2
+</code></pre><h1 id="Hash应用"><a href="#Hash应用" class="headerlink" title="Hash应用"></a><strong>Hash应用</strong></h1><h1 id="存储商品信息"><a href="#存储商品信息" class="headerlink" title="存储商品信息:"></a>存储商品信息:</h1><p>商品字段</p>
+<pre><code>【商品id、商品名称、商品描述、商品库存、商品好评】
+</code></pre><p>定义商品信息的key</p>
+<pre><code>商品1001的信息在 Redis中的key为：[items:1001]
+</code></pre><p>储商品信息</p>
+<pre><code>192.168.101.3:7003&gt; HMSET items:1001 id 3 name apple price 999.9
+OK
+</code></pre><p>获取商品信息</p>
+<pre><code>192.168.101.3:7003&gt; HGET items:1001 id
+&quot;3&quot;
+192.168.101.3:7003&gt; HGETALL items:1001
+1) &quot;id&quot;
+2) &quot;3&quot;
+3) &quot;name&quot;
+4) &quot;apple&quot;
+5) &quot;price&quot;
+6) &quot;999.9&quot;
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/09/16/redis数据类型及string命令/" itemprop="url">
                   redis数据类型String命令
                 </a>
@@ -928,25 +1103,58 @@ NoSQL，泛指非关系型的数据库，NoSQL即Not-Only SQL，它可以作为�
         
           
             <h1 id="使用SecureCRT连接服务器"><a href="#使用SecureCRT连接服务器" class="headerlink" title="使用SecureCRT连接服务器"></a><strong>使用SecureCRT连接服务器</strong></h1><p>1.点击new session新建连接，选择SSH2<br>2.hostname填服务器的地址，Port填22,SecureFX选择SFTP</p>
-<h1 id="安装JDK"><a href="#安装JDK" class="headerlink" title="安装JDK"></a><strong>安装JDK</strong></h1><p>1.通过Connect SFTP Session将jdk上传至服务器<br>2.使用命令tar -zxvf jdk-7u55-linux-i586.tar.gz解压压缩包<br>3.将解压后的文件移到/usr/local下 mv jdk1.7.0_55 /usr/local<br>4.cd /usr/local 查看文件是否存在<br>5.通过notepad++连接服务器,找到/etc/profile编辑<br>6.加入内容如下：<br>export JAVA_HOME=/usr/local/jdk1.7.0_55<br>export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar<br>export PATH=$JAVA_HOME/bin:$PATH<br>7.加载刚设置的变量 source /etc/profile<br>8.java -version 查看是否成功安装jdk</p>
-<h1 id="nginx安装"><a href="#nginx安装" class="headerlink" title="nginx安装"></a><strong>nginx安装</strong></h1><p>nginx是一个使用c语言开发的高性能的http服务器及反向代理服务器。<br>Nginx是一款高性能的http 服务器/反向代理服务器及电子邮件（IMAP/POP3）代理服务器。由俄罗斯的程序设计师Igor Sysoev所开发，官方测试nginx能够支支撑5万并发链接，并且cpu、内存等资源消耗却非常低，运行非常稳定。</p>
-<ol>
-<li>gcc<br>安装nginx需要先将官网下载的源码进行编译，编译依赖gcc环境，如果没有gcc环境，需要安装gcc：yum install gcc-c++ </li>
-<li>PCRE<br>PCRE(Perl Compatible Regular Expressions)是一个Perl库，包括 perl 兼容的正则表达式库。nginx的http模块使用pcre来解析正则表达式，所以需要在linux上安装pcre库。<br>yum install -y pcre pcre-devel<br>注：pcre-devel是使用pcre开发的一个二次开发库。nginx也需要此库。</li>
-<li><p>zlib<br>zlib库提供了很多种压缩和解压缩的方式，nginx使用zlib对http包的内容进行gzip，所以需要在linux上安装zlib库。<br>yum install -y zlib zlib-devel</p>
-</li>
-<li><p>openssl<br>OpenSSL 是一个强大的安全套接字层密码库，囊括主要的密码算法、常用的密钥和证书封装管理功能及SSL协议，并提供丰富的应用程序供测试或其它目的使用。<br>nginx不仅支持http协议，还支持https（即在ssl协议上传输http），所以需要在linux安装openssl库。<br>yum install -y openssl openssl-devel</p>
-</li>
-<li>将nginx-1.8.0.tar.gz拷贝至linux服务器</li>
-<li>解压 tar -zxvf nginx-1.8.0.tar.gz</li>
-<li>移到/usr/local mv nginx-1.8.0 /usr/local</li>
-<li><p>进入nginx目录,参数设置如下：<br>./configure \<br>–prefix=/usr/local/nginx \<br>–pid-path=/var/run/nginx/nginx.pid \<br>–lock-path=/var/lock/nginx.lock \<br>–error-log-path=/var/log/nginx/error.log \<br>–http-log-path=/var/log/nginx/access.log \<br>–with-http_gzip_static_module \<br>–http-client-body-temp-path=/var/temp/nginx/client \<br>–http-proxy-temp-path=/var/temp/nginx/proxy \<br>–http-fastcgi-temp-path=/var/temp/nginx/fastcgi \<br>–http-uwsgi-temp-path=/var/temp/nginx/uwsgi \<br>–http-scgi-temp-path=/var/temp/nginx/scgi</p>
-<p>注意：上边将临时文件目录指定为/var/temp/nginx，需要在/var下创建temp及nginx目录cd /var -&gt; mkdir temp -&gt; cd temp -&gt; mkdir nginx</p>
-</li>
-<li>在nginx目录,编译make，安装make install,安装在了/usr/local/nginx目录下</li>
-<li>启动：进入nginx的sbin目录，./nginx就可以启动。关闭:./nginx -s stop<br>ps aux|grep nginx 查看nginx进程</li>
-</ol>
-<h1 id="nginx配置"><a href="#nginx配置" class="headerlink" title="nginx配置"></a><strong>nginx配置</strong></h1><p>在/usr/local/nginx/conf目录下nginx.conf文件是nginx的配置文件。<br>在nginx.conf文件中添加一个Service节点，修改端口号就可以</p>
+<h1 id="安装JDK"><a href="#安装JDK" class="headerlink" title="安装JDK"></a><strong>安装JDK</strong></h1><pre><code>1.通过Connect SFTP Session将jdk上传至服务器
+2.使用命令tar -zxvf jdk-7u55-linux-i586.tar.gz解压压缩包
+3.将解压后的文件移到/usr/local下 mv jdk1.7.0_55 /usr/local
+4.cd /usr/local 查看文件是否存在
+5.通过notepad++连接服务器,找到/etc/profile编辑
+6.加入内容如下：
+export JAVA_HOME=/usr/local/jdk1.7.0_55
+export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+export PATH=$JAVA_HOME/bin:$PATH
+7.加载刚设置的变量 source /etc/profile
+8.java -version 查看是否成功安装jdk
+</code></pre><h1 id="nginx安装"><a href="#nginx安装" class="headerlink" title="nginx安装"></a><strong>nginx安装</strong></h1><pre><code>nginx是一个使用c语言开发的高性能的http服务器及反向代理服务器。
+Nginx是一款高性能的http 服务器/反向代理服务器及电子邮件（IMAP/POP3）代理服务器。
+由俄罗斯的程序设计师Igor Sysoev所开发，官方测试nginx能够支支撑5万并发链接，并且cpu、内存等资源消耗却非常低，运行非常稳定。
+
+1.    gcc
+    安装nginx需要先将官网下载的源码进行编译，编译依赖gcc环境，如果没有gcc环境，需要安装gcc：yum install gcc-c++ 
+2.  PCRE
+    PCRE(Perl Compatible Regular Expressions)是一个Perl库，包括 perl 兼容的正则表达式库。nginx的http模块使用pcre来解析正则表达式，所以需要在linux上安装pcre库。
+    yum install -y pcre pcre-devel
+    注：pcre-devel是使用pcre开发的一个二次开发库。nginx也需要此库。
+3.  zlib
+    zlib库提供了很多种压缩和解压缩的方式，nginx使用zlib对http包的内容进行gzip，所以需要在linux上安装zlib库。
+    yum install -y zlib zlib-devel
+
+4.  openssl
+    OpenSSL 是一个强大的安全套接字层密码库，囊括主要的密码算法、常用的密钥和证书封装管理功能及SSL协议，并提供丰富的应用程序供测试或其它目的使用。
+    nginx不仅支持http协议，还支持https（即在ssl协议上传输http），所以需要在linux安装openssl库。
+    yum install -y openssl openssl-devel
+5.  将nginx-1.8.0.tar.gz拷贝至linux服务器
+6.  解压 tar -zxvf nginx-1.8.0.tar.gz
+7.  移到/usr/local mv nginx-1.8.0 /usr/local
+8.  进入nginx目录,参数设置如下：
+    ./configure \
+    --prefix=/usr/local/nginx \
+    --pid-path=/var/run/nginx/nginx.pid \
+    --lock-path=/var/lock/nginx.lock \
+    --error-log-path=/var/log/nginx/error.log \
+    --http-log-path=/var/log/nginx/access.log \
+    --with-http_gzip_static_module \
+    --http-client-body-temp-path=/var/temp/nginx/client \
+    --http-proxy-temp-path=/var/temp/nginx/proxy \
+    --http-fastcgi-temp-path=/var/temp/nginx/fastcgi \
+    --http-uwsgi-temp-path=/var/temp/nginx/uwsgi \
+    --http-scgi-temp-path=/var/temp/nginx/scgi
+
+    注意：上边将临时文件目录指定为/var/temp/nginx，需要在/var下创建temp及nginx目录
+    cd /var -&gt; mkdir temp -&gt; cd temp -&gt; mkdir nginx
+9.  在nginx目录,编译make，安装make install,安装在了/usr/local/nginx目录下
+10. 启动：进入nginx的sbin目录，./nginx就可以启动。关闭:./nginx -s stop
+    ps aux|grep nginx 查看nginx进程
+</code></pre><h1 id="nginx配置"><a href="#nginx配置" class="headerlink" title="nginx配置"></a><strong>nginx配置</strong></h1><p>在/usr/local/nginx/conf目录下nginx.conf文件是nginx的配置文件。<br>在nginx.conf文件中添加一个Service节点，修改端口号就可以</p>
 <pre><code>server {                        //一个server是一个虚拟主机
         listen       80;        //当前虚拟主机监听的端口号
         server_name  localhost; //当前虚拟主机的名称
@@ -1509,320 +1717,6 @@ Dao层
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/06/01/我是如何整合SSH的-三-CRM总结/" itemprop="url">
-                  我是如何整合SSH的(三)CRM总结
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-06-01T21:18:29+08:00" content="2016-06-01">
-              2016-06-01
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/06/01/我是如何整合SSH的-三-CRM总结/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/01/我是如何整合SSH的-三-CRM总结/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="前述"><a href="#前述" class="headerlink" title="前述"></a>前述</h1><p>这个周一直在逐步地完成临摹一个CRM系统的工作，并且每一小版本的工作都通过SVN记录下来。这个周初步了解学习了linux系统，选用的版本是Centos6.5，并且学会了搭建JavaEE所需要的环境，包括Tomcat7、jdk1.7、eclise，svn等基本环境。还学会了如何通过SSH远程登录服务器，如何在windows和linux之间交换数据。</p>
-<h1 id="小项目-CRM"><a href="#小项目-CRM" class="headerlink" title="小项目:CRM"></a>小项目:CRM</h1><h2 id="练习步骤"><a href="#练习步骤" class="headerlink" title="练习步骤"></a>练习步骤</h2><p>1.确定需求<br>1.1登录 （基本流程、登录拦截器、校验）<br>1.2员工管理</p>
-<ul>
-<li>查询所有</li>
-<li>添加（ajax级联）</li>
-<li>更新（标签回显）</li>
-<li>条件查询<br>1.3课程类别</li>
-<li>查询所有（条件 + 分页）</li>
-<li>添加或更新<br><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/img/CRM.jpg" alt=""></li>
-</ul>
-<p>2.根据需求创建ER图，并在数据库中添加数据<br><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/img/CRM-ER.jpg" alt=""></p>
-<p>3.在Eclips中创建CRM项目，并且将项目添加SVN版本控制器。<br><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/img/CRM-SVN.JPG" alt=""></p>
-<p>4.添加Spring、Hibernate、struts2等相关的jar包</p>
-<p>5.对应ER图，创建相应的JavaBean，并且为相应的Bean添加hibernate配置文件。</p>
-<pre><code>&lt;hibernate-mapping&gt;
-&lt;class name=&quot;com.jessyon.crm.classes.domain.CrmClass&quot; table=&quot;crm_class&quot;&gt;
-    &lt;id name=&quot;classId&quot;&gt;
-        &lt;generator class=&quot;uuid&quot;&gt;&lt;/generator&gt;
-    &lt;/id&gt;
-
-    &lt;property name=&quot;name&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;beginTime&quot;&gt;
-        &lt;column name=&quot;beginTime&quot; sql-type=&quot;datetime&quot;&gt;&lt;/column&gt;
-    &lt;/property&gt;
-    &lt;property name=&quot;endTime&quot;&gt;
-        &lt;column name=&quot;endTime&quot; sql-type=&quot;datetime&quot;&gt;&lt;/column&gt;
-    &lt;/property&gt;
-
-    &lt;property name=&quot;status&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;totalCount&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;upgradeCount&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;changeCount&quot;&gt;&lt;/property&gt;
-
-    &lt;property name=&quot;runoffCount&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;remark&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;uploadTime&quot;&gt;
-        &lt;column name=&quot;uploadTime&quot; sql-type=&quot;datetime&quot;&gt;&lt;/column&gt;
-    &lt;/property&gt;
-
-    &lt;property name=&quot;uploadPath&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;uploadFilename&quot;&gt;&lt;/property&gt;
-
-    &lt;many-to-one name=&quot;courseType&quot; class=&quot;com.jessyon.crm.coursetype.domain.CrmCourseType&quot; column=&quot;courseTypeId&quot;&gt;&lt;/many-to-one&gt;
-&lt;/class&gt;
-&lt;/hibernate-mapping&gt;
-</code></pre><p>6.配置spring</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-   xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-   xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot;
-   xmlns:tx=&quot;http://www.springframework.org/schema/tx&quot;
-   xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
-   xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans 
-                          http://www.springframework.org/schema/beans/spring-beans.xsd
-                          http://www.springframework.org/schema/tx 
-                          http://www.springframework.org/schema/tx/spring-tx.xsd
-                          http://www.springframework.org/schema/aop 
-                          http://www.springframework.org/schema/aop/spring-aop.xsd
-                          http://www.springframework.org/schema/context 
-                          http://www.springframework.org/schema/context/spring-context.xsd&quot;&gt;
-
-&lt;!-- 配置公共项 --&gt;
-&lt;!-- 1 加载properties文件 --&gt;
-&lt;context:property-placeholder location=&quot;classpath:jdbcInfo.properties&quot;/&gt;
-
-&lt;!-- 2 配置数据源 --&gt;
-&lt;bean id=&quot;dataSource&quot; class=&quot;com.mchange.v2.c3p0.ComboPooledDataSource&quot;&gt;
-    &lt;property name=&quot;driverClass&quot; value=&quot;${jdbc.driverClass}&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;jdbcUrl&quot; value=&quot;${jdbc.jdbcUrl}&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;user&quot; value=&quot;${jdbc.user}&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;password&quot; value=&quot;${jdbc.password}&quot;&gt;&lt;/property&gt;
-&lt;/bean&gt;
-
-&lt;!-- 3 session工厂 --&gt;
-&lt;bean id=&quot;sessionFactory&quot; class=&quot;org.springframework.orm.hibernate3.LocalSessionFactoryBean&quot;&gt;
-    &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;hibernateProperties&quot;&gt;
-        &lt;props&gt;
-            &lt;prop key=&quot;hibernate.dialect&quot;&gt;org.hibernate.dialect.MySQL5Dialect&lt;/prop&gt;
-            &lt;prop key=&quot;hibernate.show_sql&quot;&gt;true&lt;/prop&gt;
-            &lt;prop key=&quot;hibernate.format_sql&quot;&gt;true&lt;/prop&gt;
-            &lt;prop key=&quot;hibernate.current_session_context_class&quot;&gt;thread&lt;/prop&gt;
-            &lt;prop key=&quot;javax.persistence.validation.mode&quot;&gt;none&lt;/prop&gt;
-        &lt;/props&gt;
-    &lt;/property&gt;
-    &lt;property name=&quot;mappingLocations&quot; value=&quot;classpath:com/jessyon/crm/*/domain/*.hbx.xml&quot;&gt;&lt;/property&gt;
-</code></pre><p>   </p>
-<pre><code>&lt;!-- 4 事务管理 --&gt;
-&lt;!-- 4.1 事务管理器 --&gt;
-&lt;bean id=&quot;txManager&quot; class=&quot;org.springframework.orm.hibernate3.HibernateTransactionManager&quot;&gt;
-    &lt;property name=&quot;sessionFactory&quot; ref=&quot;sessionFactory&quot;&gt;&lt;/property&gt;
-&lt;/bean&gt;
-&lt;!-- 4.2 事务详情  --&gt;
-&lt;tx:advice id=&quot;txAdvice&quot; transaction-manager=&quot;txManager&quot;&gt;
-    &lt;tx:attributes&gt;
-        &lt;tx:method name=&quot;add*&quot;/&gt;
-        &lt;tx:method name=&quot;save*&quot;/&gt;
-        &lt;tx:method name=&quot;update*&quot;/&gt;
-        &lt;tx:method name=&quot;delete*&quot;/&gt;
-        &lt;tx:method name=&quot;find*&quot; read-only=&quot;true&quot;/&gt;
-        &lt;tx:method name=&quot;*&quot; read-only=&quot;true&quot;/&gt;
-    &lt;/tx:attributes&gt;
-&lt;/tx:advice&gt;
-&lt;!-- 4.3 aop编程  
---&gt;
-&lt;aop:config proxy-target-class=&quot;true&quot;&gt;
-    &lt;aop:advisor advice-ref=&quot;txAdvice&quot; pointcut=&quot;execution(* com.jessyon.crm.*.service..*.*(..))&quot;/&gt;
-&lt;/aop:config&gt;
-
-
-&lt;!-- 包含其他子模块 --&gt;
-&lt;!-- 员工 ,部门, 职务--&gt;
-&lt;!-- &lt;import resource=&quot;applicationContext-staff.xml&quot;/&gt;
-&lt;import resource=&quot;applicationContext-department.xml&quot;/&gt;
-&lt;import resource=&quot;applicationContext-post.xml&quot;/&gt;
-&lt;import resource=&quot;applicationContext-coursetype.xml&quot;/&gt; --&gt;
-&lt;/beans&gt;
-</code></pre><p><strong> applicationContext-courseType.xml<br>其他的相关的配置文件，比如department、post、staff的配置文件都是以下格式</strong></p>
-<pre><code>    &lt;bean id=&quot;courseTypeDao&quot; class=&quot;com.jessyon.crm.coursetype.dao.impl.CourseTypeDaoImpl&quot;&gt;
-    &lt;property name=&quot;sessionFactory&quot; ref=&quot;sessionFactory&quot;&gt;&lt;/property&gt;
-&lt;/bean&gt;
-&lt;!-- service --&gt;
-&lt;bean id=&quot;courseTypeService&quot; class=&quot;com.jessyon.crm.coursetype.service.impl.CourseTypeServiceImpl&quot;&gt;
-    &lt;property name=&quot;courseTypeDao&quot; ref=&quot;courseTypeDao&quot;&gt;&lt;/property&gt;
-&lt;/bean&gt;
-</code></pre><p>7.配置struts2</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;!DOCTYPE struts PUBLIC
-&quot;-//Apache Software Foundation//DTD Struts Configuration 2.3//EN&quot;
-&quot;http://struts.apache.org/dtds/struts-2.3.dtd&quot;&gt;
-&lt;struts&gt;
-&lt;!-- 常量 --&gt;
-&lt;constant name=&quot;struts.devMode&quot; value=&quot;true&quot;&gt;&lt;/constant&gt;
-&lt;constant name=&quot;struts.ui.theme&quot; value=&quot;simple&quot;&gt;&lt;/constant&gt;
-
-&lt;!-- 公共项 其他子模块都会继承common --&gt;
-&lt;package name=&quot;common&quot; namespace=&quot;/&quot; extends=&quot;struts-default&quot;&gt;
-    &lt;!-- 配置拦截器 --&gt;
-    &lt;interceptors&gt;
-        &lt;interceptor name=&quot;loginInterceptor&quot; class=&quot;com.jessyon.crm.web.interceptor.LoginInterceptor&quot;&gt;&lt;/interceptor&gt;
-        &lt;interceptor-stack name=&quot;loginStack&quot;&gt;
-            &lt;interceptor-ref name=&quot;defaultStack&quot;&gt;&lt;/interceptor-ref&gt;
-            &lt;interceptor-ref name=&quot;loginInterceptor&quot;&gt;
-                &lt;!-- 不需要拦截的方法,多个方法逗号隔开 --&gt;
-                &lt;param name=&quot;excludeMethods&quot;&gt;login&lt;/param&gt;
-            &lt;/interceptor-ref&gt;
-        &lt;/interceptor-stack&gt;
-    &lt;/interceptors&gt;
-    &lt;!-- &lt;default-interceptor-ref name=&quot;loginStack&quot;&gt;&lt;/default-interceptor-ref&gt; --&gt;
-    &lt;global-results&gt;
-        &lt;result name=&quot;login&quot;&gt;/WEB-INF/pages/login.jsp&lt;/result&gt;
-    &lt;/global-results&gt;
-    &lt;action name=&quot;uiAction_*_*&quot;&gt;
-
-            &lt;result&gt;/WEB-INF/pages/{1}/{2}.jsp&lt;/result&gt;
-    &lt;/action&gt;
-&lt;/package&gt;
-
-&lt;!-- 包含其他子模块 --&gt;
-&lt;include file=&quot;struts/struts-staff.xml&quot;&gt;&lt;/include&gt;
-&lt;include file=&quot;struts/struts-post.xml&quot;&gt;&lt;/include&gt;
-&lt;include file=&quot;struts/struts-department.xml&quot;&gt;&lt;/include&gt;
-&lt;include file=&quot;struts/struts-coursetype.xml&quot;&gt;&lt;/include&gt;
-&lt;/struts&gt;
-</code></pre><p><strong> struts2-courseType.xml<br>其他的相关的配置文件，比如department、post、staff的配置文件都是以下格式</strong></p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;!DOCTYPE struts PUBLIC
-&quot;-//Apache Software Foundation//DTD Struts Configuration 2.3//EN&quot;
-&quot;http://struts.apache.org/dtds/struts-2.3.dtd&quot;&gt;
-struts&gt;
-&lt;package name=&quot;coursetype&quot; namespace=&quot;/&quot; extends=&quot;common&quot;&gt;
-    &lt;action name=&quot;courseTypeAction_*&quot; class=&quot;com.jessyon.crm.coursetype.web.action.CourseTypeAction&quot; method=&quot;{1}&quot;&gt;
-        &lt;result name=&quot;findAll&quot;&gt;/WEB-INF/pages/coursetype/listCourse.jsp&lt;/result&gt;
-        &lt;result name=&quot;saveOrUpdateUI&quot;&gt;/WEB-INF/pages/coursetype/addOrEditCourse.jsp&lt;/result&gt;
-        &lt;result name=&quot;saveOrUpdate&quot; type=&quot;redirectAction&quot;&gt;
-            &lt;param name=&quot;namespace&quot;&gt;/&lt;/param&gt;
-            &lt;param name=&quot;actionName&quot;&gt;courseTypeAction_findAll&lt;/param&gt;
-        &lt;/result&gt;
-    &lt;/action&gt;
-&lt;/package&gt;
-&lt;/struts&gt;
-</code></pre><p>8.配置web.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;web-app xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns=&quot;http://java.sun.com/xml/ns/javaee&quot; xmlns:web=&quot;http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd&quot; xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd&quot; id=&quot;WebApp_ID&quot; version=&quot;2.5&quot;&gt;
-  &lt;display-name&gt;Mycrm&lt;/display-name&gt;
-  &lt;filter&gt;
-      &lt;filter-name&gt;openSession&lt;/filter-name&gt;
-      &lt;filter-class&gt;org.springframework.orm.hibernate3.support.OpenSessionInViewFilter&lt;/filter-class&gt;
-  &lt;/filter&gt;
-
-  &lt;filter-mapping&gt;
-      &lt;filter-name&gt;openSession&lt;/filter-name&gt;
-      &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
-  &lt;/filter-mapping&gt;
-
-  &lt;context-param&gt;
-      &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
-      &lt;param-value&gt;classpath:spring/applicationContext*.xml&lt;/param-value&gt;
-  &lt;/context-param&gt;
-
-  &lt;listener&gt;
-      &lt;listener-class&gt;org.springframework.web.context.ContextLoaderListener&lt;/listener-class&gt;
-  &lt;/listener&gt;
-
-  &lt;filter&gt;
-          &lt;filter-name&gt;struts2&lt;/filter-name&gt;
-          &lt;filter-class&gt;org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter&lt;/filter-class&gt;
-  &lt;/filter&gt;
-
-  &lt;filter-mapping&gt;
-          &lt;filter-name&gt;struts2&lt;/filter-name&gt;
-          &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
-  &lt;/filter-mapping&gt;
-&lt;/web-app&gt;
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1868,7 +1762,7 @@ struts&gt;
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">33</span>
+              <span class="site-state-item-count">34</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
