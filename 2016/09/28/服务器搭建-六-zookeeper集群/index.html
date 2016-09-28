@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="集群,solr,服务器,zookeeper," />
 
 
 
@@ -84,15 +84,18 @@
 
 
 
-<meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="OneStack">
-<meta property="og:url" content="http://jessyon.com/tags/索引/index.html">
+<meta name="description" content="zookeeper体系结构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="服务器搭建(六)zookeeper集群">
+<meta property="og:url" content="http://jessyon.com/2016/09/28/服务器搭建-六-zookeeper集群/index.html">
 <meta property="og:site_name" content="OneStack">
-<meta property="og:description">
+<meta property="og:description" content="zookeeper体系结构">
+<meta property="og:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/zookeeper.jpg">
+<meta property="og:updated_time" content="2016-09-28T02:19:34.274Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="OneStack">
-<meta name="twitter:description">
+<meta name="twitter:title" content="服务器搭建(六)zookeeper集群">
+<meta name="twitter:description" content="zookeeper体系结构">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/zookeeper.jpg">
 
 
 
@@ -113,9 +116,9 @@
 
 
 
-  <link rel="canonical" href="http://jessyon.com/tags/索引/"/>
+  <link rel="canonical" href="http://jessyon.com/2016/09/28/服务器搭建-六-zookeeper集群/"/>
 
-  <title> 标签: 索引 | OneStack </title>
+  <title> 服务器搭建(六)zookeeper集群 | OneStack </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -136,7 +139,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left  ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -214,46 +217,135 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-collapse">
-    <div class="collection-title">
-      <h2 >
-        索引
-        <small>标签</small>
-      </h2>
-    </div>
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
 
     
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                服务器搭建(六)zookeeper集群
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-28T10:05:45+08:00" content="2016-09-28">
+              2016-09-28
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/28/服务器搭建-六-zookeeper集群/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/28/服务器搭建-六-zookeeper集群/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
       
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+      
+        <h1 id="zookeeper体系结构"><a href="#zookeeper体系结构" class="headerlink" title="zookeeper体系结构"></a>zookeeper体系结构</h1><p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/zookeeper.jpg" alt=""></p>
 
-      <h1 class="post-title">
+      
+    </div>
+
+    <div>
+      
         
-            <a class="post-title-link" href="/2016/09/19/lucene域、索引维护、搜索、中文分词/" itemprop="url">
-              
-                <span itemprop="name">lucene域、索引维护、搜索、中文分词</span>
-              
-            </a>
+
+      
+    </div>
+
+    <div>
+      
         
-      </h1>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-09-19T20:50:29+08:00"
-              content="2016-09-19" >
-          09-19
-        </time>
-      </div>
+      
+    </div>
 
-    </header>
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/集群/" rel="tag">#集群</a>
+          
+            <a href="/tags/solr/" rel="tag">#solr</a>
+          
+            <a href="/tags/服务器/" rel="tag">#服务器</a>
+          
+            <a href="/tags/zookeeper/" rel="tag">#zookeeper</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/24/服务器搭建-五-solr集群/" rel="next" title="服务器搭建(五)solr集群">
+                <i class="fa fa-chevron-left"></i> 服务器搭建(五)solr集群
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </article>
 
 
-    
-  </div>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -261,6 +353,14 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/28/服务器搭建-六-zookeeper集群/"
+           data-title="服务器搭建(六)zookeeper集群" data-url="http://jessyon.com/2016/09/28/服务器搭建-六-zookeeper集群/">
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -280,8 +380,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.gif"
@@ -324,6 +433,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#zookeeper体系结构"><span class="nav-number">1.</span> <span class="nav-text">zookeeper体系结构</span></a></li></ol></div>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -427,6 +547,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
 
   
 
