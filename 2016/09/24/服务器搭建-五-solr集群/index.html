@@ -101,7 +101,7 @@ Solr服务的搭建第一步：安装jdk、安装tomcat,复制一份tomcat到/us
 cp -r apache-tomcat-7.0.47 /usr/local/solr
 mv apache-tomcat-7.0.47 tomcat">
 <meta property="og:image" content="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/solr_infrastructure.jpg">
-<meta property="og:updated_time" content="2016-09-24T04:01:06.318Z">
+<meta property="og:updated_time" content="2016-09-28T04:25:13.173Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="服务器搭建(五)solr集群">
 <meta name="twitter:description" content="搜索系统搭建搜索功能需要发布服务共pc端、移动端使用。根据关键词搜索，得到json格式的搜索结果。
@@ -329,6 +329,61 @@ cp -r /usr/local/solr-4.10.3/example/solr /usr/local/solr/home
    &lt;env-entry-value&gt;/usr/local/solr/solrhome&lt;/env-entry-value&gt;
    &lt;env-entry-type&gt;java.lang.String&lt;/env-entry-type&gt;
 &lt;/env-entry&gt;
+</code></pre><h1 id="solr集群"><a href="#solr集群" class="headerlink" title="solr集群"></a>solr集群</h1><pre><code>第一步，安装4个tomcat到solr-cloud目录下，修改端口号分别为9001，9002，9003，9004
+
+第二步，将solr分别部署到4个tomcat下，把单机版的solr复制到solr-cloud的tomcat/webapps下就可以了。
+
+第三步，为每一个solr实例创建一个solrhome,修改
+/usr/local/solr-cloud/tomcat01/webapps/solr/WEB-INF/下的web.xml
+
+   &lt;env-entry&gt;
+   &lt;env-entry-name&gt;solr/home&lt;/env-entry-name&gt;
+   &lt;env-entry-value&gt;/usr/local/solr-cloud/solrhome01&lt;/env-entry-value&gt;
+   &lt;env-entry-type&gt;java.lang.String&lt;/env-entry-type&gt;
+      &lt;/env-entry&gt;
+
+第四步，修改每个/usr/local/solr-cloud/solrhome下的solr.xml
+32,33行分别为主机地址和端口号
+&lt;str name=&quot;host&quot;&gt;${host:115.159.93.201}&lt;/str&gt;
+&lt;int name=&quot;hostPort&quot;&gt;${jetty.port:9001}&lt;/int&gt;
+
+第五步，把配置文件上传到zookeeper，由zookeeper来统一管理solr集群的配置信息。
+
+    进入命令所在的目录
+    cd /usr/local/solr-4.10.3/example/scripts/cloud-scripts/
+
+    把/usr/local/solr-cloud/solrhome01/collection1/conf目录上传到zookeeper
+
+    ./zkcli.sh -zkhost 115.159.93.201:2182, 115.159.93.201:2181, 115.159.93.201:2183 -cmd upconfig -confdir /usr/local/solr-cloud/solrhome01/collection1/conf -confname myconf
+
+    进入一个zookeeper下的bin
+    使用zkCli.sh查看是否上传成功
+
+第六步，告诉solr实例zookeeper的位置，需要向tomcat的catalina.sh里添加：
+
+    JAVA_OPTS=&quot;-DzkHost=115.159.93.201:2181,115.159.93.201:2182,115.159.93.201:2183&quot;
+
+第七步，启动4个tomcat
+
+第八步，将4个solr分成2片，每片一个主节点，一个从节点。
+
+    http://115.159.93.201:9001/solr/admin/collections?action=CREATE&amp;name=collection2&amp;numShards=2&amp;replicationFactor=2
+
+第九步，删除不需要的collection1
+
+    http://115.159.93.201:9001/solr/admin/collections?action=DELETE&amp;name=collection1
+</code></pre><h1 id="将单机版solr切换到集群版"><a href="#将单机版solr切换到集群版" class="headerlink" title="将单机版solr切换到集群版"></a>将单机版solr切换到集群版</h1><pre><code>在applicationContext-service.xml中修改配置:
+
+        &lt;!-- 配置单机版solr客户端 --&gt;
+        &lt;!-- &lt;bean id=&quot;httpSolrServer&quot; class=&quot;org.apache.solr.client.solrj.impl.HttpSolrServer&quot;&gt;
+            &lt;constructor-arg name=&quot;baseURL&quot; value=&quot;http://115.159.93.201:8080/solr&quot;&gt;&lt;/constructor-arg&gt;
+        &lt;/bean&gt;
+         --&gt;
+        &lt;!-- 配置集群版solr客户端 --&gt;
+        &lt;bean id=&quot;cloudSolrServer&quot; class=&quot;org.apache.solr.client.solrj.impl.CloudSolrServer&quot;&gt;
+            &lt;constructor-arg name=&quot;zkHost&quot; value=&quot;115.159.93.201:2181,115.159.93.201:2182,115.159.93.201:2183&quot;&gt;&lt;/constructor-arg&gt;
+            &lt;property name=&quot;defaultCollection&quot; value=&quot;collection2&quot;&gt;&lt;/property&gt;
+        &lt;/bean&gt;
 </code></pre>
       
     </div>
@@ -483,7 +538,7 @@ cp -r /usr/local/solr-4.10.3/example/solr /usr/local/solr/home
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#搜索系统搭建"><span class="nav-number">1.</span> <span class="nav-text">搜索系统搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Solr服务的搭建"><span class="nav-number">1.1.</span> <span class="nav-text">Solr服务的搭建</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#搜索系统搭建"><span class="nav-number">1.</span> <span class="nav-text">搜索系统搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Solr服务的搭建"><span class="nav-number">1.1.</span> <span class="nav-text">Solr服务的搭建</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#solr集群"><span class="nav-number">2.</span> <span class="nav-text">solr集群</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#将单机版solr切换到集群版"><span class="nav-number">3.</span> <span class="nav-text">将单机版solr切换到集群版</span></a></li></ol></div>
             
           </div>
         </section>

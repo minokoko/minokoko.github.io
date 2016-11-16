@@ -289,8 +289,52 @@
       
         
           
-            <h1 id="zookeeper体系结构"><a href="#zookeeper体系结构" class="headerlink" title="zookeeper体系结构"></a>zookeeper体系结构</h1><p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/zookeeper.jpg" alt=""></p>
+            <h1 id="zookeeper微集群结构"><a href="#zookeeper微集群结构" class="headerlink" title="zookeeper微集群结构"></a>zookeeper微集群结构</h1><p><img src="https://raw.githubusercontent.com/minokoko/minokoko.github.io/master/images/zookeeper.jpg" alt=""></p>
+<h2 id="Zookeeper"><a href="#Zookeeper" class="headerlink" title="Zookeeper"></a>Zookeeper</h2><pre><code>1、集群管理
+主从的管理、负载均衡、高可用的管理。集群的入口。Zookeeper必须是集群才能保证高可用。Zookeeper有选举和投票的机制。集群中至少应该有三个节点。
 
+2、配置文件的集中管理(这里使用)
+搭建solr集群时，需要把Solr的配置文件上传zookeeper，让zookeeper统一管理。每个节点都到zookeeper上取配置文件。
+</code></pre><h2 id="Zookeeper集群搭建步骤"><a href="#Zookeeper集群搭建步骤" class="headerlink" title="Zookeeper集群搭建步骤"></a>Zookeeper集群搭建步骤</h2><pre><code>第一步.把zookeeper-3.4.6.tar.gz上传到服务，解压缩到/usr/local/目录下
+
+第二步.在/usr/local/目录下创建solr-cloud目录，把zookeeper向该目录复制三份
+
+    cp -r zookeeper-3.4.6 /usr/local/solr-cloud/zookeeper01
+    cp -r zookeeper-3.4.6 /usr/local/solr-cloud/zookeeper02
+    cp -r zookeeper-3.4.6 /usr/local/solr-cloud/zookeeper03
+
+第三步.配置zookeeper:
+    1.在zookeeper01目录下，创建一个data文件夹
+    2.在data目录下创建一个myid文件,内容为对应的id
+    echo 1 &gt;&gt; data/myid  
+    在其他两个目录重复1，2两个步骤
+    3.修改conf文件,把zoo_sample.cfg文件改名为zoo_cfg
+    4.修改zoo.cfg
+    12行 dataDir=/usr/local/solr-cloud/zookeeper01/data
+    14行 01：2181，02：2182，03：2183
+    5.在zoo.cfg末尾添加服务地址
+
+    01:
+    server.1=0.0.0.0:2881:3881
+    server.2=115.159.93.201:2882:3882
+    server.3=115.159.93.201:2883:3883
+
+    02
+    server.1=115.159.93.201:2881:3881
+    server.2=0.0.0.0:2882:3882
+    server.3=115.159.93.201:2883:3883
+
+    03
+    server.1=115.159.93.201:2881:3881
+    server.2=115.159.93.201:2882:3882
+    server.3=0.0.0.0:2883:3883
+
+第四步，启动zookeeper
+    到三个zookeeper目录的bin目录下，分别开启zookeeper服务
+    启动：./zkServer.sh start
+    关闭：./zkServer.sh stop
+    查看服务状态：./zkServer.sh status
+</code></pre>
           
         
       
@@ -419,6 +463,61 @@ cp -r /usr/local/solr-4.10.3/example/solr /usr/local/solr/home
    &lt;env-entry-value&gt;/usr/local/solr/solrhome&lt;/env-entry-value&gt;
    &lt;env-entry-type&gt;java.lang.String&lt;/env-entry-type&gt;
 &lt;/env-entry&gt;
+</code></pre><h1 id="solr集群"><a href="#solr集群" class="headerlink" title="solr集群"></a>solr集群</h1><pre><code>第一步，安装4个tomcat到solr-cloud目录下，修改端口号分别为9001，9002，9003，9004
+
+第二步，将solr分别部署到4个tomcat下，把单机版的solr复制到solr-cloud的tomcat/webapps下就可以了。
+
+第三步，为每一个solr实例创建一个solrhome,修改
+/usr/local/solr-cloud/tomcat01/webapps/solr/WEB-INF/下的web.xml
+
+   &lt;env-entry&gt;
+   &lt;env-entry-name&gt;solr/home&lt;/env-entry-name&gt;
+   &lt;env-entry-value&gt;/usr/local/solr-cloud/solrhome01&lt;/env-entry-value&gt;
+   &lt;env-entry-type&gt;java.lang.String&lt;/env-entry-type&gt;
+      &lt;/env-entry&gt;
+
+第四步，修改每个/usr/local/solr-cloud/solrhome下的solr.xml
+32,33行分别为主机地址和端口号
+&lt;str name=&quot;host&quot;&gt;${host:115.159.93.201}&lt;/str&gt;
+&lt;int name=&quot;hostPort&quot;&gt;${jetty.port:9001}&lt;/int&gt;
+
+第五步，把配置文件上传到zookeeper，由zookeeper来统一管理solr集群的配置信息。
+
+    进入命令所在的目录
+    cd /usr/local/solr-4.10.3/example/scripts/cloud-scripts/
+
+    把/usr/local/solr-cloud/solrhome01/collection1/conf目录上传到zookeeper
+
+    ./zkcli.sh -zkhost 115.159.93.201:2182, 115.159.93.201:2181, 115.159.93.201:2183 -cmd upconfig -confdir /usr/local/solr-cloud/solrhome01/collection1/conf -confname myconf
+
+    进入一个zookeeper下的bin
+    使用zkCli.sh查看是否上传成功
+
+第六步，告诉solr实例zookeeper的位置，需要向tomcat的catalina.sh里添加：
+
+    JAVA_OPTS=&quot;-DzkHost=115.159.93.201:2181,115.159.93.201:2182,115.159.93.201:2183&quot;
+
+第七步，启动4个tomcat
+
+第八步，将4个solr分成2片，每片一个主节点，一个从节点。
+
+    http://115.159.93.201:9001/solr/admin/collections?action=CREATE&amp;name=collection2&amp;numShards=2&amp;replicationFactor=2
+
+第九步，删除不需要的collection1
+
+    http://115.159.93.201:9001/solr/admin/collections?action=DELETE&amp;name=collection1
+</code></pre><h1 id="将单机版solr切换到集群版"><a href="#将单机版solr切换到集群版" class="headerlink" title="将单机版solr切换到集群版"></a>将单机版solr切换到集群版</h1><pre><code>在applicationContext-service.xml中修改配置:
+
+        &lt;!-- 配置单机版solr客户端 --&gt;
+        &lt;!-- &lt;bean id=&quot;httpSolrServer&quot; class=&quot;org.apache.solr.client.solrj.impl.HttpSolrServer&quot;&gt;
+            &lt;constructor-arg name=&quot;baseURL&quot; value=&quot;http://115.159.93.201:8080/solr&quot;&gt;&lt;/constructor-arg&gt;
+        &lt;/bean&gt;
+         --&gt;
+        &lt;!-- 配置集群版solr客户端 --&gt;
+        &lt;bean id=&quot;cloudSolrServer&quot; class=&quot;org.apache.solr.client.solrj.impl.CloudSolrServer&quot;&gt;
+            &lt;constructor-arg name=&quot;zkHost&quot; value=&quot;115.159.93.201:2181,115.159.93.201:2182,115.159.93.201:2183&quot;&gt;&lt;/constructor-arg&gt;
+            &lt;property name=&quot;defaultCollection&quot; value=&quot;collection2&quot;&gt;&lt;/property&gt;
+        &lt;/bean&gt;
 </code></pre>
           
         
